@@ -4,30 +4,21 @@ const logic = {
     userUsername: null,
     spotifyToken: null,
 
-    _callUsersApi(path, method = 'get', body, useToken) {
-        const config = {
-            method
-        }
-
-        const methodNotGet = method !== 'get'
-
-        if (methodNotGet || useToken) {
-            config.headers = {}
-
-            if (methodNotGet) config.headers['content-type'] = 'application/json'
-
-            if (useToken) config.headers.authorization = 'Bearer ' + this.userToken
-        }
-
-        if (body) config.body = JSON.stringify(body)
-
-        return fetch('https://skylabcoders.herokuapp.com/api' + path, config)
+    _callUsersApi(path, method = 'get', body) {
+        return fetch('https://skylabcoders.herokuapp.com/api' + path, {
+            method,
+            headers: {
+                //authorization: 'Bearer ' + this.userToken
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
             .then(res => res.json())
             .then(res => {
-                if (res.status === 'KO') throw Error(alert(res.error))
+                if (res.status === 'KO') throw Error('request error, status ' + res.status);
 
                 return res;
-            })
+            });
     },
 
     _callSpotifyApi(path) {
@@ -52,38 +43,18 @@ const logic = {
     },
 
     loginUser(username, password) {
-        return this._callUsersApi('/auth', 'post', { username, password })
-            .then(({ data: { id, token } }) => {
-                this.userId = id
-                this.userToken = token
-                this.userUsername = username
+       return this._callUsersApi('/auth','post', {username,password})
+        .then(res => {
+           this.userId=res.data.id
+           this.userToken=res.data.token
+            return true
+        }
 
-                return true
-            })
     },
 
     unregisterUser(password) {
-        return this._callUsersApi(`/user/${this.userId}`, 'delete', {
-            username: this.userUsername,
-            password
-        }, true)
-            .then(() => true)
-    },
-
-    logout() {
-        this.userId = null
-        this.userToken = null
-        this.userUsername = null
-    },
-
-    updateUser(password, newUsername, newPassword) {
-       return this._callUsersApi(`/user/${this.userId}`, 'put', {
-        username:this.userUsername,    
-        password,
-        newPassword,
-        newUsername
-       },true)
-       .then(() => true)
+       return this._callUsersApi('/userId','delete',  {username,password,id,token})
+        .then(res =>res)
     },
 
     // spotify's

@@ -2,10 +2,9 @@
 
 describe('logic (spotify-app)', () => {
     describe('user\'s', () => {
+        const username = 'manuel-barzi-13', password = '123'
 
         describe('register user', () => {
-            const username = 'aranzazu-perdomo-' + Math.random(), password = '123'
-
             it('should register on correct data', () => {
                 return logic.registerUser(username, password)
                     .then(id => {
@@ -15,34 +14,15 @@ describe('logic (spotify-app)', () => {
         })
 
         describe('login user', () => {
-            const username = 'aranzazu-perdomo-' + Math.random(), password = '123'
-            let userId
-
-            beforeEach(() => {
-                return logic.registerUser(username, password)
-                    .then(id => userId = id)
-            })
-
             it('should login on correct data', () => {
                 return logic.loginUser(username, password)
                     .then(res => {
                         expect(res).toBeTruthy()
-
-                        expect(logic.userId).toBe(userId)
-                        expect(logic.userToken).toBeDefined()
-                        expect(logic.userUsername).toBe(username)
                     })
             })
         })
 
         describe('unregister user', () => {
-            const username = 'aranzazu-perdomo-' + Math.random(), password = '123'
-
-            beforeEach(() => {
-                return logic.registerUser(username, password)
-                    .then(() => logic.loginUser(username, password))
-            })
-
             it('should unregister on correct data', () => {
                 return logic.unregisterUser(password)
                     .then(res => {
@@ -50,61 +30,6 @@ describe('logic (spotify-app)', () => {
                     })
             })
         })
-
-        describe('logout user', () => {
-            const username = 'aranzazu-perdomo-' + Math.random(), password = '123'
-
-            beforeEach(() => {
-                return logic.registerUser(username, password)
-                    .then(() => logic.loginUser(username, password))
-            })
-
-            it('should logout correctly', () => {
-                expect(logic.userId).toBeDefined()
-                expect(logic.userToken).toBeDefined()
-                expect(logic.userUsername).toBeDefined()
-
-                logic.logout()
-
-                expect(logic.userId).toBeNull()
-                expect(logic.userToken).toBeNull()
-                expect(logic.userUsername).toBeNull()
-            })
-        })
-
-        describe('update user', ()=> {
-            const username = 'aranzazu-perdomo-' + Math.random(), password = '123'
-            const newUsername= 'ar-pc'
-            const newPassword = '456'
-
-            beforeEach(() => {
-                return logic.registerUser(username, password)
-                    .then(() => logic.updateUser(password, newUsername, newPassword))
-            })
-
-            it('should update correctly', () =>{
-                expect(logic.userUsername).toBe(username)
-                expect(newPassword).toBe('456')
-            })
-
-        }
-    
-    
-    
-    
-    
-    
-    
-    
-    )
-
-
-
-
-
-
-
-
     })
 
     describe('spotify\'s', () => {

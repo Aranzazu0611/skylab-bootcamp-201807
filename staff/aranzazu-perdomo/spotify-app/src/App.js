@@ -34,7 +34,7 @@ class App extends Component {
 
   loginUser = (username, password) =>
     logic.loginUser(username, password)
-      .then(() => this.setState({ loggedIn: true, loginActive: false }))
+      .then(() => this.setState({ loggedIn: true, loginActive: false, logoutActive: false }))
       .catch(() => this.setState({ logoutActive:true}))
 
   goToLogin = () => this.setState({ loginActive: true, goToLoginActive: false })
@@ -51,7 +51,7 @@ class App extends Component {
           <h1 className="App-title">Spotify App</h1>
         </header>
 
-        {!(registerActive || loginActive || goToLoginActive || loggedIn|| logoutActive) && <Landing onRegister={this.goToRegister} onLogin={this.goToLogin} />}
+        {!(registerActive || loginActive || goToLoginActive || loggedIn|| logoutActive ) && <Landing onRegister={this.goToRegister} onLogin={this.goToLogin} />}
 
         {registerActive && <Register onRegister={this.registerUser} />}
 
@@ -63,7 +63,7 @@ class App extends Component {
 
         { logoutActive && <Errorpanel/>}
 
-        { logoutActive && <ButtonLogout onLogout={this.logoutClear}/>}
+        { loggedIn && <ButtonLogout onLogout={this.logoutClear}/>}
 
       
       </div>

@@ -7,7 +7,7 @@ class Login extends Component {
 
     keepPassword = event => this.setState({ password: event.target.value })
 
-    onLogin = event => {
+    onSubmitLogin = event => {
         event.preventDefault()
 
         const { username, password } = this.state
@@ -16,7 +16,7 @@ class Login extends Component {
     }
 
     render() {
-        return <form onSubmit={this.onLogin}>
+        return <form onSubmit={this.onSubmitLogin}>
             <input type="text" onChange={this.keepUsername} />
             <input type="password" onChange={this.keepPassword} />
             <button type="submit">Login</button>

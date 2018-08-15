@@ -1,59 +1,46 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import logic from './logic'
+import React, { Component } from 'react'
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
+import Landing from './components/Landing'
 import Register from './components/Register'
 import Login from './components/Login'
-import Landing from './components/Landing'
-import {Switch, Route, withRouter, Redirect} from 'react-router-dom'
 import Files from './components/Files'
 
 class App extends Component {
- 
-  goToRegister = (event) => {
-    event.preventDefault()
-    this.props.history.push('/Register')
+  state = {
+    username: '',
+    token: ''
   }
-  goToLogin = (event) => {
-    event.preventDefault()
-    this.props.history.push('/Login')
+
+  onLoggedIn = (username, token) => {
+    this.setState({ username, token })
+
+    this.props.history.push('/files')
   }
-  onRegister = (username,password) => {
+
+  isLoggedIn() {
+    return !!this.state.username
+  }
+
+  render() {
+    const { username, token } = this.state
     
-   logic.register(username,password)
-    .then(() => {
-      this.props.history.push('/Login')
-    })
-  
-  }
+    return <div className="full-height">
+      <header>
+        <h1 className={this.isLoggedIn() ? 'on' : 'off'}>FILES</h1>
+      </header>
 
-  onLogin = (username,password) => {
-    
-   logic.authenticate(username,password)
-    .then(() => {
-      this.props.history.push('/Files')
-    })
+      <Switch>
+        <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/files" /> : <Landing />} />
+        <Route path="/register" render={() => this.isLoggedIn() ? <Redirect to="/files" /> : <Register />} />
+        <Route path="/login" render={() => this.isLoggedIn() ? <Redirect to="/files" /> : <Login onLoggedIn={this.onLoggedIn} />} />
+        <Route path="/files" render={() => this.isLoggedIn() ? <Files username={username} token={token} /> : <Redirect to="/" />} />
+      </Switch>
 
-  }
-
-  render(){
-
-      return (
-
-        <Switch>
-            <Route exact path="/" render={() => <Landing onRegister={this.goToRegister} onLogin={this.goToLogin}/>}/>
-            <Route path="/Register" render={() => <Register onRegister={this.onRegister} />}/>
-            <Route path="/Login" render={() => <Login  onLogin={this.onLogin}/>}/>
-            <Route path="/Files" render={() => <Files />}/>
-        </Switch>
-
-
-
-
-
-
-
-      )
+      <footer>
+        <span className="power on">&#x23FB;</span>
+      </footer>
+    </div>
   }
 }
-export default withRouter(App);
+
+export default withRouter(App)

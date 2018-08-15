@@ -1,61 +1,44 @@
 import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+import logic from '../logic'
 
-class Login extends Component{
-    state = {
+class Login extends Component {
+  state = {
+    username: '',
+    password: '',
+    error: ''
+  }
 
-        username : "",
-        password : ""
+  onUsernameChanged = e => this.setState({ username: e.target.value })
 
-    }
-    handleUsername = (event) => {
-        this.setState({ username: event.target.value })
-      }
-    
-    handlePassword = (event) => {
-        this.setState({ password: event.target.value })
-      }
-    
-    onLogin = (event) => {
-        event.preventDefault()
-        const { username, password } = this.state
-        this.props.onLogin(username,password)
-    }
+  onPasswordChanged = e => this.setState({ password: e.target.value })
 
-    goToFile= (event) => {
-        event.preventDefault()
-        this.props.history.push('/File')
-    }   
-    
+  onLoginSubmitted = e => {
+    e.preventDefault()
 
-    render(){
-        return(
+    const { username, password } = this.state
 
-        <div class="screen">
-        <h1>FILES</h1>
+    logic.authenticate(username, password)
+      .then(token => this.props.onLoggedIn(username, token))
+      .catch(({ message }) => this.setState({ error: message }))
+  }
+
+  render() {
+    const { error } = this.state
+
+    return <main>
+      <div className="screen">
         <nav>
-            > <a href="/register">register</a> or login <span class="blink">_</span>
+          &gt; <a href="/#/register">register</a> or login <span className="blink">_</span>
         </nav>
-        <form action="/login" method="post" onSubmit={this.onLogin}>
-            <input type="text" name="username" placeholder="username" autofocus onChange={this.handleUsername}/>
-            <input type="password" name="password" placeholder="password" onChange={this.handlePassword}/>
-            <button type="submit">login</button>
+        <form onSubmit={this.onLoginSubmitted}>
+          <input type="text" name="username" placeholder="username" autofocus onChange={this.onUsernameChanged} />
+          <input type="password" name="password" placeholder="password" onChange={this.onPasswordChanged} />
+          <button type="submit">login</button>
         </form>
-        </div>
-
-            
-         )
-
-
-
-
-    }
-
-
-
-
-
-
+        {error && <p>{error}</p>}
+      </div>
+    </main>
+  }
 }
 
-export default withRouter(Login);
+export default Login

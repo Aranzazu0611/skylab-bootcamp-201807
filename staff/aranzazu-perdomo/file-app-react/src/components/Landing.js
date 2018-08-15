@@ -1,32 +1,13 @@
-import React,{Component} from 'react'
-import Register from './Register'
-import Login from './Login'
-import {withRouter} from 'react-router-dom'
+import React from 'react'
 
-function Landing ({ onRegister, onLogin}){
-    return(
-        <div>
-            <header>
-                <h1 className="off">FILES</h1>
-            </header>
-
-        <main>
-            <div className="screen">
-                <nav>
-                    <a href="/register" onClick={onRegister}>register </a> or <a href="/Login" onClick={onLogin}> Login</a>
-                </nav>
-            </div>
-        </main>
-                
-        
-        
+function Landing() {
+    return <main>
+        <div className="screen">
+            <nav>
+                &gt; <a href="/#/register">register</a> or <a href="/#/login">login</a> <span className="blink">_</span>
+            </nav>
         </div>
-    )
-
-    
+    </main>
 }
 
-
- 
-
-export default withRouter(Landing);
+export default Landing

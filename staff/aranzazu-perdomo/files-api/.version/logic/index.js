@@ -105,6 +105,7 @@ const logic = {
 
         this._persist()
     }
+
 }
 
 logic._users = JSON.parse(fs.readFileSync('data/users.json'))

@@ -1,23 +1,19 @@
-require('dotenv').config()
-
 const express = require('express')
-const cors = require('cors')
 const fileUpload = require('express-fileupload')
 const package = require('./package.json')
 const bodyParser = require('body-parser')
 const logic = require('./logic')
-const jwt = require('jsonwebtoken')
-const validateJwt = require('./utils/validate-jwt')
+const cors = require('cors')
 
 const { argv: [, , port] } = process
 
 const app = express()
-
 app.use(cors())
 
-const jsonBodyParser = bodyParser.json()
+app.use(fileUpload())
+app.use(bodyParser.json())
 
-app.post('/register', jsonBodyParser, (req, res) => {
+app.post('/register', (req, res) => {
     const { body: { username, password } } = req
 
     try {
@@ -29,23 +25,21 @@ app.post('/register', jsonBodyParser, (req, res) => {
     }
 })
 
-app.post('/authenticate', jsonBodyParser, (req, res) => {
+app.post('/authenticate', (req, res) => {
     const { body: { username, password } } = req
 
     try {
         logic.authenticate(username, password)
 
-        const { JWT_SECRET, JWT_EXP } = process.env
-
-        const token = jwt.sign({ sub: username }, JWT_SECRET, { expiresIn: JWT_EXP })
-
-        res.status(200).json({ message: 'user authenticated', token })
+        res.status(200).json({ message: 'user authenticated' })
     } catch ({ message }) {
         res.status(401).json({ message })
     }
 })
 
-app.get('/user/:username/files', validateJwt, (req, res) => {
+// app.get('/files', (req, res) => {
+//     const { query: { username } } = req
+app.get('/user/:username/files', (req, res) => {
     const { params: { username } } = req
 
     try {
@@ -57,38 +51,40 @@ app.get('/user/:username/files', validateJwt, (req, res) => {
     }
 })
 
-app.post('/user/:username/files', [validateJwt, fileUpload()], (req, res) => {
-    const { params: { username }, files: { upload } } = req
+app.post('/user/:username/files', (req, res) => {
+    // TODO get username from req
+    const { params:{username},files: { upload } } = req
 
-    if (upload) {
+    if (upload) { 
         try {
             logic.saveFile(username, upload.name, upload.data)
-
             res.status(201).json({ message: 'file saved' })
         } catch ({ message }) {
-            res.status(500).json({ message })
+            session.error = message
         }
-    } else
-        res.status(418).json({ message: 'no file received' })
+    } else 
+        res.status(418).json({message: 'no file received'})
 
 })
 
-app.get('/user/:username/files/:file', validateJwt, (req, res) => {
+
+app.get('/user/:username/files/:file', (req, res) => {
     const { params: { username, file } } = req
 
     res.download(logic.getFilePath(username, file))
 })
 
-app.delete('/user/:username/files/:file', validateJwt, (req, res) => {
+app.delete('/user/:username/files/:file', (req, res) => {
+    // TODO get username from req
     const { params: { username, file } } = req
 
     try {
         logic.removeFile(username, file)
-
-        res.status(200).json({ message: 'file deleted' })
     } catch ({ message }) {
-        res.status(500).json({ message })
+        res.status(500).json({ message})
     }
+    res.status(200).json({message: 'file deleted'})
+    res.redirect('/files')
 })
 
 app.put("/user/:username/profile", [validateJwt,jsonBodyParser], (req,res) => {
@@ -102,5 +98,6 @@ app.put("/user/:username/profile", [validateJwt,jsonBodyParser], (req,res) => {
         res.status(500).json({ message })
     }
 })
+
 
 app.listen(port, () => console.log(`${package.name} ${package.version} up and running on port ${port}`))

@@ -36,6 +36,25 @@ const logic = {
             })
     },
 
+    updateProfile(username,password,newPassword,token){
+        return Promise.resolve()
+            .then(() => {
+                // this._validateStringField('password', password)
+                this._validateStringField('new password', newPassword)
+
+                return this._call(`user/${username}/profile`, 'put', {'Content-Type': 'application/json', authorization: `bearer ${token}` }, 
+                    JSON.stringify({ password, newPassword }), 200)
+                    .then(res => res.json())
+            })
+    },
+
+
+
+
+
+
+
+
     authenticate(username, password) {
         return Promise.resolve()
             .then(() => {

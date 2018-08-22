@@ -1,0 +1,42 @@
+.App {
+  margin-left:35vw;
+  margin-top: 30vh;
+  background-color: rgba(3, 3, 3, 0.7);
+  width: 25vw;
+  height: 50vh;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  font-size: 5vh;
+  border: 3px solid white;
+  padding-bottom: 3%;
+ 
+}
+
+
+body {
+  background-image: url("./fondolibros.jpg");
+  min-height: 100vh;
+  min-width: 100vw;
+  overflow: hidden;
+  background-size: cover;
+  background-position: top right;
+}
+
+li {
+
+  list-style: none;
+    
+}
+
+a{
+  text-decoration-line: none;
+  color:white;
+  
+}
+
+li:hover{
+  
+  color:red;
+  
+}

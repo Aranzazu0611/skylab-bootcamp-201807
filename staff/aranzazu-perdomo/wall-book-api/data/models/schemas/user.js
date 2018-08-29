@@ -8,30 +8,30 @@ function validatePassword(password) {
 
 module.exports = new Schema({
 
-    email : {
+    email: {
 
-        type : String,
-        required : true,
-        match : /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+        type: String,
+        required: true,
+        match: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
     },
 
-    name :{
+    name: {
 
-        type : String,
-        required : true,
+        type: String,
+        required: true,
     },
 
-    password : {
+    password: {
 
-        type : String,
-        required : true,
-        validate : validatePassword
+        type: String,
+        required: true,
+        validate: validatePassword
     },
 
-    photo : {
-        
-        type : String
-    
+    photo: {
+
+        type: String
+
     },
 
     favorites: [String]

@@ -3,6 +3,6 @@
 module.exports = {
 
     User: require('./user'),
-    Reviews : require('./reviews')
+    Review : require('./review')
 
 }

@@ -7,7 +7,7 @@ module.exports = new Schema({
         type: ObjectId,
         ref: 'User'
     },
-    book: String,
-    vote: Number,
-    comment: String
+    book: { type: String },
+    vote: { type: Number },
+    comment: { type: String },
 })

@@ -6,6 +6,12 @@ const { User, Review } = require('../data/models')
 const books = require("google-books-search-2")
 const cloudinary = require('cloudinary')
 
+cloudinary.config({
+     presentname : "xmjoy1y2",
+     cloudname : "wallbook",
+     apikey : 782539495716937,
+})
+
 const logic = {
     _validateStringField(name, value) {
 
@@ -94,11 +100,14 @@ const logic = {
             .then(() => true)
     },
 
-    addReview(email, book, vote, comment) {
+    addReview(email, book, _vote, comment) {
+        debugger;
         return Promise.resolve()
             .then(() => {
                 this._validateEmail(email)
                 this._validateStringField('book', book)
+
+                let vote = _vote ? parseInt(_vote) : 1
                 this._validateNumber("vote", vote)
                 this._validateStringField("comment", comment)
 
@@ -106,6 +115,8 @@ const logic = {
             })
             .then(user => {
                 if (!user) throw new Error(`user with ${email} email already exist`)
+
+                let vote = _vote ? parseInt(_vote) : 1
 
                 const review = { book, vote, comment, user: user.id }
 
@@ -118,6 +129,8 @@ const logic = {
     listReviews(userId) {
         return Promise.resolve()
             .then(() => {
+                debugger;
+              
                 return Review.find({ user: userId })
             })
             .then(reviews => {
@@ -167,7 +180,7 @@ const logic = {
                 this._validateEmail(email)
                 this._validateStringField("book", book)
 
-                return User.find({ email })
+                return User.findOne({ email })
             })
             .then(user => {
                 if (!user) throw new Error(`user with ${email} email already exist`)
@@ -179,19 +192,51 @@ const logic = {
             .then(() => true)
     },
 
-    listFavourites() {
+    listFavorites(userId) {
+        return Promise.resolve()
+            .then(() => {
+                return Review.find({ user: userId })
+            })
+            .then(favorites => {
+                if (!favorites) throw new Error(`user ${userId} has no favorites`)
 
+                return User.favorites
+            })
+    },
+
+    deleteFavorites(userId, bookId) {
+        return Promise.resolve()
+            .then(() => Review.find({ user: userId, _id: bookId }))
+            .then(favorite => {
+                if (!favorite || !favorite.length) throw new Error(`book ${bookId} from user ${userId} not exist`)
+
+                return User.favorites.deleteOne({ user: userId, _id: bookId })
+            })
+            .then(() => true)
 
     },
 
-    updatePhoto(path) {
-        //todo
+    uploadPhoto(userId, base64Image) {
+        
         return Promise.resolve()
-            .then(() => {
+        .then(() => {
+            
+            this._validateStringField("userId", userId)
+            this._validateStringField("base64Image", base64Image)
 
-                return cloudinary.uploader.upload(path)
+            return new Promise((resolve, reject) => {
+                return cloudinary.v2.uploader.upload(base64Image, function (err, data) {
+                    if (err) return reject(err)
+                    resolve(data.url)
+                })
             })
-            .then(results => results)
+            .then(urlCloudinary => {
+                    return User.findByIdAndUpdate(idUser, { photoProfile: urlCloudinary }, {new: true})
+                        .then(user => {
+                            return user.photoProfile
+                    })
+            })
+        })
     }
 
 }

@@ -7,7 +7,7 @@
     "start": "node . 8080",
     "debug": "mocha debug logic",
     "test": "mocha logic --timeout 15000",
-    "test-coverage": "nyc npm test",
+    "run test-coverage": "nyc  npm test",
     "test-coverage-report": "nyc report --reporter=html"
   },
   "keywords": [],

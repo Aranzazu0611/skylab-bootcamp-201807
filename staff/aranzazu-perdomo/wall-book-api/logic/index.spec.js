@@ -314,7 +314,7 @@ describe('Logic', () => {
         })
     })
 
-    true && describe('Add review', () => {
+    !true && describe('Add review', () => {
         const book = "La chica del tren", vote = 5, comment = "Impresionante thriller"
         beforeEach(() => User.create({ email, name, password }))
 
@@ -428,7 +428,7 @@ describe('Logic', () => {
                 })
         })
 
-        it('should list all user notes', () => {
+        it('should list all user reviews', () => {
             return logic.listReviews(userId)
                 .then(userReviews => {
                     expect(userReviews.length).to.equal(reviews.length)
@@ -568,11 +568,11 @@ describe('Logic', () => {
 
 
     })
-    true && describe('add favorites', () => {
+    !true && describe('add favorites', () => {
         beforeEach(() => User.create({ email, name, password }))
 
         it('should succeed on add favorites', () => {
-
+            let book = "Harry Potter"
             return logic.addFavorites(email, book)
                 .then(res => {
                     expect(res).to.be.true
@@ -580,20 +580,160 @@ describe('Logic', () => {
                     return User.findOne({ email })
                 })
                 .then(user => {
+
                     expect(user.favorites).to.contain(book)
                 })
 
         })
+        it('should fail on trying to add favorites with an undefined book', () => {
+
+            return logic.addFavorites(email, undefined)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid book`))
+
+        })
+        it('should fail on trying to add favorites with an empty book', () => {
+
+            return logic.addFavorites(email, '')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid book`))
+
+        })
+        it('should fail on trying to add favorites with a blank book', () => {
+
+            return logic.addFavorites(email, '       ')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid book`))
+
+        })
+        it('should fail on trying to add favorites with a numeric book', () => {
+
+            return logic.addFavorites(email, 123)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid book`))
+
+        })
+        it('should fail on trying to add favorites with an undefined email ', () => {
+            let book = "Harry Potter"
+            return logic.addFavorites(undefined, book)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid email`))
+
+        })
+        it('should fail on trying to add favorites with a numeric email', () => {
+            let book = "Harry Potter"
+            return logic.addFavorites(123, book)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid email`))
+
+        })
+        it('should fail on trying to add favorites with an empty email', () => {
+            let book = "Harry Potter"
+            return logic.addFavorites('', book)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid email`))
+
+        })
+        it('should fail on trying to add favorites with a blank email', () => {
+            let book = "Harry Potter"
+            return logic.addFavorites('      ', book)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid email`))
+
+        })
 
     })
-    afterEach(() => Promise.all([User.deleteMany(), Review.deleteMany()]))
+    true && describe('list favorites', () => {
+        let userId
 
-    after(() =>
-        Promise.all([
-            User.deleteMany(),
-            Review.deleteMany(),
+        const favorites = ["15447712lpy", "78529t71pj8", "78529t71pj7"]
 
-        ])
-            .then(() => _connection.disconnect())
-    )
-})
+        beforeEach(() => {
+            return User.create({ email, name, password })
+                .then(user => {
+                    userId = user._id.toString()
+
+                    favorites.map(favorite => user.favorites.push())
+                })
+        })
+
+        it('should list all user reviews', () => {
+            debugger
+            return logic.listFavorites(userId)
+                .then(userFavorites => {
+                    expect(userFavorites.length).to.equal(favorites.length)
+                })
+        })
+    })
+
+    // todo delete favorite
+
+    true && describe('delete favorites', () => {
+        let userId
+
+        const favorites = [
+            { book: "Cien años de soledad" },
+            { book: "Harry Potter" },
+            { book: "La casa de Bernarda Alba" }
+        ]
+        beforeEach(() => {
+            return User.create({ email, name, password })
+                .then(user => {
+                    userId = user._id.toString()
+
+                    return Promise.all(favorites.map(favorite => User.favorites.create({ user: userId, ...favorite })))
+                })
+        })
+        it('should delete favorites correctly', () => {
+            return logic.deleteFavorites(userId, bookId)
+                .then(res => {
+                    expect(res).to.be.true
+
+                    return User.favorites.find({ userId, bookId })
+                })
+                .then(userfavorites => {
+
+                    expect(userFavorites).to.be.empty;
+                })
+        })
+
+    })
+
+    describe('upload photo', () => {
+        it('should succeed on correct upload photo', () => {
+
+            return User.create({ email })
+                .then(({ id }) => {
+
+                    return new Promise((resolve, reject) => {
+
+                        return fs.readFile('./demos/img_base64.txt', 'utf8', (err, buffer) => {
+                            if (err) return reject(err)
+
+                            resolve(buffer.toString())
+                        })
+                    }).then(imgBase64 => {
+                        return logic.saveImageProfile(id, imgBase64)
+                            .then(res => {
+                                expect(typeof res).to.equal("string")
+                            })
+                    })
+                })
+
+        })
+
+        //todo upload photo
+
+        //todo delete photo
+
+        afterEach(() => Promise.all([User.deleteMany(), Review.deleteMany()]))
+
+        after(() =>
+            Promise.all([
+                User.deleteMany(),
+                Review.deleteMany(),
+
+            ])
+                .then(() => _connection.disconnect())
+        )
+    })

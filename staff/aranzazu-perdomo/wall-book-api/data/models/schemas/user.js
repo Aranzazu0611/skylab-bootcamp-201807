@@ -28,7 +28,7 @@ module.exports = new Schema({
         validate: validatePassword
     },
 
-    photo: {
+    photoProfile: {
 
         type: String
 

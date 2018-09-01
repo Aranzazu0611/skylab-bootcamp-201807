@@ -7,14 +7,13 @@ const books = require("google-books-search-2")
 const cloudinary = require('cloudinary')
 
 cloudinary.config({
-     presentname : "xmjoy1y2",
-     cloudname : "wallbook",
-     apikey : 782539495716937,
+    presentname: "xmjoy1y2",
+    cloudname: "wallbook",
+    apikey: 782539495716937,
 })
 
 const logic = {
     _validateStringField(name, value) {
-
         if (typeof value !== 'string' || !value.trim().length || value === '/n') throw new Error(`invalid ${name}`)
     },
 
@@ -56,7 +55,7 @@ const logic = {
                 if (!user) throw new Error(`user with ${email} email already exist`)
                 if (user.password !== password) throw new Error(`wrong password`)
 
-                return true
+                return user._id.toString()
             })
     },
 
@@ -100,37 +99,33 @@ const logic = {
             .then(() => true)
     },
 
-    addReview(email, book, _vote, comment) {
-        debugger;
+    addReview(userId, book, _vote, comment) {
+       debugger
         return Promise.resolve()
             .then(() => {
-                this._validateEmail(email)
-                this._validateStringField('book', book)
-
-                let vote = _vote ? parseInt(_vote) : 1
-                this._validateNumber("vote", vote)
+                debugger
+                this._validateStringField("userId", userId)
+                this._validateStringField("book", book)
+                this._validateNumber("vote", _vote ? Number(_vote) : _vote)
                 this._validateStringField("comment", comment)
 
-                return User.findOne({ email })
+                return User.findById(userId)
             })
             .then(user => {
-                if (!user) throw new Error(`user with ${email} email already exist`)
+                if (!user) throw new Error(`user with ${userId} does not exists`)
 
-                let vote = _vote ? parseInt(_vote) : 1
-
-                const review = { book, vote, comment, user: user.id }
+                const review = { book, vote: Number(_vote), comment, user: user.id }
 
                 return Review.create(review)
             })
             .then(() => true)
-
     },
 
     listReviews(userId) {
         return Promise.resolve()
             .then(() => {
-                debugger;
-              
+
+
                 return Review.find({ user: userId })
             })
             .then(reviews => {
@@ -151,39 +146,40 @@ const logic = {
     },
 
     searchBook(query, searchBy = 'title', orderBy = 'relevance') {
-        if (searchBy !== undefined && typeof searchBy !== 'string') throw new Error(`invalid ${searchBy}`)
-        if (orderBy !== undefined && typeof orderBy !== 'string') throw new Error(`invalid ${orderBy}`)
-
         return Promise.resolve()
-            .then(() => {
-                this._validateStringField("query", query)
-                this._validateStringField("searchBy", searchBy)
-                this._validateStringField("orderBy", orderBy)
+        .then(() => {
+            if (searchBy !== undefined && typeof searchBy !== 'string') throw new Error(`invalid ${searchBy}`)
+            if (orderBy !== undefined && typeof orderBy !== 'string') throw new Error(`invalid ${orderBy}`)
+                
+            this._validateStringField("query", query)
+            this._validateStringField("searchBy", searchBy)
+            this._validateStringField("orderBy", orderBy)
 
-                const options = {
-                    field: searchBy,
-                    offset: 0,
-                    limit: 20,
-                    type: 'books',
-                    order: orderBy,
-                    lang: 'es'
-                };
+            const options = {
+                field: searchBy,
+                offset: 0,
+                limit: 20,
+                type: 'books',
+                order: orderBy,
+                lang: 'es'
+            };
 
-                return books.search(query, options)
-            })
-            .then(results => results)
+            return books.search(query, options)
+        })
+        .then(results => results)
     },
 
-    addFavorites(email, book) {
+    addFavorites(userId, book) {
         return Promise.resolve()
             .then(() => {
-                this._validateEmail(email)
+                debugger
+                this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
 
-                return User.findOne({ email })
+                return User.findById(userId)
             })
             .then(user => {
-                if (!user) throw new Error(`user with ${email} email already exist`)
+                if (!user) throw new Error(`user with ${userId} does not exists`)
 
                 user.favorites.push(book)
 
@@ -195,13 +191,18 @@ const logic = {
     listFavorites(userId) {
         return Promise.resolve()
             .then(() => {
-                return Review.find({ user: userId })
+                return User.findById(userId)
             })
-            .then(favorites => {
-                if (!favorites) throw new Error(`user ${userId} has no favorites`)
+            .then(user => {
+                if (!user) throw new Error(`user ${userId} does not exists`)
 
-                return User.favorites
+                const bookPromises = user.favorites.map(isbn =>
+                    this.searchBook(isbn, 'isbn').then(book => book[0])
+                )
+
+                return Promise.all(bookPromises)
             })
+            .then(books => books)
     },
 
     deleteFavorites(userId, bookId) {
@@ -216,27 +217,23 @@ const logic = {
 
     },
 
-    uploadPhoto(userId, base64Image) {
-        
-        return Promise.resolve()
-        .then(() => {
-            
-            this._validateStringField("userId", userId)
-            this._validateStringField("base64Image", base64Image)
+    saveImageProfile(userId, base64Image) {
 
-            return new Promise((resolve, reject) => {
-                return cloudinary.v2.uploader.upload(base64Image, function (err, data) {
-                    if (err) return reject(err)
-                    resolve(data.url)
+        return Promise.resolve()
+            .then(() => {
+                return new Promise((resolve, reject) => {
+                    return cloudinary.v2.uploader.upload(base64Image, function (err, data) {
+                        if (err) return reject(err)
+                        resolve(data.url)
+                    })
                 })
-            })
-            .then(urlCloudinary => {
-                    return User.findByIdAndUpdate(idUser, { photoProfile: urlCloudinary }, {new: true})
-                        .then(user => {
-                            return user.photoProfile
+                    .then(urlCloudinary => {
+                        return User.findByIdAndUpdate(userId, { photoProfile: urlCloudinary }, { new: true })
+                            .then(user => {
+                                return user.photoProfile
+                            })
                     })
             })
-        })
     }
 
 }

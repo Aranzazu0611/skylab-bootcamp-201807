@@ -23,7 +23,7 @@ describe('Logic', () => {
             .then(() => User.deleteMany())
     )
 
-    !true && describe("validateStringField", () => {
+    true && describe("validateStringField", () => {
         it('should succeed on correct value', () => {
             expect(() => logic._validateStringField('email', email).to.equal(email))
             expect(() => logic._validateStringField('password', password).to.equal(password))
@@ -44,7 +44,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe("Register", () => {
+    true && describe("Register", () => {
         it('should register correctly', () => {
             return User.findOne({ email })
                 .then(user => {
@@ -138,12 +138,18 @@ describe('Logic', () => {
         })
     })
 
-    !true && describe('authenticate user', () => {
-        beforeEach(() => User.create({ email, name, password }))
+    true && describe('authenticate user', () => {
+        let userId
+
+        beforeEach(() =>
+            User.create({ email, name, password })
+                .then(() => User.findOne({ email }))
+                .then(user => userId = user.id)
+        )
 
         it('should login correctly', () => {
             return logic.authenticate(email, password)
-                .then(res => expect(res).to.be.true)
+                .then(user => expect(user).to.equal(userId))
         })
         it('should fail on trying to login with an undefined email', () => {
             return logic.authenticate(undefined, password)
@@ -190,7 +196,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('update password', () => {
+    true && describe('update password', () => {
         const newPassword = `${password}-${Math.random()}`
 
         beforeEach(() => User.create({ email, name, password }))
@@ -273,7 +279,7 @@ describe('Logic', () => {
         })
     })
 
-    !true && describe('unregister', () => {
+    true && describe('unregister', () => {
         beforeEach(() => User.create({ email, name, password }))
 
         it('should unregister user correctly', () => {
@@ -314,16 +320,22 @@ describe('Logic', () => {
         })
     })
 
-    !true && describe('Add review', () => {
+    !!true && describe('Add review', () => {
+        let userId
         const book = "La chica del tren", vote = 5, comment = "Impresionante thriller"
-        beforeEach(() => User.create({ email, name, password }))
+
+        beforeEach(() =>
+            User.create({ email, name, password })
+                .then(() => User.findOne({ email }))
+                .then(user => userId = user.id)
+        )
 
         it('should succeed on add review', () => {
-            return logic.addReview(email, book, vote, comment)
+            return logic.addReview(userId, book, vote, comment)
                 .then(res => {
                     expect(res).to.be.true
 
-                    return User.findOne({ email })
+                    return User.findById(userId)
                 })
                 .then(user => {
                     return Review.find({ user: user.id })
@@ -339,79 +351,75 @@ describe('Logic', () => {
                 })
         })
 
-        it('should fail on trying to add review with an undefined email', () => {
+        it('should fail on trying to add review with an undefined userId', () => {
             return logic.addReview(undefined, book, vote, comment)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
-        it('should fail on trying to add review with an empty email', () => {
+        it('should fail on trying to add review with an empty userId', () => {
             return logic.addReview('', book, vote, comment)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
-        it('should fail on trying to add review with a numeric email', () => {
+        it('should fail on trying to add review with a numeric userId', () => {
             return logic.addReview(123, book, vote, comment)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
-        it('should fail on trying to add review with a blank email', () => {
+        it('should fail on trying to add review with a blank userId', () => {
             return logic.addReview('    ', book, vote, comment)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with an undefined book ', () => {
-            return logic.addReview(email, undefined, vote, comment)
+            return logic.addReview(userId, undefined, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
         it('should fail on trying to add review with an empty book ', () => {
-            return logic.addReview(email, '', vote, comment)
+            return logic.addReview(userId, '', vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
         it('should fail on trying to add review with a numeric book ', () => {
-            return logic.addReview(email, 123, vote, comment)
+            return logic.addReview(userId, 123, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
         it('should fail on trying to add review with a blank book ', () => {
-            return logic.addReview(email, '      ', vote, comment)
+            return logic.addReview(userId, '      ', vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
         it('should fail on trying to add review with an undefined vote ', () => {
-            return logic.addReview(email, book, undefined, comment)
+            return logic.addReview(userId, book, undefined, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid vote`))
         })
         it('should fail on trying to add review with an empty vote ', () => {
-            return logic.addReview(email, book, '', comment)
+            return logic.addReview(userId, book, '', comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid vote`))
         })
-        it('should fail on trying to add review with a blank vote ', () => {
-            return logic.addReview(email, book, '    ', comment)
-                .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid vote`))
-        })
+
         it('should fail on trying to add review with an undefined comment ', () => {
-            return logic.addReview(email, book, vote, undefined)
+            return logic.addReview(userId, book, vote, undefined)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid comment`))
         })
         it('should fail on trying to add review with an empty comment ', () => {
-            return logic.addReview(email, book, vote, '')
+            return logic.addReview(userId, book, vote, '')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid comment`))
         })
         it('should fail on trying to add review with a numeric comment', () => {
-            return logic.addReview(email, book, vote, 123)
+            return logic.addReview(userId, book, vote, 123)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid comment`))
         })
     })
 
-    !true && describe('List review', () => {
+    true && describe('List review', () => {
         let userId
         const reviews = [
             { book: "Cien años de soledad", vote: 5, comment: "Un clásico que te lleva a los mas profundo del realismo mágico " },
@@ -437,7 +445,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('Delete Review', () => {
+    true && describe('Delete Review', () => {
         let userId, reviewId
         const reviews = [
             { book: "Cien años de soledad", vote: 5, comment: "Un clásico que te lleva a los mas profundo del realismo mágico " },
@@ -479,7 +487,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('search books', () => {
+    true && describe('search books', () => {
         it('should search books by title', () => {
             let query = "harry potter"
             return logic.searchBook(query)
@@ -497,6 +505,7 @@ describe('Logic', () => {
 
                 })
         })
+
         it('should search books by author', () => {
             let query = "j.k. Rowling"
             return logic.searchBook(query, 'author')
@@ -512,6 +521,7 @@ describe('Logic', () => {
 
                 })
         })
+
         it('should search books by newest', () => {
             let query = "j.k. Rowling"
             return logic.searchBook(query, 'author', 'newest')
@@ -568,16 +578,23 @@ describe('Logic', () => {
 
 
     })
-    !true && describe('add favorites', () => {
-        beforeEach(() => User.create({ email, name, password }))
+
+    true && describe('add favorites', () => {
+        let userId
+        beforeEach(() =>
+            User.create({ email, name, password })
+                .then(() => User.findOne({ email }))
+                .then(user => userId = user.id)
+        )
 
         it('should succeed on add favorites', () => {
+            let userId
             let book = "Harry Potter"
-            return logic.addFavorites(email, book)
+            return logic.addFavorites(userId, book)
                 .then(res => {
                     expect(res).to.be.true
 
-                    return User.findOne({ email })
+                    return User.findOne({ userId })
                 })
                 .then(user => {
 
@@ -587,88 +604,90 @@ describe('Logic', () => {
         })
         it('should fail on trying to add favorites with an undefined book', () => {
 
-            return logic.addFavorites(email, undefined)
+            return logic.addFavorites(userId, undefined)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
 
         })
         it('should fail on trying to add favorites with an empty book', () => {
 
-            return logic.addFavorites(email, '')
+            return logic.addFavorites(userId, '')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
 
         })
         it('should fail on trying to add favorites with a blank book', () => {
 
-            return logic.addFavorites(email, '       ')
+            return logic.addFavorites(userId, '       ')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
 
         })
         it('should fail on trying to add favorites with a numeric book', () => {
-
-            return logic.addFavorites(email, 123)
+            return logic.addFavorites(userId, 123)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
 
         })
-        it('should fail on trying to add favorites with an undefined email ', () => {
+        it('should fail on trying to add favorites with an undefined userId ', () => {
             let book = "Harry Potter"
             return logic.addFavorites(undefined, book)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to add favorites with a numeric email', () => {
+        it('should fail on trying to add favorites with a numeric userId', () => {
             let book = "Harry Potter"
             return logic.addFavorites(123, book)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to add favorites with an empty email', () => {
+        it('should fail on trying to add favorites with an empty userId', () => {
             let book = "Harry Potter"
             return logic.addFavorites('', book)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to add favorites with a blank email', () => {
+        it('should fail on trying to add favorites with a blank userId', () => {
             let book = "Harry Potter"
             return logic.addFavorites('      ', book)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
 
     })
+
     true && describe('list favorites', () => {
         let userId
 
-        const favorites = ["15447712lpy", "78529t71pj8", "78529t71pj7"]
+        const favorites = ["9788441416291", "9781781101353", "9781781101322"]
 
         beforeEach(() => {
             return User.create({ email, name, password })
                 .then(user => {
                     userId = user._id.toString()
 
-                    favorites.map(favorite => user.favorites.push())
+                    user.favorites.push(...favorites)
+
+                    return user.save()
                 })
         })
 
         it('should list all user reviews', () => {
-            debugger
             return logic.listFavorites(userId)
                 .then(userFavorites => {
                     expect(userFavorites.length).to.equal(favorites.length)
+
                 })
         })
     })
 
     // todo delete favorite
 
-    true && describe('delete favorites', () => {
+    !true && describe('delete favorites', () => {
         let userId
 
         const favorites = [
@@ -699,11 +718,11 @@ describe('Logic', () => {
 
     })
 
-    describe('upload photo', () => {
+    !true && describe('upload photo', () => {
         it('should succeed on correct upload photo', () => {
 
             return User.create({ email })
-                .then(({ id }) => {
+                .then(({ userId }) => {
 
                     return new Promise((resolve, reject) => {
 
@@ -713,7 +732,7 @@ describe('Logic', () => {
                             resolve(buffer.toString())
                         })
                     }).then(imgBase64 => {
-                        return logic.saveImageProfile(id, imgBase64)
+                        return logic.saveImageProfile(userId, imgBase64)
                             .then(res => {
                                 expect(typeof res).to.equal("string")
                             })
@@ -722,18 +741,18 @@ describe('Logic', () => {
 
         })
 
-        //todo upload photo
-
-        //todo delete photo
-
-        afterEach(() => Promise.all([User.deleteMany(), Review.deleteMany()]))
-
-        after(() =>
-            Promise.all([
-                User.deleteMany(),
-                Review.deleteMany(),
-
-            ])
-                .then(() => _connection.disconnect())
-        )
     })
+
+    //todo delete photo
+
+    afterEach(() => Promise.all([User.deleteMany(), Review.deleteMany()]))
+
+    after(() =>
+        Promise.all([
+            User.deleteMany(),
+            Review.deleteMany(),
+
+        ])
+            .then(() => _connection.disconnect())
+    )
+})

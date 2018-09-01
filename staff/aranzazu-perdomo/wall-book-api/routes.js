@@ -25,10 +25,10 @@ router.post('/authenticate', jsonBodyParser, (req, res) => {
     const { body: { email, password } } = req
 
     logic.authenticate(email, password)
-        .then(() => {
+        .then(id => {
             const { JWT_SECRET, JWT_EXP } = process.env
 
-            const token = jwt.sign({ sub: email }, JWT_SECRET, { expiresIn: JWT_EXP })
+            const token = jwt.sign({ sub: id }, JWT_SECRET, { expiresIn: JWT_EXP })
 
             res.json({ message: 'user authenticated', token })
         })
@@ -39,11 +39,24 @@ router.post('/authenticate', jsonBodyParser, (req, res) => {
             res.status(err instanceof Error ? 401 : 500).json({ message })
         })
 })
+//unregister
+router.delete('/unregister', validateJwt, (req, res) => {
+    const { body: { email, password } } = req
+
+    logic.unregister(email, password)
+        .then(() => res.json({ message: 'User deleted correctly' }))
+        .catch(err => {
+            const { message } = err
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
+
 //add review
-router.post('/user/:email/reviews', [validateJwt, jsonBodyParser], (req, res) => {
-    const { params: { email }, body: { book, vote, comment } } = req
+router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) => {
+    const { params: { userId }, body: { book, vote, comment } } = req
 debugger;
-    logic.addReview(email, book, vote, comment)
+    logic.addReview(userId, book, vote, comment)
         .then(() => res.json({ message: 'Review added correctly' }))
         .catch(err => {
             const { message } = err
@@ -54,10 +67,10 @@ debugger;
 
 //list reviews 
 
-router.get('/user/:id/reviews', validateJwt, (req, res) => {
-    const { params: { id } } = req
+router.get('/user/:userId/reviews', validateJwt, (req, res) => {
+    const { params: { userId } } = req
 
-    logic.listReviews(id)
+    logic.listReviews(userId)
         .then(res.json.bind(res))
         .catch(err => {
             const { message } = err
@@ -70,7 +83,7 @@ router.get('/user/:id/reviews', validateJwt, (req, res) => {
 
 //delete reviews
 
-router.delete('/user/:userId/reviews/:id', validateJwt, (req, res) => {
+router.delete('/user/:userId/reviews/:reviewId', validateJwt, (req, res) => {
     const { params: { reviewId, userId } } = req
 
     logic.deleteReviews(reviewId, userId)
@@ -85,10 +98,10 @@ router.delete('/user/:userId/reviews/:id', validateJwt, (req, res) => {
 
 //add favorites
 
-router.post('/user/:email/favorites', [validateJwt, jsonBodyParser], (req, res) => {
-    const { params: email, body: { book } } = req
+router.post('/user/:userId/favorites', [validateJwt, jsonBodyParser], (req, res) => {
+    const { params: userId, body: { book } } = req
 
-    logic.addFavorites(email, book)
+    logic.addFavorites(userId, book)
 
         .then(() => res.json({ message: 'Favourite added correctly' }))
         .catch(err => {
@@ -100,7 +113,7 @@ router.post('/user/:email/favorites', [validateJwt, jsonBodyParser], (req, res) 
 
 //list favorites
 
-router.get('/user/:id/favorites', validateJwt, (req, res) => {
+router.get('/user/:userId/favorites', validateJwt, (req, res) => {
     const { params: { userId } } = req
 
     logic.listfavorites(userId)
@@ -131,16 +144,32 @@ router.delete('/user/:userId/favorites/:id', validateJwt, (req, res) => {
 
 //search 
 
-router.post('/user/:email/searchbook', validateJwt, (req, res) => {
-    const { params: { query, searchBy, orderBy } } = req
+// /user/:userId/searchbook?query=Harry Potter&searchBy=Title&orderBy=relevance
+router.post('/user/:userId/searchbook', validateJwt, (req, res) => {
+    const { query: { query, searchBy, orderBy } } = req
+
+    debugger
 
     logic.searchBook(query, searchBy, orderBy)
-        .then(() => res.json({ message: 'Search correctly' }))
+        .then(books => res.json({ message: 'Search correctly',  books }))
         .catch(err => {
             const { message } = err
             res.status(err instanceof Error ? 400 : 500).json({ message })
         })
 })
+
+//saveimage
+router.post('/user/:userId/saveimage', validateJwt, (req, res) => {
+    const { params: { userId, base64Image } } = req
+
+    logic.saveImageProfile(userId, base64Image)
+        .then(() => res.json({ message: 'Save image correctly' }))
+        .catch(err => {
+            const { message } = err
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
 
 
 

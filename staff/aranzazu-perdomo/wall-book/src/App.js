@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
+import { Route, Redirect, Switch } from 'react-router'
+import logic from "./logic/indexaxios";
 import logo from './logo.svg';
+import LandingPage from '../src/components/LandingPage'
+import Book from '../src/components/Book'
+import Profile from '../src/components/Profile'
+import Search from '../src/components/Search'
+import Review from '../src/components/Review'
+import swal from 'sweetalert2'
 import './App.css';
 
 class App extends Component {

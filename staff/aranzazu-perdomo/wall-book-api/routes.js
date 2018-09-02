@@ -39,6 +39,17 @@ router.post('/authenticate', jsonBodyParser, (req, res) => {
             res.status(err instanceof Error ? 401 : 500).json({ message })
         })
 })
+// update preguntar a mikel lo del email
+router.patch('/user/:email/updatePassword', validateJwt, (req, res) => {
+    const { body: { email, password, newPassword } } = req
+    logic.updatePassword(email, password, newPassword)
+        .then(() => res.json({ message: 'Password update correctly' }))
+        .catch(err => {
+            const { message } = err
+            res.status(err instanceof Error ? 400 : 500).json({ message })
+        })
+})
+
 //unregister
 router.delete('/unregister', validateJwt, (req, res) => {
     const { body: { email, password } } = req
@@ -55,7 +66,7 @@ router.delete('/unregister', validateJwt, (req, res) => {
 //add review
 router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) => {
     const { params: { userId }, body: { book, vote, comment } } = req
-debugger;
+    debugger;
     logic.addReview(userId, book, vote, comment)
         .then(() => res.json({ message: 'Review added correctly' }))
         .catch(err => {
@@ -148,10 +159,8 @@ router.delete('/user/:userId/favorites/:id', validateJwt, (req, res) => {
 router.post('/user/:userId/searchbook', validateJwt, (req, res) => {
     const { query: { query, searchBy, orderBy } } = req
 
-    debugger
-
     logic.searchBook(query, searchBy, orderBy)
-        .then(books => res.json({ message: 'Search correctly',  books }))
+        .then(books => res.json({ message: 'Search correctly', books }))
         .catch(err => {
             const { message } = err
             res.status(err instanceof Error ? 400 : 500).json({ message })

@@ -12,9 +12,6 @@ describe('logic', () => {
     const email = `Aranzazu-${Math.random()}@gmail.com`
     const name = `Aranzazu-${Math.random()}`
     const password = `123456-${Math.random()}`
-    const book = "Harry Potter"
-    const _vote = '10'
-    const comment = 'fantastic'
 
     !true && describe('validate fields', () => {
         it('should succeed on correct value', () => {
@@ -236,16 +233,31 @@ describe('logic', () => {
     })
 
     true && describe('add review', () => {
-        beforeEach('')
+        const email = `Aranzazu-${Math.random()}@gmail.com`
+        const name = `Aranzazu-${Math.random()}`
+        const password = `123456-${Math.random()}`
+        const book = "Harry Potter"
+        const _vote = '10'
+        const comment = 'fantastic'
 
-        it('should add review correctly', () =>
-            logicWallbook.addReview(userId, book, _vote, comment, token)
-                .catch(({ message }) => expect(message).to.be.undefined)
-                .then(res =>{
-                    })
+        let user, token
 
+        beforeEach(() =>
+            logicWallbook.register(email, name, password)
+                .then(() =>
+                    logicWallbook.authenticate(email, password)
+                        .then(({ message, token: _token, user: _user }) => {
+                            user = _user
+                            token = _token
+                        })
+                )
         )
 
+        it('should add review correctly', () =>
+            logicWallbook.addReview(user, book, _vote, comment, token)
+                .catch(({ message }) => expect(message).to.be.undefined)
+                .then(({message}) => expect(message).to.equal('Review added correctly'))
+        )
     })
 
 

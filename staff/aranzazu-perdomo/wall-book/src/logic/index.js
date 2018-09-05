@@ -181,7 +181,6 @@ const logicWallbook = {
                 )
                     .then(res => res.json())
                     .then(res => res)
-
             })
     },
 

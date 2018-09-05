@@ -2,7 +2,7 @@
 
 require('dotenv').config()
 
-const logic = require('.')
+const { logic, LogicError } = require('.')
 const { expect } = require('chai')
 const mongoose = require('mongoose')
 const { Types: { ObjectId } } = mongoose
@@ -497,9 +497,9 @@ describe('Logic', () => {
                     expect(books.length).to.equal(20)
                     expect(books[0].title).to.equal("La irresistible ascensión de Harry Potter")
                     expect(books[1].title).to.equal('Harry Potter y la Orden del Fénix')
-                    expect(books[2].title).to.equal('Harry Potter y la cámara secreta')
-                    expect(books[3].title).to.equal("Bautizando a harry potter")
-                    expect(books[4].title).to.equal("Harry Potter y la piedra filosofal")
+                    expect(books[2].title).to.equal('Bautizando a harry potter')
+                    expect(books[3].title).to.equal("Harry Potter y la piedra filosofal")
+                    expect(books[4].title).to.equal("Harry Potter y la Biblia")
                     expect(books[0].authors[0]).to.equal("Andrew Blake")
 
 
@@ -538,7 +538,7 @@ describe('Logic', () => {
 
                     expect(books[0].title).to.equal("Vivir Bien La Vida")
                     expect(books[0].publishedDate).to.equal("2018-04-30")
-                    expect(books[3].publishedDate).to.equal("2018-03-01")
+                    expect(books[3].publishedDate).to.equal("2015-12-08")
 
                 })
         })
@@ -588,13 +588,12 @@ describe('Logic', () => {
         )
 
         it('should succeed on add favorites', () => {
-            let userId
             let book = "Harry Potter"
             return logic.addFavorites(userId, book)
                 .then(res => {
                     expect(res).to.be.true
 
-                    return User.findOne({ userId })
+                    return User.findById(userId)
                 })
                 .then(user => {
 

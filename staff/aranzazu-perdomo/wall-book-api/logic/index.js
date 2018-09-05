@@ -43,7 +43,8 @@ const logic = {
      * @throws {LogicError} invalid name
      */
     _validateNumber(name, value) {
-        if (typeof value !== 'number') throw new LogicError(`invalid ${name}`)
+        debugger
+        if (!Number.isInteger(value)) throw new LogicError(`invalid ${name}`)
     },
    
     /**
@@ -94,8 +95,8 @@ const logic = {
                 return User.findOne({ email })
             })
             .then(user => {
-                if (!user) throw new LogicError(`user with ${email} email already exist`)
-                if (user.password !== password) throw new LogicError(`wrong password`)
+                if (!user) throw new LogicError(`user with ${email} email does not exist`)
+                if (user.password !== password) throw new LogicError('wrong password')
 
                 return user._id.toString()
             })
@@ -175,13 +176,17 @@ const logic = {
      * @returns {boolean} TRUE => if it is add review correctly
      */
     addReview(userId, book, _vote, comment){
+        let vote
         
         return Promise.resolve()
             .then(() => {
-               
+                vote = parseInt(_vote)
+
+                debugger
+
                 this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
-                this._validateNumber("vote", _vote ? Number(_vote) : _vote)
+                this._validateNumber("vote", vote)
                 this._validateStringField("comment", comment)
 
                 return User.findById(userId)
@@ -189,7 +194,7 @@ const logic = {
             .then(user => {
                 if (!user) throw new LogicError(`user with ${userId} does not exists`)
 
-                const review = { book, vote: Number(_vote), comment, user: user.id }
+                const review = { book, vote, comment, user: user.id }
 
                 return Review.create(review)
             })
@@ -207,7 +212,6 @@ const logic = {
     listReviews(userId) {
         return Promise.resolve()
             .then(() => {
-
 
                 return Review.find({ user: userId })
             })
@@ -286,7 +290,7 @@ const logic = {
     addFavorites(userId, book) {
         return Promise.resolve()
             .then(() => {
-                debugger
+                
                 this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
 

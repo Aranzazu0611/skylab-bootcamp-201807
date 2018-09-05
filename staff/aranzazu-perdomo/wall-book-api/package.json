@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node . 8080",
-    "debug": "mocha debug logic",
+    "debug-test": "mocha debug logic",
     "test": "mocha logic --timeout 15000",
     "run test-coverage": "nyc  npm test",
     "test-coverage-report": "nyc report --reporter=html"

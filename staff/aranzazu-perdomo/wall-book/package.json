@@ -15,14 +15,19 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test-logic": "mocha src/logic --timeout 45000",
+    "debug-test-logic": "mocha debug src/logic --timeout 45000"
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "core-js": "^2.5.7",
     "dotenv": "^6.0.0",
     "form-data": "^2.3.2",
     "isomorphic-fetch": "^2.2.1",
+    "jimp": "^0.4.0",
     "jsonwebtoken": "^8.3.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "rimraf": "^2.6.2"
   }
 }

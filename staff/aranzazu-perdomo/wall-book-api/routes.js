@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const logic = require('./logic')
+const { logic, LogicError } = require('./logic')
 const jwt = require('jsonwebtoken')
 const validateJwt = require('./helpers/validate-jwt')
 
@@ -16,7 +16,7 @@ router.post('/register', jsonBodyParser, (req, res) => {
         .catch(err => {
             const { message } = err
 
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 
 })
@@ -30,13 +30,13 @@ router.post('/authenticate', jsonBodyParser, (req, res) => {
 
             const token = jwt.sign({ sub: id }, JWT_SECRET, { expiresIn: JWT_EXP })
 
-            res.json({ message: 'user authenticated', token })
+            res.json({ message: 'user authenticated', token, user: id })
         })
         .catch(err => {
 
             const { message } = err
 
-            res.status(err instanceof Error ? 401 : 500).json({ message })
+            res.status(err instanceof LogicError ? 401 : 500).json({ message })
         })
 })
 // update preguntar a mikel lo del email
@@ -46,19 +46,18 @@ router.patch('/user/:email/updatePassword', validateJwt, (req, res) => {
         .then(() => res.json({ message: 'Password update correctly' }))
         .catch(err => {
             const { message } = err
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 })
 
 //unregister
-router.delete('/unregister', validateJwt, (req, res) => {
+router.delete('/unregister', jsonBodyParser, (req, res) => {
     const { body: { email, password } } = req
-
     logic.unregister(email, password)
         .then(() => res.json({ message: 'User deleted correctly' }))
         .catch(err => {
             const { message } = err
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 })
 
@@ -66,12 +65,12 @@ router.delete('/unregister', validateJwt, (req, res) => {
 //add review
 router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) => {
     const { params: { userId }, body: { book, vote, comment } } = req
-    debugger;
+    
     logic.addReview(userId, book, vote, comment)
-        .then(() => res.json({ message: 'Review added correctly' }))
+        .then(() => res.status(201).json({ message: 'Review added correctly' }))
         .catch(err => {
             const { message } = err
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 })
 
@@ -80,13 +79,11 @@ router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) =
 
 router.get('/user/:userId/reviews', validateJwt, (req, res) => {
     const { params: { userId } } = req
-
     logic.listReviews(userId)
-        .then(res.json.bind(res))
+        .then(data => res.json(data))
         .catch(err => {
             const { message } = err
-
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 
 
@@ -101,7 +98,7 @@ router.delete('/user/:userId/reviews/:reviewId', validateJwt, (req, res) => {
         .then(() => res.json({ message: 'Review deleted correctly' }))
         .catch(err => {
             const { message } = err
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 })
 
@@ -117,7 +114,7 @@ router.post('/user/:userId/favorites', [validateJwt, jsonBodyParser], (req, res)
         .then(() => res.json({ message: 'Favourite added correctly' }))
         .catch(err => {
             const { message } = err
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 
 })
@@ -132,7 +129,7 @@ router.get('/user/:userId/favorites', validateJwt, (req, res) => {
         .catch(err => {
             const { message } = err
 
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 
 
@@ -148,7 +145,7 @@ router.delete('/user/:userId/favorites/:id', validateJwt, (req, res) => {
         .then(() => res.json({ message: 'Favorites deleted correctly' }))
         .catch(err => {
             const { message } = err
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 })
 
@@ -163,7 +160,7 @@ router.post('/user/:userId/searchbook', validateJwt, (req, res) => {
         .then(books => res.json({ message: 'Search correctly', books }))
         .catch(err => {
             const { message } = err
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 })
 
@@ -175,7 +172,7 @@ router.post('/user/:userId/saveimage', validateJwt, (req, res) => {
         .then(() => res.json({ message: 'Save image correctly' }))
         .catch(err => {
             const { message } = err
-            res.status(err instanceof Error ? 400 : 500).json({ message })
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 })
 

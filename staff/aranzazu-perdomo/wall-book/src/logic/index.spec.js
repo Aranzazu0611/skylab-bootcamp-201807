@@ -16,7 +16,7 @@ describe('logic', () => {
     const _vote = '10'
     const comment = 'fantastic'
 
-    true && describe('validate fields', () => {
+    !true && describe('validate fields', () => {
         it('should succeed on correct value', () => {
             expect(() => logicWallbook._validateEmail(email)).not.to.throw()
             expect(() => logicWallbook._validateStringField('password', password)).not.to.throw()
@@ -56,10 +56,10 @@ describe('logic', () => {
         })
 
     })
-    true && describe('register user', () => {
+    !true && describe('register user', () => {
         it('should register correctly', () =>
             logicWallbook.register(email, name, password)
-                .catch(({message}) => expect(message).to.be.undefined)
+                .catch(({ message }) => expect(message).to.be.undefined)
                 .then(res => expect(res).to.be.true)
         )
 
@@ -116,7 +116,7 @@ describe('logic', () => {
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid password'))
         )
-        
+
         it('should fail on empty password', () =>
             logicWallbook.register(email, name, '')
                 .catch(({ message }) => message)
@@ -130,10 +130,10 @@ describe('logic', () => {
         )
     })
 
-    true && describe('authenticate user', () => {
+    !true && describe('authenticate user', () => {
         it('should authenticate correctly', () =>
             logicWallbook.authenticate(email, password)
-                .catch(({message}) => expect(message).to.be.undefined)
+                .catch(({ message }) => expect(message).to.be.undefined)
                 .then(({ message, token, user }) => {
                     expect(token).to.exist
                     expect(user).to.exist
@@ -185,10 +185,10 @@ describe('logic', () => {
         )
     })
 
-    true && describe('unregister user', () => {
+    !true && describe('unregister user', () => {
         it('should unregister correctly', () =>
             logicWallbook.unregister(email, password)
-                .catch(({message}) => expect(message).to.be.undefined)
+                .catch(({ message }) => expect(message).to.be.undefined)
                 .then(res => expect(res).to.be.true)
         )
 
@@ -234,6 +234,21 @@ describe('logic', () => {
                 .then(message => expect(message).to.equal('invalid password'))
         )
     })
+
+    true && describe('add review', () => {
+        beforeEach('')
+
+        it('should add review correctly', () =>
+            logicWallbook.addReview(userId, book, _vote, comment, token)
+                .catch(({ message }) => expect(message).to.be.undefined)
+                .then(res =>{
+                    })
+
+        )
+
+    })
+
+
 })
 
 

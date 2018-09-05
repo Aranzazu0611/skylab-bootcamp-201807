@@ -40,9 +40,10 @@ router.post('/authenticate', jsonBodyParser, (req, res) => {
         })
 })
 // update preguntar a mikel lo del email
-router.patch('/user/:email/updatePassword', validateJwt, (req, res) => {
-    const { body: { email, password, newPassword } } = req
-    logic.updatePassword(email, password, newPassword)
+router.patch('/user/:userId', [validateJwt, jsonBodyParser], (req, res) => {
+    const { params: { userId }, body: { password, newPassword } } = req
+
+    logic.updatePassword(userId, password, newPassword)
         .then(() => res.json({ message: 'Password update correctly' }))
         .catch(err => {
             const { message } = err
@@ -53,6 +54,7 @@ router.patch('/user/:email/updatePassword', validateJwt, (req, res) => {
 //unregister
 router.delete('/unregister', jsonBodyParser, (req, res) => {
     const { body: { email, password } } = req
+
     logic.unregister(email, password)
         .then(() => res.json({ message: 'User deleted correctly' }))
         .catch(err => {
@@ -65,7 +67,7 @@ router.delete('/unregister', jsonBodyParser, (req, res) => {
 //add review
 router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) => {
     const { params: { userId }, body: { book, vote, comment } } = req
-    
+
     logic.addReview(userId, book, vote, comment)
         .then(() => res.status(201).json({ message: 'Review added correctly' }))
         .catch(err => {
@@ -79,6 +81,7 @@ router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) =
 
 router.get('/user/:userId/reviews', validateJwt, (req, res) => {
     const { params: { userId } } = req
+
     logic.listReviews(userId)
         .then(data => res.json(data))
         .catch(err => {

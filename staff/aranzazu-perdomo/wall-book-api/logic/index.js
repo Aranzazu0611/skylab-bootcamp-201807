@@ -104,7 +104,7 @@ const logic = {
    
     /**
      * Update a new Password with his/her email and a password 
-     * @param {String} email
+     * @param {String} userId
      * @param {String} password 
      * @param {String} newPassword
      * 
@@ -114,17 +114,17 @@ const logic = {
      * 
      * @returns {boolean} TRUE => if it is update new password correctly
      */
-    updatePassword(email, password, newPassword) {
+    updatePassword(userId, password, newPassword) {
         return Promise.resolve()
             .then(() => {
-                this._validateEmail(email)
+                this._validateStringField("userId", userId)
                 this._validateStringField("password", password)
                 this._validateStringField("newPassword", newPassword)
 
-                return User.findOne({ email })
+                return User.findById(userId)
             })
             .then(user => {
-                if (!user) throw new LogicError(`user with ${email} email already exist`)
+                if (!user) throw new LogicError(`user with id ${userId} already exist`)
                 if (user.password !== password) throw new LogicError(`wrong password`)
                 if (password === newPassword) throw new LogicError('new password must be different to old password')
 

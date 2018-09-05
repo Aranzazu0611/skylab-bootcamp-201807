@@ -107,7 +107,7 @@ const logicWallbook = {
     },
     /**
      * Update a new Password with his/her email and a password 
-     * @param {String} email
+     * @param {String} userId
      * @param {String} password 
      * @param {String} newPassword
      * @param {String} token
@@ -115,14 +115,16 @@ const logicWallbook = {
      *  @returns {boolean} TRUE => if it is update new password correctly
      */
 
-    updatePassword(email, password, newPassword, token) {
+    updatePassword(userId, password, newPassword, token) {
+        debugger
         return Promise.resolve()
             .then(() => {
-                this._validateEmail(email)
+                this._validateStringField("userId", userId)
                 this._validateStringField("password", password)
                 this._validateStringField("newPassword", newPassword)
+                this._validateStringField("token", token)
 
-                return this._call(`user/${email}/updatePassword`, 'patch', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ email, password, newPassword }), 201)
+                return this._call(`user/${userId}`, 'patch', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, JSON.stringify({ password, newPassword }), 200)
                     .then(res => res.json())
                     .then(() => true)
             })
@@ -130,20 +132,20 @@ const logicWallbook = {
 
     /**
      * Unregister user with his/her email and a password 
-     * @param {String} email
+     * @param {String} userId
      * @param {String} password 
      * @param {String} token 
      * 
      * @returns {boolean} TRUE => if it is unregister user correctly
      */
 
-    unregister(email, password) {
+    unregister(userId, password) {
         return Promise.resolve()
             .then(() => {
-                this._validateEmail(email)
+                this._validateStringField("userId", userId)
                 this._validateStringField("password", password)
 
-                return this._call('unregister', 'delete', { 'Content-Type': 'application/json'}, JSON.stringify({ email, password }), 200)
+                return this._call('unregister', 'delete', { 'Content-Type': 'application/json'}, JSON.stringify({ userId, password }), 200)
                     .then(res => res.json())
                     .then(() => true)
             })

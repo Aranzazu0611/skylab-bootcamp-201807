@@ -233,17 +233,20 @@ describe('logic', () => {
     })
 
     true && describe('add review', () => {
-        const email = `Aranzazu-${Math.random()}@gmail.com`
-        const name = `Aranzazu-${Math.random()}`
-        const password = `123456-${Math.random()}`
+        let email, name, password
+
         const book = "Harry Potter"
         const _vote = '10'
         const comment = 'fantastic'
 
         let user, token
 
-        beforeEach(() =>
-            logicWallbook.register(email, name, password)
+        beforeEach(() => {
+            email = `Aranzazu-${Math.random()}@gmail.com`
+            name = `Aranzazu-${Math.random()}`
+            password = `123456-${Math.random()}`
+
+            return logicWallbook.register(email, name, password)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -251,7 +254,7 @@ describe('logic', () => {
                             token = _token
                         })
                 )
-        )
+        })
 
         it('should add review correctly', () =>
             logicWallbook.addReview(user, book, _vote, comment, token)

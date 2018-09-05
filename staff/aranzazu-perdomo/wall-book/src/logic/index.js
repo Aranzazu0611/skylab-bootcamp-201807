@@ -196,8 +196,7 @@ const logicWallbook = {
             .then(()=> {
                 this._validateStringField('userId',userId)
                 this._validateStringField('token',token)
-            })
-            .then(() => {
+            
                return this._call(`user/${userId}/reviews`, 'GET', { authorization: `Bearer ${token}` },undefined,200)
                     .then(res => res.json())
             })

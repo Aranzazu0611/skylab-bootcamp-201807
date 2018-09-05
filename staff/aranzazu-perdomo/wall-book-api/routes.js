@@ -157,7 +157,7 @@ router.delete('/user/:userId/favorites/:id', validateJwt, (req, res) => {
 
 // /user/:userId/searchbook?query=Harry Potter&searchBy=Title&orderBy=relevance
 router.post('/user/:userId/searchbook', validateJwt, (req, res) => {
-    const { query: { query, searchBy, orderBy } } = req
+    const { params: { userId }, query: { query, searchBy, orderBy } } = req
 
     logic.searchBook(query, searchBy, orderBy)
         .then(books => res.json({ message: 'Search correctly', books }))

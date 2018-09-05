@@ -98,10 +98,7 @@ const logicWallbook = {
                     200
                 )
                     .then(res => res.json())
-                    /*.then(res => {
-                        debugger;
-                    })*/
-                    //.then(({ id, token }) => { id, token })
+                   
             })
 
     },
@@ -218,7 +215,7 @@ const logicWallbook = {
     deleteReviews(reviewId, userId, token) {
         return Promise.resolve()
             .then(() => {
-                return this._call(`user/${userId}/reviews/${reviewId}`, 'delete', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ reviewId, userId }), 201)
+                return this._call(`user/${userId}/reviews/${reviewId}`, 'delete', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
                     .then(() => true)
             })

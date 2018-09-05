@@ -12,6 +12,7 @@ describe('logic', () => {
     const email = `Aranzazu-${Math.random()}@gmail.com`
     const name = `Aranzazu-${Math.random()}`
     const password = `123456-${Math.random()}`
+    
 
     !true && describe('validate fields', () => {
         it('should succeed on correct value', () => {
@@ -182,6 +183,33 @@ describe('logic', () => {
         )
     })
 
+    true && describe('update password', () => {
+        let user, token, email, name, password,newPassword
+       
+        
+        beforeEach(() => {
+            email = `Aranzazu-${Math.random()}@gmail.com`
+            name = `Aranzazu-${Math.random()}`
+            password = `123456-${Math.random()}`
+            newPassword = `123456-${Math.random()}`
+
+            return logicWallbook.register(email, name, password)
+                .then(() =>
+                    logicWallbook.authenticate(email, password)
+                        .then(({ message, token: _token, user: _user }) => {
+                            user = _user
+                            token = _token
+                        })
+                )
+        })
+
+        it('should update password correctly', () =>
+            logicWallbook.updatePassword(email, password, newPassword, token)
+                .catch(({ message }) => expect(message).to.be.undefined)
+                .then(res => expect(res).to.be.true)
+        )
+    })
+
     !true && describe('unregister user', () => {
         it('should unregister correctly', () =>
             logicWallbook.unregister(email, password)
@@ -232,7 +260,7 @@ describe('logic', () => {
         )
     })
 
-    true && describe('add review', () => {
+    !true && describe('add review', () => {
         let email, name, password
 
         const book = "Harry Potter"
@@ -268,6 +296,154 @@ describe('logic', () => {
                 .then(message => expect(message).to.equal('invalid userId'))
         )
 
+        it('should fail on trying to add review with an empty userId', () =>
+            logicWallbook.addReview('', book, _vote, comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+        it('should fail on trying to add review with a blank userId', () =>
+            logicWallbook.addReview('    ', book, _vote, comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+        it('should fail on trying to add review with an undefined book', () =>
+            logicWallbook.addReview(user, undefined, _vote, comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid book'))
+        )
+
+        it('should fail on trying to add review with an empty book', () =>
+            logicWallbook.addReview(user, '', _vote, comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid book'))
+        )
+
+        it('should fail on trying to add review with a blank book', () =>
+            logicWallbook.addReview(user, '     ', _vote, comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid book'))
+        )
+
+        it('should fail on trying to add review with a numeric book', () =>
+            logicWallbook.addReview(user, 12345, _vote, comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid book'))
+        )
+
+        it('should fail on trying to add review with an undefined vote', () =>
+            logicWallbook.addReview(user, book, undefined, comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid vote'))
+        )
+
+        it('should fail on trying to add review with an empty vote', () =>
+            logicWallbook.addReview(user, book, '', comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid vote'))
+        )
+
+        it('should fail on trying to add review with a blank vote', () =>
+            logicWallbook.addReview(user, book, '    ', comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid vote'))
+        )
+
+        it('should fail on trying to add review with an undefined comment', () =>
+            logicWallbook.addReview(user, book, _vote, undefined, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid comment'))
+        )
+
+        it('should fail on trying to add review with an empty comment', () =>
+            logicWallbook.addReview(user, book, _vote, '', token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid comment'))
+        )
+
+        it('should fail on trying to add review with a blank comment', () =>
+            logicWallbook.addReview(user, book, _vote, '      ', token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid comment'))
+        )
+
+        it('should fail on trying to add review with a numeric comment', () =>
+            logicWallbook.addReview(user, book, _vote, 12345, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid comment'))
+        )
+
+    })
+
+    !true && describe('list review', () => {
+        let email, name, password, userId, token
+
+        beforeEach(() => {
+            email = `Aranzazu-${Math.random()}@gmail.com`
+            name = `Aranzazu-${Math.random()}`
+            password = `123456-${Math.random()}`
+
+            return logicWallbook.register(email, name, password)
+                .then(() =>
+                    logicWallbook.authenticate(email, password)
+                        .then(({ message, token: _token, user: _user }) => {
+                            userId = _user
+                            token = _token
+                        })
+                )
+        })
+
+        it('should list review correctly', () =>
+            logicWallbook.listReviews(userId, token)
+                .catch(({ message }) => expect(message).to.be.undefined)
+                .then((reviews) => expect(reviews).to.exist)
+        )
+
+        it('should fail on trying to list review with an undefined userId', () =>
+            logicWallbook.listReviews(undefined, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+        it('should fail on trying to list review with an empty userId', () =>
+            logicWallbook.listReviews('', token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+        it('should fail on trying to list review with a blank userId', () =>
+            logicWallbook.listReviews('      ', token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+    })
+
+    !true && describe('delete review', () => {
+        let email, name, password, userId, token
+
+        beforeEach(() => {
+            email = `Aranzazu-${Math.random()}@gmail.com`
+            name = `Aranzazu-${Math.random()}`
+            password = `123456-${Math.random()}`
+
+            return logicWallbook.register(email, name, password)
+                .then(() =>
+                    logicWallbook.authenticate(email, password)
+                        .then(({ message, token: _token, user: _user }) => {
+                            userId = _user
+                            token = _token
+                        })
+                )
+        })
+
+        it('should delete review', () =>
+            logicWallbook.deleteReviews(reviewId, userId, token)
+                .catch(({ message }) => expect(message).to.be.undefined)
+                .then(res => expect(res).to.be.true)
+
+        )
 
     })
 

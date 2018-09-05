@@ -256,8 +256,16 @@ describe('logic', () => {
         it('should add review correctly', () =>
             logicWallbook.addReview(user, book, _vote, comment, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
-                .then(({message}) => expect(message).to.equal('Review added correctly'))
+                .then(({ message }) => expect(message).to.equal('Review added correctly'))
         )
+
+        it('should fail on trying to add review with undefined userId', () =>
+            logicWallbook.addReview(undefined, book, _vote, comment, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+
     })
 
 

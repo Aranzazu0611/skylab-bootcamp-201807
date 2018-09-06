@@ -323,7 +323,6 @@ const logic = {
 
                 return Promise.all(bookPromises)
             })
-            .then(books => books)
     },
     
     /**

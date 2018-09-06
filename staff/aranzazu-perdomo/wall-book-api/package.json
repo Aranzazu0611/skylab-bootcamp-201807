@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node . 8080",
     "debug": "node inspect --inspect-port=9228 . 8080", 
-    "debug-test": "mocha debug logic",
-    "test": "mocha logic --timeout 15000",
+    "debug-test-logic": "mocha debug logic --timeout 15000",
+    "test-logic": "mocha logic --timeout 15000",
     "run test-coverage": "nyc  npm test",
     "test-coverage-report": "nyc report --reporter=html"
   },

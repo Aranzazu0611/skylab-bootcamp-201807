@@ -126,7 +126,7 @@ router.post('/user/:userId/favorites', [validateJwt, jsonBodyParser], (req, res)
 router.get('/user/:userId/favorites', validateJwt, (req, res) => {
     const { params: { userId } } = req
 
-    logic.listfavorites(userId)
+    logic.listFavorites(userId)
         .then(res.json.bind(res))
         .catch(err => {
             const { message } = err

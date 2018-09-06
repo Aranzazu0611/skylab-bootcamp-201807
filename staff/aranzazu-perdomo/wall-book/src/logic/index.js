@@ -281,7 +281,8 @@ const logicWallbook = {
                 this._validateStringField("userId", userId)
                 this._validateStringField("token", token)
 
-                return this._call(`user/${userId}/favorites`, 'get', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ userId }), 201)
+                debugger
+                return this._call(`user/${userId}/favorites`, 'get', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
             })
     },

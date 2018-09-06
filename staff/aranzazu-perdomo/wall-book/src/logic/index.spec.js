@@ -54,7 +54,7 @@ describe('logic', () => {
         })
 
     })
-    
+
     true && describe('register user', () => {
         it('should register correctly', () =>
             logicWallbook.register(email, name, password)
@@ -739,20 +739,21 @@ describe('logic', () => {
             password = `123456-${Math.random()}`
 
             return logicWallbook.register(email, name, password)
-                .then(() =>
-                    logicWallbook.authenticate(email, password)
-                        .then(({ message, token: _token, user: _user }) => {
-                            userId = _user
-                            token = _token
-                        })
-                )
+                .then(() => logicWallbook.authenticate(email, password))
+                .then(({ message, token: _token, user: _user }) => {
+                    userId = _user
+                    token = _token
+                })
                 .then(() => logicWallbook.addFavorite(userId, book, token))
         })
 
         it('should list favorites correctly', () =>
-            logicWallbook.listFavorites(userId)
+            logicWallbook.listFavorites(userId, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
-                .then(({ message }) => expect(message).to.equal('Favourite added correctly'))
+                .then(favorites => {
+                    expect(favorites).to.exist
+                    expect(favorites.length).to.equal(1)
+                })
         )
 
     })

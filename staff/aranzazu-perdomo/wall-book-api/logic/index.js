@@ -288,7 +288,6 @@ const logic = {
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("userId", userId)
-                debugger
                 this._validateStringField("book", book)
 
                 return User.findById(userId)

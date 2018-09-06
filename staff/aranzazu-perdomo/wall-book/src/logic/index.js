@@ -257,6 +257,8 @@ const logicWallbook = {
             .then(() => {
                 this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
+                this._validateStringField("token", token)
+
 
                 return this._call(`user/${userId}/favorites`, 'post', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, JSON.stringify({ book }), 201)
                     .then(res => res.json())
@@ -276,6 +278,9 @@ const logicWallbook = {
     listFavorites(userId, token) {
         return Promise.resolve()
             .then(() => {
+                this._validateStringField("userId", userId)
+                this._validateStringField("token", token)
+
                 return this._call(`user/${userId}/favorites`, 'get', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ userId }), 201)
                     .then(res => res.json())
             })
@@ -294,6 +299,10 @@ const logicWallbook = {
     deleteFavorites(userId, bookId, token) {
         return Promise.resolve()
             .then(() => {
+                this._validateStringField("userId", userId)
+                this._validateStringField("bookId", bookId)
+                this._validateStringField("token", token)
+
                 return this._call(`user/${userId}/favorites/${bookId}`, 'delete', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ userId, bookId }), 201)
                     .then(res => res.json())
                     .then(() => true)
@@ -311,6 +320,10 @@ const logicWallbook = {
     saveImageProfile(userId, base64Image, token) {
         return Promise.resolve()
             .then(() => {
+                this._validateStringField("userId", userId)
+                this._validateStringField("base64Image", base64Image)
+                this._validateStringField("token", token)
+
                 return this._call(`user/${userId}/saveimage`, 'post', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ userId, base64Image }), 201)
                     .then(res => res.json())
                     .then(res => res)

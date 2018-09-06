@@ -140,7 +140,7 @@ router.get('/user/:userId/favorites', validateJwt, (req, res) => {
 
 //delete favorites
 
-router.delete('/user/:userId/favorites/:id', validateJwt, (req, res) => {
+router.delete('/user/:userId/favorites/:bookId', validateJwt, (req, res) => {
     const { params: { userId, bookId } } = req
 
     logic.deleteFavourites(userId, bookId)
@@ -158,7 +158,7 @@ router.delete('/user/:userId/favorites/:id', validateJwt, (req, res) => {
 router.post('/user/:userId/searchbook', validateJwt, (req, res) => {
     const { params: { userId }, query: { query, searchBy, orderBy } } = req
 
-    logic.searchBook(query, searchBy, orderBy)
+    logic.searchBook(userId,query, searchBy, orderBy)
         .then(books => res.json({ message: 'Search correctly', books }))
         .catch(err => {
             const { message } = err

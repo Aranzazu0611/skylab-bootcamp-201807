@@ -756,10 +756,47 @@ describe('logic', () => {
                 })
         )
 
+        it('should fail on trying to list favorites with an undefined userId', () =>
+            logicWallbook.listFavorites(undefined, token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+        it('should fail on trying to list favorites with an empty userId', () =>
+            logicWallbook.listFavorites('', token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+        it('should fail on trying to list favorites with a blank userId', () =>
+            logicWallbook.listFavorites('     ', token)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid userId'))
+        )
+
+        it('should fail on trying to list favorites with an undefined token', () =>
+            logicWallbook.listFavorites(userId, undefined)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid token'))
+
+        )
+
+        it('should fail on trying to list favorites with an empty token', () =>
+            logicWallbook.listFavorites(userId, '')
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid token'))
+        )
+
+        it('should fail on trying to list favorites with a blank token', () =>
+            logicWallbook.listFavorites(userId, '     ')
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid token'))
+        )
+
     })
 
     true && describe('delete favorites', () => {
-        let email, name, password
+        let email, name, password, bookId
         let userId, token
 
         const book = "Harry Potter"
@@ -786,6 +823,42 @@ describe('logic', () => {
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then(({ message }) => expect(message).to.equal('Delete favorites correctly'))
         )
+
+
+    })
+
+    true && describe(' search book', () => {
+        let email, name, password, token, query, searchBy, orderBy, userId
+
+        query = "Harry Potter"
+
+        beforeEach(() => {
+            email = `Aranzazu-${Math.random()}@gmail.com`
+            name = `Aranzazu-${Math.random()}`
+            password = `123456-${Math.random()}`
+            
+            return logicWallbook.register(email, name, password)
+                .then(() =>
+                    logicWallbook.authenticate(email, password)
+                        .then(({ message, token: _token, user: _user }) => {
+                            userId = _user
+                            token = _token
+                        })
+                )
+
+        })
+
+        it('should search book correctly', () =>
+            logicWallbook.searchBook(query, searchBy = 'title', orderBy = 'relevance', token)
+                .catch(({ message }) => expect(message).to.be.undefined)
+                .then(searchs => {
+                    expect(searchs).to.exist
+                    expect(searchs.length).to.equal(1)
+                })
+
+        )
+
+
 
 
     })

@@ -15,7 +15,7 @@ describe('Logic', () => {
     const email = `Ara-${Math.random()}@mail.com`, name = `Ara-${Math.random()}`, password = `123-${Math.random()}`
     let _connection
     let count = 0
-
+    let userId
 
     before(() =>
         mongoose.connect(MONGO_URL, { useNewUrlParser: true })
@@ -199,10 +199,10 @@ describe('Logic', () => {
     true && describe('update password', () => {
         const newPassword = `${password}-${Math.random()}`
 
-        beforeEach(() => User.create({ email, name, password }))
+        beforeEach(() => User.create({ email, name, password }).then(user => userId = user.id))
 
         it('should update password correctly', () => {
-            return logic.updatePassword(email, password, newPassword)
+            return logic.updatePassword(userId, password, newPassword)
                 .then(res => {
                     expect(res).to.be.true
 
@@ -210,69 +210,69 @@ describe('Logic', () => {
                 })
                 .then(user => {
                     expect(user).to.exist
-                    expect(user.email).to.equal(email)
+                    expect(user.id).to.equal(userId)
                     expect(user.password).to.equal(newPassword)
                 })
 
 
         })
 
-        it('should fail on trying to update password with an undefined email', () => {
+        it('should fail on trying to update password with an undefined userId', () => {
             return logic.updatePassword(undefined, password, newPassword)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to update password with an empty email', () => {
+        it('should fail on trying to update password with an empty userId', () => {
             return logic.updatePassword('', password, newPassword)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to update password with a blank email', () => {
+        it('should fail on trying to update password with a blank userId', () => {
             return logic.updatePassword('     ', password, newPassword)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to update password with a numeric email', () => {
+        it('should fail on trying to update password with a numeric userId', () => {
             return logic.updatePassword(123, password, newPassword)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
         it('should fail on trying to update password with an undefined password', () => {
-            return logic.updatePassword(email, undefined, newPassword)
+            return logic.updatePassword(userId, undefined, newPassword)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid password`))
 
         })
         it('should fail on trying to update password with an empty password', () => {
-            return logic.updatePassword(email, '', newPassword)
+            return logic.updatePassword(userId, '', newPassword)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid password`))
 
         })
         it('should fail on trying to update password with a blank password', () => {
-            return logic.updatePassword(email, '     ', newPassword)
+            return logic.updatePassword(userId, '     ', newPassword)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid password`))
 
         })
         it('should fail on trying to update password with an undefined new password', () => {
-            return logic.updatePassword(email, password, undefined)
+            return logic.updatePassword(userId, password, undefined)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid newPassword`))
 
         })
         it('should fail on trying to update password with an empty new password', () => {
-            return logic.updatePassword(email, password, '')
+            return logic.updatePassword(userId, password, '')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid newPassword`))
 
         })
         it('should fail on trying to update password with a blank new password', () => {
-            return logic.updatePassword(email, password, '     ')
+            return logic.updatePassword(userId, password, '     ')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid newPassword`))
 
@@ -280,42 +280,42 @@ describe('Logic', () => {
     })
 
     true && describe('unregister', () => {
-        beforeEach(() => User.create({ email, name, password }))
+        beforeEach(() => User.create({ email, name, password }).then(user => userId = user.id))
 
         it('should unregister user correctly', () => {
-            return logic.unregister(email, password)
+            return logic.unregister(userId, password)
                 .then(res => {
                     expect(res).to.be.true
 
-                    return User.findOne({ email })
+                    return User.findById(userId)
                 })
                 .then(user => {
                     expect(user).to.not.exist
                 })
         })
 
-        it('should fail on trying to unregister user with an undefined email', () => {
+        it('should fail on trying to unregister user with an undefined userId', () => {
             return logic.unregister(undefined, password)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to unregister user with an empty email', () => {
+        it('should fail on trying to unregister user with an empty userId', () => {
             return logic.unregister('', password)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to unregister user with a numeric email', () => {
+        it('should fail on trying to unregister user with a numeric userId', () => {
             return logic.unregister(123, password)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
-        it('should fail on trying to unregister user with a blank email', () => {
+        it('should fail on trying to unregister user with a blank userId', () => {
             return logic.unregister('     ', password)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid email`))
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
     })
@@ -488,34 +488,48 @@ describe('Logic', () => {
     })
 
     true && describe('search books', () => {
+        let userId
+
+        beforeEach(() =>
+            User.create({ email, name, password })
+                .then(() => User.findOne({ email }))
+                .then(user => userId = user.id)
+        )
+
         it('should search books by title', () => {
             let query = "harry potter"
-            return logic.searchBook(query)
+            return logic.searchBook(userId, query)
                 .then(books => {
 
                     expect(books).to.exist
                     expect(books.length).to.equal(20)
                     expect(books[0].title).to.equal("La irresistible ascensión de Harry Potter")
-                    expect(books[1].title).to.equal('Harry Potter y la Orden del Fénix')
-                    expect(books[2].title).to.equal('Bautizando a harry potter')
-                    expect(books[3].title).to.equal("Harry Potter y la piedra filosofal")
-                    expect(books[4].title).to.equal("Harry Potter y la Biblia")
-                    expect(books[0].authors[0]).to.equal("Andrew Blake")
+                    
+                    const isCorrect = true
+                    books.forEach(book => {
+                        if(book.title.search(/harry potter/gi) === -1) {
+                            isCorrect = false
+                            return
+                        }
+                    })
 
+                    expect(isCorrect).to.be.true
+                    expect(books[0].authors[0]).to.equal("Andrew Blake")
 
                 })
         })
-
+        // J. J K.Rowling J.K. Rowling J. K. Rowling
         it('should search books by author', () => {
             let query = "j.k. Rowling"
-            return logic.searchBook(query, 'author')
+            return logic.searchBook(userId, query, 'author')
                 .then(books => {
                     expect(books).to.exist
                     expect(books.length).to.equal(20)
-
+                    debugger
                     books.forEach(book => {
 
-                        let isAuthor = book.authors.includes('J. K. Rowling') || book.authors.includes('J.K. Rowling')
+                        let isAuthor = book.authors.some(author => author.match(/Rowling/gi))
+                        // let isAuthor = book.authors.includes('J. K. Rowling') || book.authors.includes('J.K. Rowling')
                         expect(isAuthor).to.be.true
                     })
 
@@ -524,7 +538,7 @@ describe('Logic', () => {
 
         it('should search books by newest', () => {
             let query = "j.k. Rowling"
-            return logic.searchBook(query, 'author', 'newest')
+            return logic.searchBook(userId, query, 'author', 'newest')
                 .then(books => {
 
                     expect(books).to.exist
@@ -538,42 +552,60 @@ describe('Logic', () => {
 
                     expect(books[0].title).to.equal("Vivir Bien La Vida")
                     expect(books[0].publishedDate).to.equal("2018-04-30")
-                    expect(books[3].publishedDate).to.equal("2015-12-08")
 
                 })
         })
 
+        it('should fail on trying to search books with an undefined userId', () => {
+            let query = "harry potter"
+            return logic.searchBook(undefined, query)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
+
+        })
+
+        it('should fail on trying to search books with an empty userId', () => {
+            let query = "harry potter"
+            return logic.searchBook('', query)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
+
+        })
+
+        it('should fail on trying to search books with an empty userId', () => {
+            let query = "harry potter"
+            return logic.searchBook('     ', query)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid userId`))
+
+        })
+
         it('should fail on trying to search books with an undefined query', () => {
-            return logic.searchBook(undefined)
+            let userId = "485522"
+            return logic.searchBook(userId, undefined)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid query`))
 
         })
         it('should fail on trying to search books with an empty query', () => {
-            return logic.searchBook('')
+            return logic.searchBook(userId, '')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid query`))
 
         })
         it('should fail on trying to search books with a blank query', () => {
-            return logic.searchBook('    ')
+            return logic.searchBook(userId, '    ')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid query`))
 
         })
         it('should fail on trying to search books with a numeric query', () => {
-            return logic.searchBook(123)
+            return logic.searchBook(userId, 123)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid query`))
 
         })
-        // it('should fail on trying to search books with an undefined searchby', () => {
-        //     let query = "harry potter"
-        //     return logic.searchBook(query, undefined)
-        //         .catch(err => err)
-        //         .then(({ message }) => expect(message).to.equal(`undefined`))
 
-        // })
 
 
 
@@ -686,7 +718,7 @@ describe('Logic', () => {
 
     // todo delete favorite
 
-    !true && describe('delete favorites', () => {
+    true && describe('delete favorites', () => {
         let userId
 
         const favorites = [
@@ -699,7 +731,7 @@ describe('Logic', () => {
                 .then(user => {
                     userId = user._id.toString()
 
-                    return Promise.all(favorites.map(favorite => User.favorites.create({ user: userId, ...favorite })))
+                    return Promise.all(favorites.map(favorite => user.favorites.push({ user: userId, ...favorite })))
                 })
         })
         it('should delete favorites correctly', () => {
@@ -717,7 +749,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('upload photo', () => {
+    true && describe('upload photo', () => {
         it('should succeed on correct upload photo', () => {
 
             return User.create({ email })

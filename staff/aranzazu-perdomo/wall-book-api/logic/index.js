@@ -251,12 +251,13 @@ const logic = {
     *      
     * @returns {Array} results => books information
     */
-    searchBook(query, searchBy = 'title', orderBy = 'relevance') {
+    searchBook(userId,query, searchBy = 'title', orderBy = 'relevance') {
         return Promise.resolve()
             .then(() => {
                 if (searchBy !== undefined && typeof searchBy !== 'string') throw new LogicError(`invalid ${searchBy}`)
                 if (orderBy !== undefined && typeof orderBy !== 'string') throw new LogicError(`invalid ${orderBy}`)
 
+                this._validateStringField("userId", userId)
                 this._validateStringField("query", query)
                 this._validateStringField("searchBy", searchBy)
                 this._validateStringField("orderBy", orderBy)
@@ -335,15 +336,18 @@ const logic = {
     */
     deleteFavorites(userId, bookId) {
         return Promise.resolve()
-            .then(() => Review.find({ user: userId, _id: bookId }))
-            .then(favorite => {
-                if (!favorite || !favorite.length) throw new LogicError(`book ${bookId} from user ${userId} not exist`)
+            .then(() => User.findById(userId)
+            .then(user => {
+                if (!user) throw new LogicError(`user ${userId} not exist`)
 
-                return User.favorites.deleteOne({ user: userId, _id: bookId })
+                const favorites = user.favorites
+                favorites.splice(favorites.indexOf(bookId), 1)
+
+                return user.save()
             })
-            .then(() => true)
+            .then(() => true))
 
-    },
+        },
 
     /**
     * Save image of profile

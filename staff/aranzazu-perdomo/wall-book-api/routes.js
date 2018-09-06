@@ -53,9 +53,9 @@ router.patch('/user/:userId', [validateJwt, jsonBodyParser], (req, res) => {
 
 //unregister
 router.delete('/unregister', jsonBodyParser, (req, res) => {
-    const { body: { email, password } } = req
+    const { body: { userId, password } } = req
 
-    logic.unregister(email, password)
+    logic.unregister(userId, password)
         .then(() => res.json({ message: 'User deleted correctly' }))
         .catch(err => {
             const { message } = err

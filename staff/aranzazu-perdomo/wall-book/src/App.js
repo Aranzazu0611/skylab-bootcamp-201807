@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router'
-import logic from "./logic/indexaxios";
+import { logicWallbook } from '../src/logic'
 import logo from './logo.svg';
 import LandingPage from '../src/components/LandingPage'
 import Book from '../src/components/Book'
@@ -11,18 +11,49 @@ import swal from 'sweetalert2'
 import './App.css';
 
 class App extends Component {
+  state = {
+    email: sessionStorage.getItem('email') || '',
+    password: sessionStorage.getItem('password') || ''
+
+  }
+
+  isLoggedIn() {
+    return this.state.email
+  }
+
+  onLoggedIn = (email, password) => {
+    this.setState({ email, password })
+
+    sessionStorage.setItem('email', email)
+    sessionStorage.setItem('password', password)
+
+    this.props.history.push('/search')
+  }
+
+
+  onLogout = e => {
+    e.preventDefault()
+    this.setState({ email: '', password: '' })
+    sessionStorage.clear()
+    this.props.history.push('/')
+  }
+
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+
+        <Switch>
+          <Route exact path="/" render={() => this.state.isLoggedIn ? <Redirect to="/search" /> : <LandingPage />} />
+          <Route path="/reviews" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} />
+          <Route path="/search" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} />
+          <Route path="/register" render={() => this.state.isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />} />
+          <Route path="/login" render={() => this.state.isLoggedIn ? <Redirect to="/search" /> : <Redirect to="/" />} />
+          <Route path="/favorites" render={() => this.state.isLoggedIn ? <Favorites /> : <Redirect to="/" />} />
+        </Switch>
       </div>
-    );
+
+    )
   }
 }
 

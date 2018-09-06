@@ -52,7 +52,7 @@ const logicWallbook = {
     _validateNumber(name, value) {
         if (!Number.isInteger(value)) throw new Error(`invalid ${name}`)
     },
-    
+
     /**
     * Registers an user with a email, name and password 
     * @param {String} email 
@@ -91,14 +91,14 @@ const logicWallbook = {
                 this._validateStringField("password", password)
 
                 return this._call(
-                    'authenticate', 
-                    'POST', 
-                    { 'Content-Type': 'application/json' }, 
-                    JSON.stringify({ email, password }), 
+                    'authenticate',
+                    'POST',
+                    { 'Content-Type': 'application/json' },
+                    JSON.stringify({ email, password }),
                     200
                 )
                     .then(res => res.json())
-                   
+
             })
 
     },
@@ -142,7 +142,7 @@ const logicWallbook = {
                 this._validateStringField("userId", userId)
                 this._validateStringField("password", password)
 
-                return this._call('unregister', 'delete', { 'Content-Type': 'application/json'}, JSON.stringify({ userId, password }), 200)
+                return this._call('unregister', 'delete', { 'Content-Type': 'application/json' }, JSON.stringify({ userId, password }), 200)
                     .then(res => res.json())
                     .then(() => true)
             })
@@ -171,11 +171,13 @@ const logicWallbook = {
                 this._validateStringField("comment", comment)
 
                 return this._call(
-                    `user/${userId}/reviews`, 
-                    'post', 
-                    { 'Content-Type': 'application/json', 
-                    authorization: `bearer ${token}` }, 
-                    JSON.stringify({ userId, book, vote, comment }), 
+                    `user/${userId}/reviews`,
+                    'post',
+                    {
+                        'Content-Type': 'application/json',
+                        authorization: `bearer ${token}`
+                    },
+                    JSON.stringify({ userId, book, vote, comment }),
                     201
                 )
                     .then(res => res.json())
@@ -193,11 +195,11 @@ const logicWallbook = {
 
     listReviews(userId, token) {
         return Promise.resolve()
-            .then(()=> {
-                this._validateStringField('userId',userId)
-                this._validateStringField('token',token)
-            
-               return this._call(`user/${userId}/reviews`, 'GET', { authorization: `Bearer ${token}` },undefined,200)
+            .then(() => {
+                this._validateStringField('userId', userId)
+                this._validateStringField('token', token)
+
+                return this._call(`user/${userId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
             })
     },
@@ -214,6 +216,10 @@ const logicWallbook = {
     deleteReviews(reviewId, userId, token) {
         return Promise.resolve()
             .then(() => {
+                this._validateStringField("reviewId", reviewId)
+                this._validateStringField("userId", userId)
+                this._validateStringField("token", token)
+
                 return this._call(`user/${userId}/reviews/${reviewId}`, 'delete', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
                     .then(() => true)

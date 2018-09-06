@@ -147,16 +147,16 @@ const logic = {
      *      
      * @returns {boolean} TRUE => if it is unregister user correctly
      */
-    unregister(email, password) {
+    unregister(userId, password) {
         return Promise.resolve()
             .then(() => {
-                this._validateEmail(email)
+                this._validateStringField("userId", userId)
                 this._validateStringField("password", password)
 
                 return User.findOne({ email })
             })
             .then(user => {
-                if (!user) throw new LogicError(`user with ${email} email already exist`)
+                if (!user) throw new LogicError(`user with id ${userId} already exist`)
                 if (user.password !== password) throw new LogicError(`wrong password`)
 
                 return User.deleteOne({ _id: user._id })

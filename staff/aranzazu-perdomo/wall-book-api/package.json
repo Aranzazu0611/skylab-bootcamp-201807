@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node . 8080",
-    "debug": "node inspect . 8080", 
+    "debug": "node inspect --inspect-port=9228 . 8080", 
     "debug-test": "mocha debug logic",
     "test": "mocha logic --timeout 15000",
     "run test-coverage": "nyc  npm test",

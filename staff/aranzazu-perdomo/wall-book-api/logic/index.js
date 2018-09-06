@@ -43,7 +43,6 @@ const logic = {
      * @throws {LogicError} invalid name
      */
     _validateNumber(name, value) {
-        debugger
         if (!Number.isInteger(value)) throw new LogicError(`invalid ${name}`)
     },
    
@@ -153,7 +152,7 @@ const logic = {
                 this._validateStringField("userId", userId)
                 this._validateStringField("password", password)
 
-                return User.findOne({ email })
+                return User.findById(userId)
             })
             .then(user => {
                 if (!user) throw new LogicError(`user with id ${userId} already exist`)
@@ -181,8 +180,6 @@ const logic = {
         return Promise.resolve()
             .then(() => {
                 vote = parseInt(_vote)
-
-                debugger
 
                 this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
@@ -287,11 +284,11 @@ const logic = {
      *
      * @returns {boolean} TRUE => if it is add favorites correctly
      */
-    addFavorites(userId, book) {
+    addFavorite(userId, book) {
         return Promise.resolve()
             .then(() => {
-                
                 this._validateStringField("userId", userId)
+                debugger
                 this._validateStringField("book", book)
 
                 return User.findById(userId)

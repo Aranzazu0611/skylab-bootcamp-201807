@@ -589,7 +589,7 @@ describe('Logic', () => {
 
         it('should succeed on add favorites', () => {
             let book = "Harry Potter"
-            return logic.addFavorites(userId, book)
+            return logic.addFavorite(userId, book)
                 .then(res => {
                     expect(res).to.be.true
 
@@ -603,55 +603,55 @@ describe('Logic', () => {
         })
         it('should fail on trying to add favorites with an undefined book', () => {
 
-            return logic.addFavorites(userId, undefined)
+            return logic.addFavorite(userId, undefined)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
 
         })
         it('should fail on trying to add favorites with an empty book', () => {
 
-            return logic.addFavorites(userId, '')
+            return logic.addFavorite(userId, '')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
 
         })
         it('should fail on trying to add favorites with a blank book', () => {
 
-            return logic.addFavorites(userId, '       ')
+            return logic.addFavorite(userId, '       ')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
 
         })
         it('should fail on trying to add favorites with a numeric book', () => {
-            return logic.addFavorites(userId, 123)
+            return logic.addFavorite(userId, 123)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
 
         })
         it('should fail on trying to add favorites with an undefined userId ', () => {
             let book = "Harry Potter"
-            return logic.addFavorites(undefined, book)
+            return logic.addFavorite(undefined, book)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
         it('should fail on trying to add favorites with a numeric userId', () => {
             let book = "Harry Potter"
-            return logic.addFavorites(123, book)
+            return logic.addFavorite(123, book)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
         it('should fail on trying to add favorites with an empty userId', () => {
             let book = "Harry Potter"
-            return logic.addFavorites('', book)
+            return logic.addFavorite('', book)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
         it('should fail on trying to add favorites with a blank userId', () => {
             let book = "Harry Potter"
-            return logic.addFavorites('      ', book)
+            return logic.addFavorite('      ', book)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
 

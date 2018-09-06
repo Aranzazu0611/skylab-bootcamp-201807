@@ -113,7 +113,6 @@ const logicWallbook = {
      */
 
     updatePassword(userId, password, newPassword, token) {
-        debugger
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("userId", userId)
@@ -253,13 +252,13 @@ const logicWallbook = {
     * 
     *@returns {Response} response with message notifying favorites was added correctly
     */
-    addFavorites(userId, book, token) {
+    addFavorite(userId, book, token) {
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
 
-                return this._call(`user/${userId}/favorites`, 'post', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ userId, book }), 201)
+                return this._call(`user/${userId}/favorites`, 'post', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, JSON.stringify({ book }), 201)
                     .then(res => res.json())
                     .then(res => res)
             })

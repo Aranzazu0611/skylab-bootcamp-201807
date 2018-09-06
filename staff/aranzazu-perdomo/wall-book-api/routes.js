@@ -110,11 +110,10 @@ router.delete('/user/:userId/reviews/:reviewId', validateJwt, (req, res) => {
 //add favorites
 
 router.post('/user/:userId/favorites', [validateJwt, jsonBodyParser], (req, res) => {
-    const { params: userId, body: { book } } = req
+    const { params: { userId }, body: { book } } = req
 
-    logic.addFavorites(userId, book)
-
-        .then(() => res.json({ message: 'Favourite added correctly' }))
+    logic.addFavorite(userId, book)
+        .then(() => res.status(201).json({ message: 'Favourite added correctly' }))
         .catch(err => {
             const { message } = err
             res.status(err instanceof LogicError ? 400 : 500).json({ message })

@@ -293,6 +293,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+
             return logicWallbook.register(email, name, password)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
@@ -634,7 +635,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('add favorites', () => {
+    true && describe('add favorite', () => {
         let email, name, password
         let userId, token
 
@@ -657,9 +658,9 @@ describe('logic', () => {
         })
 
         it('should add favorites correctly', () =>
-            logicWallbook.addFavorites((userId, book, token))
+            logicWallbook.addFavorite(userId, book, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
-                .then(({ message }) => expect(message).to.equal('Favorites added correctly'))
+                .then(({ message }) => expect(message).to.equal('Favourite added correctly'))
         )
    
     })

@@ -247,20 +247,20 @@ const logicWallbook = {
     /**
     * Add favorites requiring different parameters
     * @param {String} userId
-    * @param {String} book
+    * @param {String} bookId
     * @param {String} token
     * 
     *@returns {Response} response with message notifying favorites was added correctly
     */
-    addFavorite(userId, book, token) {
+    addFavorite(userId, bookId, token) {
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("userId", userId)
-                this._validateStringField("book", book)
+                this._validateStringField("bookId", bookId)
                 this._validateStringField("token", token)
 
 
-                return this._call(`user/${userId}/favorites`, 'post', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, JSON.stringify({ book }), 201)
+                return this._call(`user/${userId}/favorites`, 'post', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, JSON.stringify({ bookId }), 201)
                     .then(res => res.json())
                     .then(res => res)
             })
@@ -297,14 +297,14 @@ const logicWallbook = {
     * @returns {Boolean} True =>if it is delete favorites correctly
     */
 
-    deleteFavorites(userId, bookId, token) {
+    deleteFavorite(userId, bookId, token) {
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("userId", userId)
                 this._validateStringField("bookId", bookId)
                 this._validateStringField("token", token)
 
-                return this._call(`user/${userId}/favorites/${bookId}`, 'delete', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ userId, bookId }), 201)
+                return this._call(`user/${userId}/favorites/${bookId}`, 'delete', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
                     .then(() => true)
             })

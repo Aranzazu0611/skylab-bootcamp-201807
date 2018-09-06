@@ -5,6 +5,7 @@ const moment = require('moment')
 const { User, Review } = require('../data/models')
 const books = require("google-books-search-2")
 const cloudinary = require('cloudinary')
+require('isomorphic-fetch')
 
 cloudinary.config({
     presentname: "xmjoy1y2",
@@ -278,25 +279,26 @@ const logic = {
     
     /**
      * Add favorites requiring different parameters
+     * 
      * @param {String} userId
-     * @param {String} book
+     * @param {String} bookId
      *
      * @throws {LogicError} if user with userId does not exists
      *
      * @returns {boolean} TRUE => if it is add favorites correctly
      */
-    addFavorite(userId, book) {
+    addFavorite(userId, bookId) {
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("userId", userId)
-                this._validateStringField("book", book)
+                this._validateStringField("bookId", bookId)
 
                 return User.findById(userId)
             })
             .then(user => {
                 if (!user) throw new LogicError(`user with ${userId} does not exists`)
 
-                user.favorites.push(book)
+                user.favorites.push(bookId)
 
                 return user.save()
             })
@@ -334,13 +336,14 @@ const logic = {
     * @throws {LogicError} if book from user not exist    
     * @returns {Boolean} True =>if it is delete favorites correctly
     */
-    deleteFavorites(userId, bookId) {
+    deleteFavorite(userId, bookId) {
         return Promise.resolve()
             .then(() => User.findById(userId)
             .then(user => {
                 if (!user) throw new LogicError(`user ${userId} not exist`)
 
                 const favorites = user.favorites
+
                 favorites.splice(favorites.indexOf(bookId), 1)
 
                 return user.save()
@@ -351,13 +354,13 @@ const logic = {
 
     /**
     * Save image of profile
+    * 
     * @param {String} userId
     * @param {String} base64Image
     * 
     * @returns {object} Photo Profile
     */
     saveImageProfile(userId, base64Image) {
-
         return Promise.resolve()
             .then(() => {
                 return new Promise((resolve, reject) => {
@@ -372,6 +375,23 @@ const logic = {
                                 return user.photoProfile
                             })
                     })
+            })
+    },
+
+    /**
+     * Retrieves book information by its id
+     * 
+     * @param {string} bookId 
+     * 
+     * @returns {Promise<Object|LogicError>} - Returns the book info, otherwise if error then returns LogicError
+     */
+    retrieveBook(bookId) {
+        return Promise.resolve()
+            .then(() => {
+                this._validateStringField("bookId", bookId)
+
+                return fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
+                    .then(res => res.json())
             })
     }
 

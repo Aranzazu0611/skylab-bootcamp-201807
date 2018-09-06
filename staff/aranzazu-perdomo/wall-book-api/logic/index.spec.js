@@ -504,10 +504,10 @@ describe('Logic', () => {
                     expect(books).to.exist
                     expect(books.length).to.equal(20)
                     expect(books[0].title).to.equal("La irresistible ascensión de Harry Potter")
-                    
+
                     const isCorrect = true
                     books.forEach(book => {
-                        if(book.title.search(/harry potter/gi) === -1) {
+                        if (book.title.search(/harry potter/gi) === -1) {
                             isCorrect = false
                             return
                         }
@@ -611,7 +611,7 @@ describe('Logic', () => {
 
     })
 
-    true && describe('add favorites', () => {
+    true && describe('add favorite', () => {
         let userId
         beforeEach(() =>
             User.create({ email, name, password })
@@ -620,70 +620,70 @@ describe('Logic', () => {
         )
 
         it('should succeed on add favorites', () => {
-            let book = "Harry Potter"
-            return logic.addFavorite(userId, book)
+            let bookId = "9KJJYFIss_wC"
+            return logic.addFavorite(userId, bookId)
                 .then(res => {
                     expect(res).to.be.true
 
                     return User.findById(userId)
                 })
                 .then(user => {
-
-                    expect(user.favorites).to.contain(book)
+                    expect(user.favorites).to.contain(bookId)
                 })
 
         })
-        it('should fail on trying to add favorites with an undefined book', () => {
+
+        it('should fail on trying to add favorites with an undefined book id', () => {
 
             return logic.addFavorite(userId, undefined)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid book`))
+                .then(({ message }) => expect(message).to.equal(`invalid bookId`))
 
         })
-        it('should fail on trying to add favorites with an empty book', () => {
+        it('should fail on trying to add favorites with an empty book id', () => {
 
             return logic.addFavorite(userId, '')
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid book`))
+                .then(({ message }) => expect(message).to.equal(`invalid bookId`))
 
         })
-        it('should fail on trying to add favorites with a blank book', () => {
+        it('should fail on trying to add favorites with a blank book id', () => {
 
             return logic.addFavorite(userId, '       ')
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid book`))
+                .then(({ message }) => expect(message).to.equal(`invalid bookId`))
 
         })
-        it('should fail on trying to add favorites with a numeric book', () => {
+        it('should fail on trying to add favorites with a numeric book id', () => {
             return logic.addFavorite(userId, 123)
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`invalid book`))
+                .then(({ message }) => expect(message).to.equal(`invalid bookId`))
 
         })
         it('should fail on trying to add favorites with an undefined userId ', () => {
-            let book = "Harry Potter"
-            return logic.addFavorite(undefined, book)
+            let bookId = "9KJJYFIss_wC"
+            return logic.addFavorite(undefined, bookId)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
         it('should fail on trying to add favorites with a numeric userId', () => {
-            let book = "Harry Potter"
-            return logic.addFavorite(123, book)
+            let bookId = "9KJJYFIss_wC"
+            return logic.addFavorite(123, bookId)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
         it('should fail on trying to add favorites with an empty userId', () => {
-            let book = "Harry Potter"
-            return logic.addFavorite('', book)
+            let bookId = "9KJJYFIss_wC"
+            return logic.addFavorite('', bookId)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
         })
         it('should fail on trying to add favorites with a blank userId', () => {
-            let book = "Harry Potter"
-            return logic.addFavorite('      ', book)
+            let bookId = "9KJJYFIss_wC"
+            return logic.addFavorite('      ', bookId)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
 
@@ -718,35 +718,45 @@ describe('Logic', () => {
 
     // todo delete favorite
 
-    true && describe('delete favorites', () => {
+    true && describe('delete favorite', () => {
         let userId
 
-        const favorites = [
-            { book: "Cien años de soledad" },
-            { book: "Harry Potter" },
-            { book: "La casa de Bernarda Alba" }
-        ]
+        const favorites = ["9KJJYFIss_wC", "s1gVAAAAYAAJ"]
+
+        const bookId = '9KJJYFIss_wC'
+
         beforeEach(() => {
-            return User.create({ email, name, password })
+            return User.create({ email, name, password, favorites })
                 .then(user => {
                     userId = user._id.toString()
-
-                    return Promise.all(favorites.map(favorite => user.favorites.push({ user: userId, ...favorite })))
                 })
         })
+
         it('should delete favorites correctly', () => {
-            return logic.deleteFavorites(userId, bookId)
+            return logic.deleteFavorite(userId, bookId)
                 .then(res => {
                     expect(res).to.be.true
 
-                    return User.favorites.find({ userId, bookId })
+                    return User.findById(userId)
                 })
-                .then(userfavorites => {
-
-                    expect(userFavorites).to.be.empty;
+                .then(user => {
+                    expect(user.favorites.length).to.equal(1);
+                    expect(user.favorites.includes(bookId)).to.be.false
                 })
         })
 
+    })
+
+    true && describe('retrieve book by its id', () => {
+        const bookId = '9KJJYFIss_wC'
+
+        it('should succeed on correct book id', ()  => 
+            logic.retrieveBook(bookId)
+                .then(book => {
+                    expect(book).to.exist
+                    expect(book.volumeInfo.title).to.equal('Professional Javascript For Web Developers, 2nd Ed')
+                })
+        )
     })
 
     true && describe('upload photo', () => {

@@ -110,9 +110,9 @@ router.delete('/user/:userId/reviews/:reviewId', validateJwt, (req, res) => {
 //add favorites
 
 router.post('/user/:userId/favorites', [validateJwt, jsonBodyParser], (req, res) => {
-    const { params: { userId }, body: { book } } = req
+    const { params: { userId }, body: { bookId } } = req
 
-    logic.addFavorite(userId, book)
+    logic.addFavorite(userId, bookId)
         .then(() => res.status(201).json({ message: 'Favourite added correctly' }))
         .catch(err => {
             const { message } = err
@@ -143,7 +143,7 @@ router.get('/user/:userId/favorites', validateJwt, (req, res) => {
 router.delete('/user/:userId/favorites/:bookId', validateJwt, (req, res) => {
     const { params: { userId, bookId } } = req
 
-    logic.deleteFavourites(userId, bookId)
+    logic.deleteFavorite(userId, bookId)
         .then(() => res.json({ message: 'Favorites deleted correctly' }))
         .catch(err => {
             const { message } = err

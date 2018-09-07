@@ -45,11 +45,11 @@ class App extends Component {
 
         <Switch>
           <Route exact path="/" render={() => this.state.isLoggedIn ? <Redirect to="/search" /> : <LandingPage />} />
-          <Route path="/reviews" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} />
-          <Route path="/search" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} />
-          <Route path="/register" render={() => this.state.isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />} />
-          <Route path="/login" render={() => this.state.isLoggedIn ? <Redirect to="/search" /> : <Redirect to="/" />} />
-          <Route path="/favorites" render={() => this.state.isLoggedIn ? <Favorites /> : <Redirect to="/" />} />
+          {/* <Route path="/reviews" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} /> */}
+          {/* <Route path="/search" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} /> */}
+          {/* <Route path="/register" render={() => this.state.isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />} />
+          <Route path="/login" render={() => this.state.isLoggedIn ? <Redirect to="/search" /> : <Redirect to="/" />} /> */}
+          {/* <Route path="/favorites" render={() => this.state.isLoggedIn ? <Favorites /> : <Redirect to="/" />} /> */}
         </Switch>
       </div>
 

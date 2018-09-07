@@ -126,6 +126,18 @@ const logicWallbook = {
             })
     },
 
+    retrieveBook(bookId, token) {
+        return Promise.resolve()
+            .then(() => {
+                this._validateStringField("bookId", bookId)
+                this._validateStringField("token", token)
+
+                return this._call(`user/${bookId}`, 'GET', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, undefined, 200)
+                    .then(res => res.json())
+                    .then(() => true)
+            })
+    },
+
     /**
      * Unregister user with his/her email and a password 
      * @param {String} userId
@@ -233,7 +245,7 @@ const logicWallbook = {
     * 
     * @returns {Response} All books in an Array
     */
-    searchBook(query, searchBy = 'title', orderBy = 'relevance', token) {
+    searchBook(userId, query, searchBy = 'title', orderBy = 'relevance', token) {
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("query", query)

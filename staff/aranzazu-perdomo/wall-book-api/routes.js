@@ -51,6 +51,19 @@ router.patch('/user/:userId', [validateJwt, jsonBodyParser], (req, res) => {
         })
 })
 
+//retrive bookId
+
+router.get('/user/:bookId', validateJwt, (req, res) => {
+    const { params: { bookId } } = req
+
+    logic.retrieveBook(bookId)
+    .then(() => res.json({ message: 'Retrieve book correctly' }))
+        .catch(err => {
+            const { message } = err
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
+        })
+})
+
 //unregister
 router.delete('/unregister', jsonBodyParser, (req, res) => {
     const { body: { userId, password } } = req
@@ -158,7 +171,7 @@ router.delete('/user/:userId/favorites/:bookId', validateJwt, (req, res) => {
 router.post('/user/:userId/searchbook', validateJwt, (req, res) => {
     const { params: { userId }, query: { query, searchBy, orderBy } } = req
 
-    logic.searchBook(userId,query, searchBy, orderBy)
+    logic.searchBook(userId, query, searchBy, orderBy)
         .then(books => res.json({ message: 'Search correctly', books }))
         .catch(err => {
             const { message } = err

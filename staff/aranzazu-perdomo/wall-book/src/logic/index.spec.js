@@ -892,6 +892,34 @@ describe('logic', () => {
 
     })
 
+    true && describe('Retrive BookId', () => {
+        let email, name, password
+        let userId, token
+
+        const bookId = '9KJJYFIss_wC'
+
+        beforeEach(() => {
+            email = `Aranzazu-${Math.random()}@gmail.com`
+            name = `Aranzazu-${Math.random()}`
+            password = `123456-${Math.random()}`
+
+            return logicWallbook.register(email, name, password)
+                .then(() =>
+                    logicWallbook.authenticate(email, password)
+                        .then(({ message, token: _token, user: _user }) => {
+                            userId = _user
+                            token = _token
+                        })
+                )
+        })
+
+        it('should retrieve book id correctly', () =>
+        logicWallbook.retrieveBook(bookId, token)
+            .catch(({ message }) => expect(message).to.be.undefined)
+            .then(({ message }) => expect(message).to.equal('Retrieve book correctly'))
+    )
+    })
+
 
 
 })

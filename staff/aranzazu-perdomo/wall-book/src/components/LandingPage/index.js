@@ -12,7 +12,7 @@ import {
   Col
 } from "reactstrap";
 import swal from "sweetalert2";
-import { logicWallbook } from '../../logic'
+import logicWallbook  from '../../logic'
 
 class Landing extends Component {
   state = {
@@ -57,6 +57,10 @@ class Landing extends Component {
           confirmButtonText: "Cool"
         })
       )
+      .then(() => {
+        this.toggle()
+        this.loginToggle()
+      })
       .catch(err =>
         swal({
           title: "Failed! :(",
@@ -94,81 +98,71 @@ class Landing extends Component {
   render() {
     return (
       <div>
-      <Modal isOpen={this.state.modal} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>Registration form</ModalHeader>
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            this.handleRegisterSubmit(
-              this.state.email,
-              this.state.name,
-              this.state.password
-            );
-          }}
-        >
-          <ModalBody className="text-center">
-            <div className="mb-4 ">
-              <i className="fa fa-user mr-4" />
-              <Label for="exampleEmail">Email</Label>
-              <Input type="text" onChange={this.keepEmail} name="Email" placeholder="Email" required autoFocus="true" />
-            </div>
-            <div className="mb-4 ">
-              <i className="fa fa-user mr-4" />
-              <Label for="exampleName">Name</Label>
-              <Input type="text" onChange={this.keepName} name="Name" placeholder="Name"  />
-            </div>
-            <div className="mb-2">
-              <i className="fa fa-lock mr-4" />
-              <Label for="examplePassword">Password</Label>
-              <Input type="password" onChange={this.keepPassword} name="password" placeholder="Password" required />
+        <Modal isOpen={this.state.modal} toggle={this.toggle}>
+          <ModalHeader toggle={this.toggle}>Registration form</ModalHeader>
+          <form
+            onSubmit={this.handleRegisterSubmit}
+          >
+            <ModalBody className="text-center">
+              <div className="mb-4 ">
+                <i className="fa fa-user mr-4" />
+                <Label for="exampleEmail">Email</Label>
+                <Input type="text" onChange={this.keepEmail} name="Email" placeholder="Email" required autoFocus="true" />
+              </div>
+              <div className="mb-4 ">
+                <i className="fa fa-user mr-4" />
+                <Label for="exampleName">Name</Label>
+                <Input type="text" onChange={this.keepName} name="Name" placeholder="Name" />
+              </div>
+              <div className="mb-2">
+                <i className="fa fa-lock mr-4" />
+                <Label for="examplePassword">Password</Label>
+                <Input type="password" onChange={this.keepPassword} name="password" placeholder="Password" required />
 
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-            <Button color="primary">Submit</Button>
-          </ModalFooter>
-        </form>
-      </Modal>
-      <Container
-        className="text-center align-items-center"
-        style={{ height: 90 + "vh" }}
-      >
-        <Row>
-          <Col className="p-5">
-            <h1>Wall-Book</h1>
-            <h5>Get info of your favorite books in an easy way! </h5>
-            <Button className="mr-5" color="primary" onClick={this.toggle}>Register</Button>
-            <Button color="primary" onClick={this.loginToggle}>Log In</Button>
-          </Col>
-        </Row>
-      </Container>
-      <Modal isOpen={this.state.modalLogin} toggle={this.loginToggle}>
-        <ModalHeader toggle={this.loginToggle}>Login form</ModalHeader>
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            this.handleLoginSubmit(this.state.email, this.state.password);
-          }}
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+              <Button color="primary">Submit</Button>
+            </ModalFooter>
+          </form>
+        </Modal>
+        <Container
+          className="text-center align-items-center"
+          style={{ height: 90 + "vh" }}
         >
-          <ModalBody className="text-center">
-            <div className="mb-4 ">
-              <i className="fa fa-user mr-4" />
-              <Label for="Email">Email</Label>
-              <Input type="text" onChange={this.keepEmail} name="Email" placeholder="Email" required autoFocus="true" />
-            </div>
-            <div className="mb-2 ">
-              <i className="fa fa-lock mr-4" />
-              <Label for="Password">Password</Label>
-              <Input type="password" onChange={this.keepPassword} name="password" placeholder="Password" required />
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="secondary" onClick={this.loginToggle}>Cancel</Button>        
-            <Button color="primary" type="submit">Submit</Button>
-          </ModalFooter>
-        </form>
-      </Modal>
+          <Row>
+            <Col className="p-5">
+              <h1>Wall-Book</h1>
+              <h5>Get info of your favorite books in an easy way! </h5>
+              <Button className="mr-5" color="primary" onClick={this.toggle}>Register</Button>
+              <Button color="primary" onClick={this.loginToggle}>Log In</Button>
+            </Col>
+          </Row>
+        </Container>
+        <Modal isOpen={this.state.modalLogin} toggle={this.loginToggle}>
+          <ModalHeader toggle={this.loginToggle}>Login form</ModalHeader>
+          <form
+            onSubmit={this.handleLoginSubmit}
+          >
+            <ModalBody className="text-center">
+              <div className="mb-4 ">
+                <i className="fa fa-user mr-4" />
+                <Label for="Email">Email</Label>
+                <Input type="text" onChange={this.keepEmail} name="Email" placeholder="Email" required autoFocus="true" />
+              </div>
+              <div className="mb-2 ">
+                <i className="fa fa-lock mr-4" />
+                <Label for="Password">Password</Label>
+                <Input type="password" onChange={this.keepPassword} name="password" placeholder="Password" required />
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <Button color="secondary" onClick={this.loginToggle}>Cancel</Button>
+              <Button color="primary" type="submit">Submit</Button>
+            </ModalFooter>
+          </form>
+        </Modal>
       </div >
     );
   }

@@ -30,7 +30,7 @@ class Search extends Component {
         const { userId, query, searchBy, orderBy } = this.state
 
         logicWallbook.searchBook(userId, query, searchBy, orderBy)
-            .then(res => this.state({ res: books }))
+            .then(books => this.state({ books }))
             .catch(err =>
                 swal({
                     title: "Failed! :(",

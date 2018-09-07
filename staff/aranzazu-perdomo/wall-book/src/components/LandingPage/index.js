@@ -1,4 +1,6 @@
 import React, { Component } from "react"
+import {withRouter } from 'react-router'
+
 import {
   Button,
   Modal,
@@ -85,6 +87,9 @@ class Landing extends Component {
           confirmButtonText: "Cool"
         })
       )
+      .then(() => {
+        return this.props.onLoggin(email,password)
+      })
       .catch(err =>
         swal({
           title: "Failed! :(",
@@ -93,6 +98,8 @@ class Landing extends Component {
           confirmButtonText: "Try again"
         })
       );
+
+      
   }
 
   render() {
@@ -168,4 +175,4 @@ class Landing extends Component {
   }
 }
 
-export default Landing;
+export default withRouter(Landing);

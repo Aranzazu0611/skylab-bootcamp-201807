@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Redirect, Switch } from 'react-router'
+import { Route, Redirect, Switch, withRouter } from 'react-router'
 import { logicWallbook } from '../src/logic'
 import logo from './logo.svg';
 import LandingPage from '../src/components/LandingPage'
-// import Book from '../src/components/Book'
 import Profile from '../src/components/Profile'
 import Search from '../src/components/Search'
 import Review from '../src/components/Review'
@@ -21,8 +20,8 @@ class App extends Component {
     return this.state.email
   }
 
-  onLoggedIn = (email, password) => {
-    this.setState({ email, password })
+  onLoggin = (email, password) => {
+    // this.setState({ email, password })
 
     sessionStorage.setItem('email', email)
     sessionStorage.setItem('password', password)
@@ -44,7 +43,7 @@ class App extends Component {
       <div>
 
         <Switch>
-          <Route exact path="/" render={() => this.state.isLoggedIn ? <Redirect to="/search" /> : <LandingPage />} />
+          <Route exact path="/" render={() => this.state.isLoggedIn ? <Redirect to="/search" /> : <LandingPage  onLoggin={this.onLoggin}/>} />
           {/* <Route path="/reviews" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} /> */}
           <Route path="/search" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} />
           {/* <Route path="/register" render={() => this.state.isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />} /> */}
@@ -54,7 +53,8 @@ class App extends Component {
       </div>
 
     )
+  
   }
 }
 
-export default App;
+export default withRouter(App);

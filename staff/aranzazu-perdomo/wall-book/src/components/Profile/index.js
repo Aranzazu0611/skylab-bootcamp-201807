@@ -20,14 +20,14 @@ class Settings extends Component {
     keepPassword = event => this.setState({ password: event.target.value })
     keepNewPassword = event => this.setState({ newPassword: event.target.value })
 
-    onUpdate = event => {
-        event.preventDefault()
+    // onUpdate = event => {
+    //     event.preventDefault()
     
-        const {email, password, newPassword } = this.state
+    //     const {email, password, newPassword } = this.state
 
-        logicWallbook.updatePassword(userId,password,newPassword,token)
-        .then(token =>)
-    
+    //     logicWallbook.updatePassword(userId,password,newPassword,token)
+    //     .then(token =>)
+    // }
 }
 
 export default Settings

@@ -13,20 +13,21 @@ class App extends Component {
   state = {
     email: sessionStorage.getItem('email') || '',
     password: sessionStorage.getItem('password') || ''
-
   }
 
   isLoggedIn() {
     return !!this.state.email
   }
 
-  onLoggin = (email, password) => {
+  onLoggin = (email, password, token, userId) => {
     this.setState({ email, password })
 
     sessionStorage.setItem('email', email)
     sessionStorage.setItem('password', password)
+    sessionStorage.setItem('token', token)
+    sessionStorage.setItem('userId', userId)
 
-    this.props.history.push('/search')
+    // this.props.history.push('/search')
   }
 
 
@@ -44,10 +45,11 @@ class App extends Component {
 
         <Switch>
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage  onLoggin={this.onLoggin}/>} />
-          {/* <Route path="/reviews" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} /> */}
           <Route path="/search" render={() => this.isLoggedIn() ? <Search /> : <Redirect to="/" />} />
+
+          {/* <Route path="/reviews" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} /> */}
           {/* <Route path="/register" render={() => this.state.isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />} /> */}
-          <Route path="/login" render={() => {debugger; return this.isLoggedIn() ? <Redirect to="/search" /> : <Redirect to="/" />}} /> */}
+          {/* <Route path="/login" render={() => {return this.isLoggedIn() ? <Redirect to="/search" /> : <Redirect to="/" />}} /> */} */}
           {/* <Route path="/favorites" render={() => this.state.isLoggedIn ? <Favorites /> : <Redirect to="/" />} /> */} */}
         </Switch>
       </div>

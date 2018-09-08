@@ -15,7 +15,6 @@ import {
 } from "reactstrap";
 import swal from "sweetalert2";
 import logicWallbook  from '../../logic'
-
 class Landing extends Component {
   state = {
     modal: false,
@@ -79,16 +78,16 @@ class Landing extends Component {
     const { state: { email, password } } = this
 
     return logicWallbook.authenticate(email, password)
-      .then(() =>
+      .then(({token, user}) => {
         swal({
           title: "Success!",
           text: "Login Sucessful",
           type: "success",
           confirmButtonText: "Cool"
         })
-      )
-      .then(() => {
-        return this.props.onLoggin(email,password)
+        .then(() => {
+          this.props.onLoggin(email, password, token, user)
+        })
       })
       .catch(err =>
         swal({

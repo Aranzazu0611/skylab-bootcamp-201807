@@ -248,11 +248,12 @@ const logicWallbook = {
     searchBook(userId, query, searchBy = 'title', orderBy = 'relevance', token) {
         return Promise.resolve()
             .then(() => {
+                this._validateStringField("userId", userId)
                 this._validateStringField("query", query)
                 this._validateStringField("searchBy", searchBy)
                 this._validateStringField("orderBy", orderBy)
 
-                return this._call(`/user/${userId}/searchbook`, 'post', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, JSON.stringify({ query, searchBy, orderBy }), 201)
+                return this._call(`user/${userId}/searchbook?query=${query}&searchBy=${searchBy}&orderBy=${orderBy}`, 'GET', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
             })
     },

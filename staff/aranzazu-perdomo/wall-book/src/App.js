@@ -7,7 +7,9 @@ import Profile from '../src/components/Profile'
 import Search from '../src/components/Search'
 import Review from '../src/components/Review'
 import swal from 'sweetalert2'
-import './App.css';
+import '../src/index.css'
+
+
 
 class App extends Component {
   state = {
@@ -42,9 +44,9 @@ class App extends Component {
   render() {
     return (
       <div>
-
+       
         <Switch>
-          <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage  onLoggin={this.onLoggin}/>} />
+          <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />
           <Route path="/search" render={() => this.isLoggedIn() ? <Search /> : <Redirect to="/" />} />
 
           {/* <Route path="/reviews" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} /> */}
@@ -55,7 +57,7 @@ class App extends Component {
       </div>
 
     )
-  
+
   }
 }
 

@@ -10,26 +10,26 @@ class Review extends Component {
 
     }
 
-    onAddReview = event => {
-        event.preventDefault()
-        const {book, _vote, comment } = this.state
+    // onAddReview = event => {
+    //     event.preventDefault()
+    //     const {book, _vote, comment } = this.state
 
-        const userId = sessionStorage.getItem('userId')
-        const token = sessionStorage.getItem('token')
+    //     const userId = sessionStorage.getItem('userId')
+    //     const token = sessionStorage.getItem('token')
 
-        logicWallbook.addReview(userId, book, _vote, comment, token)
-        .then(Review => )
-        .catch(err =>
-            swal({
-                title: "Failed! :(",
-                text: err,
-                type: "error",
-                confirmButtonText: "Try again"
-            })
-        );
+    //     logicWallbook.addReview(userId, book, _vote, comment, token)
+    //     .then(Review => )
+    //     .catch(err =>
+    //         swal({
+    //             title: "Failed! :(",
+    //             text: err,
+    //             type: "error",
+    //             confirmButtonText: "Try again"
+    //         })
+    //     );
 
 
-    }
+    // }
 
 }
     export default Review

@@ -102,7 +102,7 @@ class Landing extends Component {
   }
 
   render() {
-    return (
+    return (<Container>
       <div>
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Registration form</ModalHeader>
@@ -170,6 +170,7 @@ class Landing extends Component {
           </form>
         </Modal>
       </div >
+      </Container>
     );
   }
 }

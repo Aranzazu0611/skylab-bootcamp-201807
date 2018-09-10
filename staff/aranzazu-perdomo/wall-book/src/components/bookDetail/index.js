@@ -9,9 +9,6 @@ import {
     CardSubtitle,
     CardText,
     Button,
-    Form,
-    InputGroup,
-    InputGroupAddon,
     Input,
     Container,
     Col,
@@ -39,7 +36,8 @@ class BookDetail extends Component {
             _vote: "",
             comment: "",
         });
-    };
+    }
+
     toggleAddReview = () => {
         this.setState({
             modal: !this.state.modalAddReview,
@@ -47,30 +45,13 @@ class BookDetail extends Component {
             _vote: "",
             comment: "",
         });
-    };
+    }
 
     keepBook = e => this.setState({ book: e.target.value, error: '' })
     keepVote = e => this.setState({ _vote: e.target.value, error: '' })
     keepComment = e => this.setState({ comment: e.target.value, error: '' })
 
-    HandleAddReview = event => {
-        event.preventDefault()
-        const { book, _vote, comment } = this.state
-
-        const userId = sessionStorage.getItem('userId')
-        const token = sessionStorage.getItem('token')
-
-        logicWallbook.addReview(userId, book, _vote, comment, token)
-            .then(Review => )
-            .catch(err =>
-                swal({
-                    title: "Failed! :(",
-                    text: err,
-                    type: "error",
-                    confirmButtonText: "Try again"
-                })
-            );
-    }
+    
 
     HandlelistReview = event => {
         event.preventDefault()
@@ -117,7 +98,8 @@ class BookDetail extends Component {
                         })
                     );
             }
-
+        }
+    }
 
     render() {
         < Modal isOpen = { this.state.modal } toggle = { this.toggle } >
@@ -157,47 +139,6 @@ class BookDetail extends Component {
                     </ModalFooter>
                 </form>
         </Modal >
-                <Container>
-
-                    <Row className="justify-content-center">
-
-                        <Col xs="6" sm="4">
-                            <Card className="card">
-                                <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
-                                <CardBody>
-                                    <CardImg top width="100%" src={book.thumbnail} alt="Card image cap" />
-                                    <CardTitle>{thi.props.book.title}</CardTitle>
-                                    <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
-                                    <CardSubtitle>Language: {book.language}</CardSubtitle>
-                                    <CardText>{book.description.substring(0, 100)}...</CardText>
-                                    <Button color="primary" target="_blank" rel="" href="">Comprar </Button>
-                                </CardBody>
-                            </Card>
-                        </Col>
-
-
-                    </Row>
-                    //listar reviews 
-                    <Row className="justify-content-center">
-
-                        <Col xs="6" sm="4">
-                            <Card className="card">
-
-                                <CardImg top width="100%" src={book.thumbnail} alt="Card image cap" />
-                                <CardTitle>{review.title}</CardTitle>
-                                <CardText>{review.description.substring(0, 100)}...</CardText>
-                               //icono para borrar review
-                   </CardBody>
-               </Card>
-           </Col>
-    
-           
-</Row>
-
-
-            </Container >
-
-
-    }
+                
 }
 export default BookDetail

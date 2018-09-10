@@ -125,7 +125,7 @@ class Search extends Component {
                                             <CardSubtitle>Language: {book.language}</CardSubtitle>
                                             <CardText>{book.description.substring(0, 80)}...</CardText>
                                         </div>
-                                            <Button color="primary" target="_blank" onClick={this.props.onBookDetail} >See more</Button>
+                                            <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(book.isbn.identifier)} >See more</Button>
                                     </CardBody>
                                 </Card>
                             </Col>

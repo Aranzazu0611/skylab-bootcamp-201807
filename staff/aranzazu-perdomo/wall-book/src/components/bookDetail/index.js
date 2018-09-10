@@ -14,7 +14,8 @@ import {
     Col,
     Row
 } from "reactstrap"
-import swal from "sweetalert2";
+import swal from "sweetalert2"
+import ReactStars from 'react-stars'
 
 
 class BookDetail extends Component {

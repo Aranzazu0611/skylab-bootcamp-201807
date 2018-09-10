@@ -30,6 +30,7 @@ import logicWallbook from "../../logic"
 import swal from "sweetalert2"
 import Style from './style.css'
 import './style.css'
+// import ReactStars from 'react-stars'
 
 
 
@@ -42,7 +43,8 @@ class Search extends Component {
         orderBy: undefined,
         books: [],
         collapsed: true,
-        dropdownOpen: false
+        dropdownOpen: false,
+        vote: []
     }
 
     toggle() {
@@ -75,6 +77,10 @@ class Search extends Component {
             );
 
     }
+
+    // ratingChanged = (vote) => {
+    //     this.setState('vote')
+    // }
 
 
     render() {
@@ -124,15 +130,15 @@ class Search extends Component {
                                             <CardTitle>{book.title}</CardTitle>
                                             <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
                                             <CardSubtitle>Language: {book.language}</CardSubtitle>
-                                            <ReactStars
-                                                count={5},
-                                                onChange={ratingChanged},
-                                                size={24},
-                                                color2={'#ffd700'} />,
-                                                                                              
+                                            {/* <ReactStars
+                                                count={5}
+                                                onChange={ratingChanged}
+                                                size={24}
+                                                color2={'#ffd700'} /> */}
+
                                             <CardText>{book.description.substring(0, 80)}...</CardText>
                                         </div>
-                                            <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(book.isbn.identifier)} >See more</Button>
+                                        <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(book.isbn.identifier)} >See more</Button>
                                     </CardBody>
                                 </Card>
                             </Col>

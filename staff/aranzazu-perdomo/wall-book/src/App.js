@@ -6,6 +6,7 @@ import LandingPage from '../src/components/LandingPage'
 import Profile from '../src/components/Profile'
 import Search from '../src/components/Search'
 import Review from '../src/components/Review'
+import BookDetail from '../src/components/BookDetail'
 import swal from 'sweetalert2'
 import '../src/index.css'
 
@@ -41,7 +42,7 @@ class App extends Component {
   }
 
   onBookDetail = bookId => {
-
+debugger;
     this.props.history.push(`/book/${bookId}`)
 
   }
@@ -54,7 +55,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />
           <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail= {this.onBookDetail}/> : <Redirect to="/" />} />
-          <Route path="/book/:id" render={() => this.isLoggedIn() ? <bookDetail /> : <Redirect to="/" />} />
+          <Route path="/book/:id" render={() => this.isLoggedIn() ? <BookDetail /> : <Redirect to="/" />} />
          
         </Switch>
       </div>

@@ -108,13 +108,13 @@ class Landing extends Component {
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Registration form</ModalHeader>
           <form onSubmit={this.handleRegisterSubmit}>
-            <ModalBody className="text-center">
-              <div className="mb-4 ">
+            <ModalBody className="text-left">
+              <div className="mb-2 ">
                 <i className="fa fa-user mr-4" />
                 <Label for="exampleEmail">Email</Label>
                 <Input type="text" onChange={this.keepEmail} name="Email" placeholder="Email" required autoFocus="true" />
               </div>
-              <div className="mb-4 ">
+              <div className="mb-2 ">
                 <i className="fa fa-user mr-4" />
                 <Label for="exampleName">Name</Label>
                 <Input type="text" onChange={this.keepName} name="Name" placeholder="Name" />
@@ -147,8 +147,8 @@ class Landing extends Component {
         <Modal isOpen={this.state.modalLogin} toggle={this.loginToggle}>
           <ModalHeader toggle={this.loginToggle}>Login form</ModalHeader>
           <form onSubmit={this.handleLoginSubmit}>
-            <ModalBody className="text-center">
-              <div className="mb-4 ">
+            <ModalBody className="text-left">
+              <div className="mb-2 ">
                 <i className="fa fa-user mr-4" />
                 <Label for="Email">Email</Label>
                 <Input type="text" onChange={this.keepEmail} name="Email" placeholder="Email" required autoFocus="true" />

@@ -92,18 +92,12 @@ class Search extends Component {
 
             <div>
                 <Navbar color="dark" light>
-                    <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
-                    <NavbarToggler onClick={this.toggle} className="mr-2" />
-                    <Collapse isOpen={!this.state.collapsed} navbar>
-                        <Nav navbar>
-                            <NavItem>
-                                <NavLink href="/Profile">Settings</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink href="/" onClick={this.props.onLogout}>Logout</NavLink>
-                            </NavItem>
-                        </Nav>
-                    </Collapse>
+                    <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>                             
+
+                        <Button id="btn-profile" color="primary" target="_blank">Profile</Button>                      
+                        <Button id="btn-logout" color="primary" target="_blank">Logout</Button>
+                       
+                  
                 </Navbar>
             </div>
             <Row className="justify-content-center">

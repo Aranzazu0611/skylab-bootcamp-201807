@@ -21,3 +21,16 @@
     padding: 8px;
     width: 450px;
   }
+
+  .mb-2{
+    margin-left: -2vw;
+    color: darkblue;
+  }
+  .form-control{
+    margin-left: 1vw;
+  }
+
+  #btn-profile{
+    margin-top: 2vh;
+     margin-right: 250px
+  }

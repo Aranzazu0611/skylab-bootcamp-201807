@@ -36,6 +36,18 @@ class BookDetail extends Component {
         reviewId: ""
     }
 
+    componentDidMount() {
+        const userId = sessionStorage.getItem('userId')
+        const token = sessionStorage.getItem('token')
+        const { bookId } = this.props
+
+        logicWallbook.retrieveBook(userId, bookId, token)
+            .then(({ book: { volumeInfo } }) => {
+                this.setState({ book: volumeInfo })
+            })
+
+    }
+
     toggle = () => {
         this.setState({
             modal: !this.state.modal,
@@ -112,73 +124,78 @@ class BookDetail extends Component {
 
 
     render() {
-        debugger;
+
+        const { book, review } = this.state
         return (
+
             <div>
+                {
+                    <div>
+                        < Modal isOpen={this.state.modal} toggle={this.toggle} >
+                            <ModalHeader toggle={this.toggle}>Add review</ModalHeader>
+                            <form onSubmit={this.HandleAddReview} >
+                                <ModalBody className="text-center">
+                                    <div className="mb-4 ">
+                                        <i className="fa fa-user mr-4" />
+                                        <Label for="exampleTitulo">Titulo</Label>
+                                        <Input type="text" onChange={this.keepbook} name="titleBook" placeholder="book" />
+                                    </div>
+                                    <div className="mb-4 ">
+                                        <i className="fa fa-user mr-4" />
+                                        <Label for="exampleSelect">Select Vote</Label>
+                                        <ReactStars
+                                            count={5}
+                                            size={24}
+                                            color2={'#ffd700'} />
+                                    </div>
+                                    <div className="mb-2">
+                                        <i className="fa fa-lock mr-4" />
+                                        <Label for="exampleText">Text Area</Label>
+                                        <Input type="textarea" name="text" id="exampleText" onChange={this.keepComment}/>
+                                    </div>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                                    <Button color="primary">Submit</Button>
+                                </ModalFooter>
+                            </form>
+                        </Modal >
+                        <Container className="container" >
+                            <Button className="btn-review" color="primary" target="_blank" onclick={this.toggleAddReview}>+ Add Review</Button>
+                            <Col xs="6" sm="4">
+                                {book && <Card className="card">
+                                    <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
+                                    <CardBody >
+                                        <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />
+                                        <div className="card_cardbody">
+                                            <CardTitle>{book.title}</CardTitle>
+                                            <CardSubtitle>Author: {book.authors}</CardSubtitle>
+                                            <CardSubtitle>Language: {book.language}</CardSubtitle>
+                                            <CardText>{book.description}</CardText>
+                                        </div>
+                                    </CardBody>
+                                </Card>}
+                            </Col>
 
-                < Modal isOpen={this.state.modal} toggle={this.toggle} >
-                    <ModalHeader toggle={this.toggle}>Add review</ModalHeader>
-                    <form onSubmit={this.HandleAddReview} >
-                        <ModalBody className="text-center">
-                            <div className="mb-4 ">
-                                <i className="fa fa-user mr-4" />
-                                <Label for="exampleTitulo">Titulo</Label>
-                                <Input type="text" onChange={this.keepbook} name="titleBook" placeholder="book" />
-                            </div>
-                            <div className="mb-4 ">
-                                <i className="fa fa-user mr-4" />
-                                <Label for="exampleSelect">Select Vote</Label>
-                                {/* <ReactStars
-                                    count={5}
-                                    onChange={ratingChanged}
-                                    size={24}
-                                    color2={'#ffd700'} /> */}
-                            </div>
-                            <div className="mb-2">
-                                <i className="fa fa-lock mr-4" />
-                                <Label for="exampleText">Text Area</Label>
-                                <Input type="textarea" name="text" id="exampleText" />
-                            </div>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                            <Button color="primary">Submit</Button>
-                        </ModalFooter>
-                    </form>
-                </Modal >
-                <Container className="container" >
-                    <Col xs="6" sm="4">
-                        <Card className="card">
-                            <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
-                            <CardBody >
-                                <CardImg top width="100%" height="461px" src={this.props.book.thumbnail} alt="Card image cap" />
-                                <div className="card_cardbody">
-                                    <CardTitle>{this.props.book.title}</CardTitle>
-                                    <CardSubtitle>ISBN: {this.props.book.isbn.identifier}</CardSubtitle>
-                                    <CardSubtitle>Language: {this.props.book.language}</CardSubtitle>
-                                    <CardText>{this.props.book.description.substring(0, 80)}...</CardText>
-                                </div>
-                                <Button color="primary" target="_blank" href="" >Comprar</Button>
-                            </CardBody>
-                        </Card>
-                    </Col>
+                            <Col xs="6" sm="4">
+                                <Card className="card">
+                                    <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
+                                    <CardBody >
+                                        {book && <CardImg top width="100%" height="461px" src={book.imageLinks.small} alt="Card image cap" />}
+                                        <div className="card_cardbody">
+                                            {/* <CardTitle>{review.title}</CardTitle>
+                                            <CardSubtitle>{review._vote}</CardSubtitle>
+                                            <CardText>{review.description}</CardText> */}
+                                        </div>
 
-                    <Col xs="6" sm="4">
-                        <Card className="card">
-                            <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
-                            <CardBody >
-                                <CardImg top width="100%" height="461px" src={this.props.book.thumbnail} alt="Card image cap" />
-                                {/* <div className="card_cardbody">
-                                    <CardTitle>{review.title}</CardTitle>
-                                    <CardSubtitle>{review._vote}</CardSubtitle>
-                                    <CardText>{book.description}</CardText>
-                                </div> */}
-
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Container>
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                        </Container>
+                    </div>
+                }
             </div>
+
         )
 
     }

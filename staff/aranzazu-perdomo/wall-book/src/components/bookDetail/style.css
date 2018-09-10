@@ -17,3 +17,7 @@
     padding: 8px;
     width: 450px;
   }
+
+  .btn-review{
+    float: right;
+  }

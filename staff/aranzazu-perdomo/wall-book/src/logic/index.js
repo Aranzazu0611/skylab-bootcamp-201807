@@ -126,15 +126,17 @@ const logicWallbook = {
             })
     },
 
-    retrieveBook(bookId, token) {
+    retrieveBook(userId, bookId, token) {
         return Promise.resolve()
             .then(() => {
+                this._validateStringField("userId", userId)
                 this._validateStringField("bookId", bookId)
                 this._validateStringField("token", token)
 
-                return this._call(`user/${bookId}`, 'GET', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, undefined, 200)
+                return this._call(`user/${userId}/book/${bookId}`, 'GET', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
-                    .then(() => true)
+                    .then(res => res)
+                    //.then(() => true)
             })
     },
 

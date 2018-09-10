@@ -132,6 +132,7 @@ class Landing extends Component {
             </ModalFooter>
           </form>
         </Modal>
+
         <div className="text-center align-items-center" style={{ height: 90 + "vh" }}>
           <Row>
             <Col className="p-5">
@@ -142,6 +143,7 @@ class Landing extends Component {
             </Col>
           </Row>
         </div>
+        
         <Modal isOpen={this.state.modalLogin} toggle={this.loginToggle}>
           <ModalHeader toggle={this.loginToggle}>Login form</ModalHeader>
           <form onSubmit={this.handleLoginSubmit}>

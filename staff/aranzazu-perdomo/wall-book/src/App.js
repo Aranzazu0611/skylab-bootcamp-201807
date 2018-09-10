@@ -42,7 +42,7 @@ class App extends Component {
   }
 
   onBookDetail = bookId => {
-debugger;
+
     this.props.history.push(`/book/${bookId}`)
 
   }
@@ -55,8 +55,7 @@ debugger;
         <Switch>
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />
           <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail= {this.onBookDetail}/> : <Redirect to="/" />} />
-          <Route path="/book/:id" render={() => this.isLoggedIn() ? <BookDetail /> : <Redirect to="/" />} />
-         
+          <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail bookId={props.match.params.id} /> : <Redirect to="/" />} />
         </Switch>
       </div>
 

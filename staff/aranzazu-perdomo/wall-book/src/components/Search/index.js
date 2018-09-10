@@ -66,7 +66,9 @@ class Search extends Component {
         const userId = sessionStorage.getItem('userId')
 
         logicWallbook.searchBook(userId, query, searchBy, orderBy, token)
-            .then(books => this.setState({ books: books.books }))
+            .then(books => {
+                this.setState({ books: books.books })
+            })
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -119,7 +121,10 @@ class Search extends Component {
 
             <Row className="justify-content-center">
                 {books.map(book => {
-                    if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail') && book.hasOwnProperty('isbn')) {
+                    if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail') && book.hasOwnProperty('isbn') && book.hasOwnProperty('infoLink')) {
+                        const { infoLink } = book
+                        const bookId = infoLink.substring(infoLink.indexOf('id') + 3, infoLink.indexOf('&'))
+                        
                         return (
                             <Col xs="6" sm="4">
                                 <Card className="card">
@@ -138,7 +143,7 @@ class Search extends Component {
 
                                             <CardText>{book.description.substring(0, 80)}...</CardText>
                                         </div>
-                                        <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(book.isbn.identifier)} >See more</Button>
+                                        <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See more</Button>
                                     </CardBody>
                                 </Card>
                             </Col>

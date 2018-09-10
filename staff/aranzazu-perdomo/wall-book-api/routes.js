@@ -53,11 +53,11 @@ router.patch('/user/:userId', [validateJwt, jsonBodyParser], (req, res) => {
 
 //retrive bookId
 
-router.get('/user/:bookId', validateJwt, (req, res) => {
+router.get('/user/:userId/book/:bookId', validateJwt, (req, res) => {
     const { params: { bookId } } = req
 
     logic.retrieveBook(bookId)
-    .then(() => res.json({ message: 'Retrieve book correctly' }))
+    .then(book => res.json({ message: 'Retrieve book correctly', book }))
         .catch(err => {
             const { message } = err
             res.status(err instanceof LogicError ? 400 : 500).json({ message })

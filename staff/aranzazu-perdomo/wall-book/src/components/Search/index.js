@@ -28,21 +28,26 @@ import {
 import logicWallbook from "../../logic"
 import swal from "sweetalert2"
 import Style from './style.css'
+import './style.css'
+
 
 
 class Search extends Component {
-    toggleNavbar = this.toggleNavbar.bind(this);
+    toggle = this.toggle.bind(this);
+
     state = {
         query: "",
         searchBy: undefined,
         orderBy: undefined,
         books: [],
-        collapsed: true
+        collapsed: true,
+        dropdownOpen: false
     }
 
-    toggleNavbar() {
+    toggle() {
         this.setState({
-            collapsed: !this.state.collapsed
+            collapsed: !this.state.collapsed,
+            dropdownOpen: !this.state.dropdownOpen
         });
     }
 
@@ -74,63 +79,62 @@ class Search extends Component {
     render() {
         const { books } = this.state
 
-        return <Container>
+        return <Container className="container" >
 
-            <Card>
-                <Container>
-                    <div>
-                        <Navbar color="dark" light>
-                            <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
-                            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-                            <Collapse isOpen={!this.state.collapsed} navbar>
-                                <Nav navbar>
-                                    <NavItem>
-                                        <NavLink href="/components/">Settings</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-                                    </NavItem>
-                                </Nav>
-                            </Collapse>
-                        </Navbar>
-                    </div>
-                    <Row>
-                        <Col xs="12">
-                            <Form onSubmit={this.onSearch}>
-                                <InputGroup>
-                                    <Input id="searchInput" onChange={this.keepQuery} placeholder="Search a book..." autoFocus="true" autoComplete="off" />
-                                    <InputGroupAddon addonType="append"><Button id="searchButton">Search</Button></InputGroupAddon>
-                                    <Input id="searchType" onChange={this.keepSearchBy} placeholder="Choose a type..." autoComplete="off" />
-                                    <Input id="searchOrder" onChange={this.keepOrderBy} placeholder="Choose a order..." autoComplete="off" />
-                                </InputGroup>
-                            </Form>
-                        </Col>
-                    </Row>
+            <div>
+                <Navbar color="dark" light>
+                    <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
+                    <NavbarToggler onClick={this.toggle} className="mr-2" />
+                    <Collapse isOpen={!this.state.collapsed} navbar>
+                        <Nav navbar>
+                            <NavItem>
+                                <NavLink href="/Profile">Settings</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink href="/">Logout</NavLink>
+                            </NavItem>
+                        </Nav>
+                    </Collapse>
+                </Navbar>
+            </div>
+            <Row className="justify-content-center">
+                <Col xs="12" className="Search">
+                    <Form onSubmit={this.onSearch} className="form-wrapper">
+                        <InputGroup>
+                            <Input id="searchInput" onChange={this.keepQuery} placeholder="Search for title, author, newest..." autoFocus="true" autoComplete="off" />
+                            <Input type="submit" value="Author" id="Author" />
+                            <Input type="submit" value="Newest" id="Newest" />
+                            <Input type="submit" value="Search" id="submit" />
+                        </InputGroup>
+                    </Form>
+                </Col>
+            </Row>
 
-                    <Row>
-                        {books.map(book => {
-                            if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail')) {
-                                return (
-                                    <Col xs="4">
-                                        <Card>
-                                            <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
-                                            <CardBody>
-                                                <CardImg top width="100%" src={book.thumbnail} alt="Card image cap" />
-                                                <CardTitle>{book.title}</CardTitle>
-                                                <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
-                                                <CardSubtitle>Language: {book.language}</CardSubtitle>
-                                                <CardText>{book.description.substring(0, 80)}...</CardText>
-                                                <Button color="primary" target="_blank" rel="" href="/bookDetail" >See more</Button>
-                                            </CardBody>
-                                        </Card>
-                                    </Col>
-                                )
-                            }
-                        })}
-                    </Row>
-                </Container>
-            </Card>
-        </Container>
+            <Row className="justify-content-center">
+                {books.map(book => {
+                    if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail')) {
+                        return (
+                            <Col xs="6" sm="4">
+                                <Card className="card">
+                                    <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
+                                    <CardBody >
+                                        <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
+                                        <div className="card_cardbody">
+                                            <CardTitle>{book.title}</CardTitle>
+                                            <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
+                                            <CardSubtitle>Language: {book.language}</CardSubtitle>
+                                            <CardText>{book.description.substring(0, 80)}...</CardText>
+                                        </div>
+                                            <Button color="primary" target="_blank" rel="" href="/bookDetail" >See more</Button>
+                                    </CardBody>
+                                </Card>
+                            </Col>
+                        )
+                    }
+                })}
+            </Row>
+
+        </Container >
     }
 }
 export default Search;

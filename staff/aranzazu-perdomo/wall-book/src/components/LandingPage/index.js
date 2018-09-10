@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import {withRouter } from 'react-router'
+import { withRouter } from 'react-router'
 
 import {
   Button,
@@ -14,7 +14,8 @@ import {
   Col
 } from "reactstrap";
 import swal from "sweetalert2";
-import logicWallbook  from '../../logic'
+import logicWallbook from '../../logic'
+import './style.css'
 class Landing extends Component {
   state = {
     modal: false,
@@ -78,16 +79,16 @@ class Landing extends Component {
     const { state: { email, password } } = this
 
     return logicWallbook.authenticate(email, password)
-      .then(({token, user}) => {
+      .then(({ token, user }) => {
         swal({
           title: "Success!",
           text: "Login Sucessful",
           type: "success",
           confirmButtonText: "Cool"
         })
-        .then(() => {
-          this.props.onLoggin(email, password, token, user)
-        })
+          .then(() => {
+            this.props.onLoggin(email, password, token, user)
+          })
       })
       .catch(err =>
         swal({
@@ -98,17 +99,15 @@ class Landing extends Component {
         })
       );
 
-      
+
   }
 
   render() {
-    return (<Container>
-      <div>
+    return (<Container className="container">
+      
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Registration form</ModalHeader>
-          <form
-            onSubmit={this.handleRegisterSubmit}
-          >
+          <form onSubmit={this.handleRegisterSubmit}>
             <ModalBody className="text-center">
               <div className="mb-4 ">
                 <i className="fa fa-user mr-4" />
@@ -133,10 +132,7 @@ class Landing extends Component {
             </ModalFooter>
           </form>
         </Modal>
-        <Container
-          className="text-center align-items-center"
-          style={{ height: 90 + "vh" }}
-        >
+        <div className="text-center align-items-center" style={{ height: 90 + "vh" }}>
           <Row>
             <Col className="p-5">
               <h1>Wall-Book</h1>
@@ -145,12 +141,10 @@ class Landing extends Component {
               <Button color="primary" onClick={this.loginToggle}>Log In</Button>
             </Col>
           </Row>
-        </Container>
+        </div>
         <Modal isOpen={this.state.modalLogin} toggle={this.loginToggle}>
           <ModalHeader toggle={this.loginToggle}>Login form</ModalHeader>
-          <form
-            onSubmit={this.handleLoginSubmit}
-          >
+          <form onSubmit={this.handleLoginSubmit}>
             <ModalBody className="text-center">
               <div className="mb-4 ">
                 <i className="fa fa-user mr-4" />
@@ -169,8 +163,8 @@ class Landing extends Component {
             </ModalFooter>
           </form>
         </Modal>
-      </div >
-      </Container>
+      
+    </Container>
     );
   }
 }

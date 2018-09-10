@@ -51,7 +51,7 @@ class BookDetail extends Component {
     keepVote = e => this.setState({ _vote: e.target.value, error: '' })
     keepComment = e => this.setState({ comment: e.target.value, error: '' })
 
-    
+
 
     HandlelistReview = event => {
         event.preventDefault()
@@ -98,47 +98,75 @@ class BookDetail extends Component {
                         })
                     );
             }
-        }
+            )
     }
+}
 
-    render() {
-        < Modal isOpen = { this.state.modal } toggle = { this.toggle } >
-                <ModalHeader toggle={this.toggle}>Add review</ModalHeader>
-                <form onSubmit={this.HandleAddReview} >
-                    <ModalBody className="text-center">
-                        <div className="mb-4 ">
-                            <i className="fa fa-user mr-4" />
-                            <Label for="exampleTitulo">Titulo</Label>
-                            <Input type="text" onChange={this.keepbook} name="titleBook" placeholder="book" />
+
+
+render() {
+    < Modal isOpen={this.state.modal} toggle={this.toggle} >
+        <ModalHeader toggle={this.toggle}>Add review</ModalHeader>
+        <form onSubmit={this.HandleAddReview} >
+            <ModalBody className="text-center">
+                <div className="mb-4 ">
+                    <i className="fa fa-user mr-4" />
+                    <Label for="exampleTitulo">Titulo</Label>
+                    <Input type="text" onChange={this.keepbook} name="titleBook" placeholder="book" />
+                </div>
+                <div className="mb-4 ">
+                    <i className="fa fa-user mr-4" />
+                    <Label for="exampleSelect">Select Vote</Label>
+                    <ReactStars
+                    count={5},
+                    onChange={ratingChanged},
+                    size={24},
+                    color2={'#ffd700'} />,
+                </div>
+                <div className="mb-2">
+                    <i className="fa fa-lock mr-4" />
+                    <Label for="exampleText">Text Area</Label>
+                    <Input type="textarea" name="text" id="exampleText" />
+                </div>
+            </ModalBody>
+            <ModalFooter>
+                <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                <Button color="primary">Submit</Button>
+            </ModalFooter>
+        </form>
+    </Modal >
+        <Container className="container" >
+            <Col xs="6" sm="4">
+                <Card className="card">
+                    <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
+                    <CardBody >
+                        <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
+                        <div className="card_cardbody">
+                            <CardTitle>{book.title}</CardTitle>
+                            <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
+                            <CardSubtitle>Language: {book.language}</CardSubtitle>
+                            <CardText>{book.description.substring(0, 80)}...</CardText>
                         </div>
-                        <div className="mb-4 ">
-                            <i className="fa fa-user mr-4" />
-                            <Label for="exampleSelect">Select Vote</Label>
-                            <Input type="select" name="select" onChange={this.keepVote} id="exampleSelect">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                            </Input>
+                        <Button color="primary" target="_blank" href="" >Comprar</Button>
+                    </CardBody>
+                </Card>
+            </Col>
+
+            <Col xs="6" sm="4">
+                <Card className="card">
+                    <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
+                    <CardBody >
+                        <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
+                        <div className="card_cardbody">
+                            <CardTitle>{review.title}</CardTitle>
+                            <CardSubtitle>{review._vote}</CardSubtitle>
+                            <CardText>{book.description}</CardText>
                         </div>
-                        <div className="mb-2">
-                            <i className="fa fa-lock mr-4" />
-                            <Label for="exampleText">Text Area</Label>
-                            <Input type="textarea" name="text" id="exampleText" />
-                        </div>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                        <Button color="primary">Submit</Button>
-                    </ModalFooter>
-                </form>
-        </Modal >
+
+                    </CardBody>
+                </Card>
+            </Col>
+        </Container>
                 
 }
-export default BookDetail
+export default BookDetail;

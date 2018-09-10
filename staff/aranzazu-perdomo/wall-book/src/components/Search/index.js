@@ -22,6 +22,7 @@ import {
     Nav,
     NavItem,
     NavLink,
+    ReactStars
 
 } from "reactstrap"
 
@@ -123,6 +124,12 @@ class Search extends Component {
                                             <CardTitle>{book.title}</CardTitle>
                                             <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
                                             <CardSubtitle>Language: {book.language}</CardSubtitle>
+                                            <ReactStars
+                                                count={5},
+                                                onChange={ratingChanged},
+                                                size={24},
+                                                color2={'#ffd700'} />,
+                                                                                              
                                             <CardText>{book.description.substring(0, 80)}...</CardText>
                                         </div>
                                             <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(book.isbn.identifier)} >See more</Button>

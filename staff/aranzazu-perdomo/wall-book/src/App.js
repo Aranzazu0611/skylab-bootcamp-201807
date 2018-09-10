@@ -40,6 +40,12 @@ class App extends Component {
     this.props.history.push('/')
   }
 
+  onBookDetail = bookId => {
+
+    this.props.history.push(`/book/${bookId}`)
+
+  }
+
 
   render() {
     return (
@@ -48,11 +54,8 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />
           <Route path="/search" render={() => this.isLoggedIn() ? <Search /> : <Redirect to="/" />} />
-
-          {/* <Route path="/reviews" render={() => this.state.isLoggedIn ? <Search /> : <Redirect to="/" />} /> */}
-          {/* <Route path="/register" render={() => this.state.isLoggedIn ? <Redirect to="/login" /> : <Redirect to="/" />} /> */}
-          {/* <Route path="/login" render={() => {return this.isLoggedIn() ? <Redirect to="/search" /> : <Redirect to="/" />}} /> */} */}
-          {/* <Route path="/favorites" render={() => this.state.isLoggedIn ? <Favorites /> : <Redirect to="/" />} /> */} */}
+          <Route path="/book/:id" render={() => this.isLoggedIn() ? <bookDetail  onBookDetail= {this.onBookDetail} /> : <Redirect to="/" />} />
+         
         </Switch>
       </div>
 

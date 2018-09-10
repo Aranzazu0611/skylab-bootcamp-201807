@@ -91,7 +91,7 @@ class Search extends Component {
                                 <NavLink href="/Profile">Settings</NavLink>
                             </NavItem>
                             <NavItem>
-                                <NavLink href="/">Logout</NavLink>
+                                <NavLink href="/" onClick={this.props.onLogout}>Logout</NavLink>
                             </NavItem>
                         </Nav>
                     </Collapse>
@@ -112,7 +112,7 @@ class Search extends Component {
 
             <Row className="justify-content-center">
                 {books.map(book => {
-                    if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail')) {
+                    if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail') && book.hasOwnProperty('isbn')) {
                         return (
                             <Col xs="6" sm="4">
                                 <Card className="card">
@@ -125,7 +125,7 @@ class Search extends Component {
                                             <CardSubtitle>Language: {book.language}</CardSubtitle>
                                             <CardText>{book.description.substring(0, 80)}...</CardText>
                                         </div>
-                                            <Button color="primary" target="_blank" rel="" href="/bookDetail" >See more</Button>
+                                            <Button color="primary" target="_blank" onClick={this.props.onBookDetail} >See more</Button>
                                     </CardBody>
                                 </Card>
                             </Col>

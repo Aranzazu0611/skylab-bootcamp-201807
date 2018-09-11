@@ -59,7 +59,7 @@ class App extends Component {
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />
           <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail= {this.onBookDetail} onLogout= {this.onLogout}/> : <Redirect to="/" />} />
           <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail bookId={props.match.params.id} /> : <Redirect to="/" />} />
-          <Route path="/user/:userId" render={props => this.isLoggedIn() ? <Profile userId={props.match.params.id} /> : <Redirect to="/" />} />
+          <Route path="/user/:userId" render={props => this.isLoggedIn() ? <Profile userId={props.match.params.id} onLogout= {this.onLogout} /> : <Redirect to="/" />} />
         </Switch>
       </div>
 

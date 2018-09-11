@@ -16,18 +16,39 @@ class Settings extends Component {
 
     }
 
-    keepUserId= event => this.setState({ userId: event.target.value })
+    keepUserId = event => this.setState({ userId: event.target.value })
     keepPassword = event => this.setState({ password: event.target.value })
     keepNewPassword = event => this.setState({ newPassword: event.target.value })
 
-    // onUpdate = event => {
-    //     event.preventDefault()
-    
-    //     const {email, password, newPassword } = this.state
+    onUpdate = event => {
+        event.preventDefault()
 
-    //     logicWallbook.updatePassword(userId,password,newPassword,token)
-    //     .then(token =>)
-    // }
+        const {userId, password, newPassword } = this.state
+
+        logicWallbook.updatePassword(userId,password,newPassword,token)
+        .then(token =>)
+    }
+    render() {
+        return (
+            <Col xs="6" sm="4">
+                <Card className="card">
+                    <CardHeader className="text-muted"></CardHeader>
+                    <CardBody >
+                        
+                            <div className="card_cardbody">
+                            <CardTitle>Name: {this.sessionStorage.getItem('name')}</CardTitle>
+                            <CardSubtitle>email: {this.sessionStorage.getItem('email')}</CardSubtitle>
+                            <Button id="btn-logout" color="primary" target="_blank" onClick={this.props.onLogout}>Logout</Button>
+                            <Button id="btn-delete" color="primary" target="_blank" onClick={this.props.onLogout}>Delete</Button>
+                            <Button id="btn-update" color="primary" target="_blank" onClick={this.onUpdate}>Update</Button>
+                           
+                        </div>
+                        <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See more</Button>
+                    </CardBody>
+                </Card>
+            </Col>
+        )
+    }
 }
 
 export default Settings

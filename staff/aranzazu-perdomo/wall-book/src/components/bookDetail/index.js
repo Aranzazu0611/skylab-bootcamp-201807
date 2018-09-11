@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import logicWallbook from "../../logic"
-import { Redirect } from "react-router";
+import { Redirect, withRouter } from "react-router";
 import {
     Card,
     CardImg,
@@ -18,7 +18,8 @@ import {
     ModalBody,
     ModalFooter,
     CardHeader,
-    FormGroup
+    FormGroup,
+    Form
 } from "reactstrap"
 import swal from "sweetalert2"
 import ReactStars from 'react-stars'
@@ -30,7 +31,8 @@ class BookDetail extends Component {
     state = {
         modal: false,
         book: "",
-        _vote: "",
+        title: "",
+        _vote: 0,
         comment: "",
         reviews: [],
         reviewId: ""
@@ -57,14 +59,12 @@ class BookDetail extends Component {
 
 
 
-    keepBook = e => this.setState({ book: e.target.value, error: '' })
-    keepVote = e => this.setState({ _vote: e.target.value, error: '' })
+    keepTitle = e => this.setState({ title: e.target.value, error: '' })
+    keepVote = rating => this.setState({ _vote: rating, error: '' })
     keepComment = e => this.setState({ comment: e.target.value, error: '' })
 
-
-
-    HandlelistReview = event => {
-        event.preventDefault()
+    listReviews = () => {
+       
 
         const userId = sessionStorage.getItem('userId')
         const token = sessionStorage.getItem('token')
@@ -79,11 +79,56 @@ class BookDetail extends Component {
                     confirmButtonText: "Try again"
                 })
             );
-
     }
-    ratingChanged = (newRating) => {
-        console.log(newRating)
-      }
+
+    listReviewsByBook = () => {
+        
+      
+        const { bookId } = this.props
+
+        const token = sessionStorage.getItem('token')
+      
+        logicWallbook.listReviewsByBook(bookId, token)
+            .then(reviews => this.setState({ reviews: reviews }))
+            .catch(err =>
+                swal({
+                    title: "Failed! :(",
+                    text: err,
+                    type: "error",
+                    confirmButtonText: "Try again"
+                })
+            );
+    }
+
+    handleAddReview = e => {
+        e.preventDefault()
+
+        const { title, _vote, comment } = this.state
+        const userId = sessionStorage.getItem('userId')
+        const token = sessionStorage.getItem('token')
+        const book = this.props.match.params.id
+
+        logicWallbook.addReview(userId, book, title, _vote, comment, token)
+            .then(() => {
+                swal({
+                    title: "Success!",
+                    text: "Add review Sucessful",
+                    type: "success",
+                    confirmButtonText: "Cool"
+                })
+                    .then(() => {
+                        this.listReviews()
+                    })
+            })
+            .catch(err =>
+                swal({
+                    title: "Failed! :(",
+                    text: err,
+                    type: "error",
+                    confirmButtonText: "Try again"
+                })
+            );
+    }
 
     HandleDeleteReview = event => {
         event.preventDefault()
@@ -114,39 +159,40 @@ class BookDetail extends Component {
             )
     }
 
-
-
-
     render() {
 
-        const { book, review } = this.state
-        return (
+        const { book, reviews } = this.state
 
+        return (
             <div>
                 {
                     <div>
                         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
                             <ModalHeader toggle={this.toggle} >Write your review</ModalHeader>
-                            <ModalBody>
-                                <FormGroup>
-                                    <Label for="exampleTitle">TITLE</Label>
-                                    <Input type="text" name="title" id="exampleTitle" placeholder="write title" />
-                                </FormGroup>
-                                <ReactStars
+                            <Form onSubmit={this.handleAddReview}>
+                                <ModalBody>
+
+                                    <FormGroup>
+                                        <Label for="exampleTitle">TITLE</Label>
+                                        <Input type="text" name="title" onChange={this.keepTitle} value={this.state.title} id="exampleTitle" placeholder="write title" />
+                                    </FormGroup>
+                                    <ReactStars
                                         count={5}
-                                        onChange={this.setState.keepVote}
+                                        onChange={this.keepVote}
+                                        value={this.state._vote}
                                         size={24}
                                         color2={'#ffd700'} />
-                                
-                                <FormGroup>
-                                    <Label for="exampleText">Text Area</Label>
-                                    <Input type="textarea" name="text" id="exampleText" />
-                                </FormGroup>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="primary" onClick={this.toggle} onChange={this.HandlelistReview}>Add review</Button>{' '}
-                                <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-                            </ModalFooter>
+
+                                    <FormGroup>
+                                        <Label for="exampleText">Text Area</Label>
+                                        <Input type="textarea" name="comment" onChange={this.keepComment} value={this.state.comment} id="exampleText" />
+                                    </FormGroup>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button type="submit" color="primary" onClick={this.listReviewsByBook}>Add review</Button>{' '}
+                                    <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+                                </ModalFooter>
+                            </Form>
                         </Modal>
 
 
@@ -155,17 +201,19 @@ class BookDetail extends Component {
 
                             <Col xs="6" sm="4">
                                 {book && <Card className="card">
-                                    <CardHeader className="text-muted"><ReactStars
-                                        count={5}
-                                        onChange={this.ratingChanged}
-                                        size={24}
-                                        color2={'#ffd700'} /></CardHeader>
+                                    <CardHeader className="text-muted">
+                                        <ReactStars
+                                            count={5}
+                                            onChange={this.ratingChanged}
+                                            size={24}
+                                            color2={'#ffd700'} />
+                                    </CardHeader>
                                     <CardBody >
                                         <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />
                                         <div className="card_cardbody">
                                             <CardTitle>{book.title}</CardTitle>
                                             <CardSubtitle>Author: {book.authors}</CardSubtitle>
-                                            <CardText>{book.description.substring(0, 587)}</CardText>
+                                            <CardText>{book.description.substring(0, 299)}...</CardText>
                                         </div>
                                     </CardBody>
                                 </Card>}
@@ -189,4 +237,4 @@ class BookDetail extends Component {
     }
 
 }
-export default BookDetail;
+export default withRouter(BookDetail);

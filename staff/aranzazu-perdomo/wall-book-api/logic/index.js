@@ -167,7 +167,8 @@ const logic = {
     /**
      * Add review requiring different parameters
      * @param {String} userId
-     * @param {String} book
+     * @param {String} book (volumen id from google api)
+     * @param {String} title
      * @param {Number} _vote
      * @param {String} comment
      * 
@@ -175,7 +176,7 @@ const logic = {
      *      
      * @returns {boolean} TRUE => if it is add review correctly
      */
-    addReview(userId, book, _vote, comment){
+    addReview(userId, book, title, _vote, comment){
         let vote
         
         return Promise.resolve()
@@ -184,6 +185,7 @@ const logic = {
 
                 this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
+                this._validateStringField("title", title)
                 this._validateNumber("vote", vote)
                 this._validateStringField("comment", comment)
 
@@ -192,7 +194,7 @@ const logic = {
             .then(user => {
                 if (!user) throw new LogicError(`user with ${userId} does not exists`)
 
-                const review = { book, vote, comment, user: user.id }
+                const review = { book, title, vote, comment, user: user.id }
 
                 return Review.create(review)
             })
@@ -200,7 +202,7 @@ const logic = {
     },
    
     /**
-    * List all reviews 
+    * List all reviews
     * @param {String} userId
     * 
     * @throws {LogicError} if user has no reviws
@@ -215,6 +217,19 @@ const logic = {
             })
             .then(reviews => {
                 if (!reviews) throw new LogicError(`user ${userId} has no reviews`)
+
+                return reviews
+            })
+    },
+
+    listReviewsByBook(bookId) {
+        return Promise.resolve()
+            .then(() => {
+
+                return Review.find({ book: bookId })
+            })
+            .then(reviews => {
+                if (!reviews) throw new LogicError(`book ${bookId} has no reviews`)
 
                 return reviews
             })

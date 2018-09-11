@@ -161,7 +161,8 @@ body {
 
 .card {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
-  margin-bottom: 15vh;
+  margin-bottom: 8vh;
+  
 }
 
 .col{
@@ -169,7 +170,7 @@ body {
   max-width: 100%;
 }
 .card_cardbody{
-  height: 150px;
+ max-height: 50vh;
  
 }
 

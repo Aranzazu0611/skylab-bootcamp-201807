@@ -8,6 +8,7 @@ module.exports = new Schema({
         ref: 'User'
     },
     book: { type: String },
+    title: { type: String },
     vote: { type: Number },
     comment: { type: String },
 })

@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
 import {
     Card,
     CardImg,
@@ -34,10 +35,12 @@ import './style.css'
 
 
 
+
 class Search extends Component {
     toggle = this.toggle.bind(this);
 
     state = {
+       
         query: "",
         searchBy: undefined,
         orderBy: undefined,
@@ -80,6 +83,7 @@ class Search extends Component {
 
     }
 
+
     // ratingChanged = (vote) => {
     //     this.setState('vote')
     // }
@@ -91,13 +95,10 @@ class Search extends Component {
         return <Container className="container" >
 
             <div>
-                <Navbar color="dark" light>
-                    <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>                             
-
-                        <Button id="btn-profile" color="primary" target="_blank">Profile</Button>                      
-                        <Button id="btn-logout" color="primary" target="_blank">Logout</Button>
-                       
-                  
+                <Navbar color="dark" light >
+                    <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
+                    <Button id="btn-profile" color="primary" target="_blank"  onClick={this.props.onProfile}>Profile</Button>
+                    <Button id="btn-logout" color="primary" target="_blank" onClick={this.props.onLogout}>Logout</Button>
                 </Navbar>
             </div>
             <Row className="justify-content-center">
@@ -118,11 +119,17 @@ class Search extends Component {
                     if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail') && book.hasOwnProperty('isbn') && book.hasOwnProperty('infoLink')) {
                         const { infoLink } = book
                         const bookId = infoLink.substring(infoLink.indexOf('id') + 3, infoLink.indexOf('&'))
-                        
+                        let description = book.description
+
+                        if (description.length > 350) {
+                            description = description.substring(0, 350) + "..."
+                        }
+
+
                         return (
                             <Col xs="6" sm="4">
                                 <Card className="card">
-                                    <CardHeader className="text-muted"><img className="icons" src="../../../public/icons/001-heart.png"></img></CardHeader>
+                                    <CardHeader className="text-muted"></CardHeader>
                                     <CardBody >
                                         <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
                                         <div className="card_cardbody">
@@ -135,7 +142,7 @@ class Search extends Component {
                                                 size={24}
                                                 color2={'#ffd700'} /> */}
 
-                                            <CardText>{book.description.substring(0, 80)}...</CardText>
+                                            <CardText>{description}</CardText>
                                         </div>
                                         <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See more</Button>
                                     </CardBody>
@@ -149,4 +156,4 @@ class Search extends Component {
         </Container >
     }
 }
-export default Search;
+export default withRouter(Search);

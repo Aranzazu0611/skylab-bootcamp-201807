@@ -136,7 +136,7 @@ const logicWallbook = {
                 return this._call(`user/${userId}/book/${bookId}`, 'GET', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
                     .then(res => res)
-                    //.then(() => true)
+                //.then(() => true)
             })
     },
 
@@ -165,6 +165,7 @@ const logicWallbook = {
      * Add review requiring different parameters
      * @param {String} userId
      * @param {String} book
+     * @param {String} title
      * @param {Number} _vote
      * @param {String} comment
      * @param {String} token
@@ -173,13 +174,14 @@ const logicWallbook = {
      * @returns {Response} response with message notifying review was added correctly
      */
 
-    addReview(userId, book, _vote, comment, token) {
+    addReview(userId, book, title, _vote, comment, token) {
         return Promise.resolve()
             .then(() => {
                 const vote = parseInt(_vote)
 
                 this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
+                this._validateStringField("title", title)
                 this._validateNumber("vote", vote)
                 this._validateStringField("comment", comment)
 
@@ -190,7 +192,7 @@ const logicWallbook = {
                         'Content-Type': 'application/json',
                         authorization: `bearer ${token}`
                     },
-                    JSON.stringify({ userId, book, vote, comment }),
+                    JSON.stringify({ userId, book, title, vote, comment }),
                     201
                 )
                     .then(res => res.json())
@@ -213,6 +215,26 @@ const logicWallbook = {
                 this._validateStringField('token', token)
 
                 return this._call(`user/${userId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
+                    .then(res => res.json())
+            })
+    },
+
+     /**
+    * List all reviews by book 
+    * @param {String} bookId
+    * @param {String} token
+    *        
+    * @returns {Response} all reviews in an array or an empty array
+    */
+
+    listReviewsByBook(bookId, token) {
+        return Promise.resolve()
+            .then(() => {
+                debugger;
+                this._validateStringField('bookId', bookId)
+                this._validateStringField('token', token)
+
+                return this._call(`user/${bookId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
             })
     },

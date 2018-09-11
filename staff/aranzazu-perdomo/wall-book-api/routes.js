@@ -57,7 +57,7 @@ router.get('/user/:userId/book/:bookId', validateJwt, (req, res) => {
     const { params: { bookId } } = req
 
     logic.retrieveBook(bookId)
-    .then(book => res.json({ message: 'Retrieve book correctly', book }))
+        .then(book => res.json({ message: 'Retrieve book correctly', book }))
         .catch(err => {
             const { message } = err
             res.status(err instanceof LogicError ? 400 : 500).json({ message })
@@ -79,9 +79,9 @@ router.delete('/unregister', jsonBodyParser, (req, res) => {
 
 //add review
 router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) => {
-    const { params: { userId }, body: { book, vote, comment } } = req
+    const { params: { userId }, body: { title, book, vote, comment } } = req
 
-    logic.addReview(userId, book, vote, comment)
+    logic.addReview(userId, book, title, vote, comment)
         .then(() => res.status(201).json({ message: 'Review added correctly' }))
         .catch(err => {
             const { message } = err
@@ -90,7 +90,7 @@ router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) =
 })
 
 
-//list reviews 
+//list reviews by user
 
 router.get('/user/:userId/reviews', validateJwt, (req, res) => {
     const { params: { userId } } = req
@@ -102,7 +102,18 @@ router.get('/user/:userId/reviews', validateJwt, (req, res) => {
             res.status(err instanceof LogicError ? 400 : 500).json({ message })
         })
 
+})
 
+// list reviews by book
+router.get('/book/:bookId', validateJwt, (req, res) => {
+    const { params: { bookId } } = req
+
+    logic.listReviewsByBook(bookId)
+        .then(data => res.json(data))
+        .catch(err => {
+            const { message } = err
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
+        })
 })
 
 //delete reviews

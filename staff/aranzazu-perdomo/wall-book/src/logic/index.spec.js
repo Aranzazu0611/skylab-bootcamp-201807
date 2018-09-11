@@ -379,91 +379,91 @@ describe('logic', () => {
         })
 
         it('should add review correctly', () =>
-            logicWallbook.addReview(userId, book, _vote, comment, token)
+            logicWallbook.addReview(userId, book, title, _vote, comment, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then(({ message }) => expect(message).to.equal('Review added correctly'))
         )
 
         it('should fail on trying to add review with undefined userId', () =>
-            logicWallbook.addReview(undefined, book, _vote, comment, token)
+            logicWallbook.addReview(undefined, book, title, _vote, comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid userId'))
         )
 
         it('should fail on trying to add review with an empty userId', () =>
-            logicWallbook.addReview('', book, _vote, comment, token)
+            logicWallbook.addReview('', book, title, _vote, comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid userId'))
         )
 
         it('should fail on trying to add review with a blank userId', () =>
-            logicWallbook.addReview('    ', book, _vote, comment, token)
+            logicWallbook.addReview('    ', book, title, _vote, comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid userId'))
         )
 
         it('should fail on trying to add review with an undefined book', () =>
-            logicWallbook.addReview(userId, undefined, _vote, comment, token)
+            logicWallbook.addReview(userId, undefined, title, _vote, comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid book'))
         )
 
         it('should fail on trying to add review with an empty book', () =>
-            logicWallbook.addReview(userId, '', _vote, comment, token)
+            logicWallbook.addReview(userId, '', title, _vote, comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid book'))
         )
 
         it('should fail on trying to add review with a blank book', () =>
-            logicWallbook.addReview(userId, '     ', _vote, comment, token)
+            logicWallbook.addReview(userId, '     ', title, _vote, comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid book'))
         )
 
         it('should fail on trying to add review with a numeric book', () =>
-            logicWallbook.addReview(userId, 12345, _vote, comment, token)
+            logicWallbook.addReview(userId, 12345, title, _vote, comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid book'))
         )
 
         it('should fail on trying to add review with an undefined vote', () =>
-            logicWallbook.addReview(userId, book, undefined, comment, token)
+            logicWallbook.addReview(userId, book, title, undefined, comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid vote'))
         )
 
         it('should fail on trying to add review with an empty vote', () =>
-            logicWallbook.addReview(userId, book, '', comment, token)
+            logicWallbook.addReview(userId, book, title, '', comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid vote'))
         )
 
         it('should fail on trying to add review with a blank vote', () =>
-            logicWallbook.addReview(userId, book, '    ', comment, token)
+            logicWallbook.addReview(userId, book, title, '    ', comment, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid vote'))
         )
 
         it('should fail on trying to add review with an undefined comment', () =>
-            logicWallbook.addReview(userId, book, _vote, undefined, token)
+            logicWallbook.addReview(userId, book, title, _vote, undefined, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid comment'))
         )
 
         it('should fail on trying to add review with an empty comment', () =>
-            logicWallbook.addReview(userId, book, _vote, '', token)
+            logicWallbook.addReview(userId, book, title, _vote, '', token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid comment'))
         )
 
         it('should fail on trying to add review with a blank comment', () =>
-            logicWallbook.addReview(userId, book, _vote, '      ', token)
+            logicWallbook.addReview(userId, book, title, _vote, '      ', token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid comment'))
         )
 
         it('should fail on trying to add review with a numeric comment', () =>
-            logicWallbook.addReview(userId, book, _vote, 12345, token)
+            logicWallbook.addReview(userId, book, title, _vote, 12345, token)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid comment'))
         )
@@ -536,6 +536,41 @@ describe('logic', () => {
             logicWallbook.listReviews(userId, '')
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid token'))
+        )
+
+    })
+
+    true && describe('list review', () => {
+        const title = "fantastic"
+        const book = "Harry Potter"
+        const _vote = '10'
+        const comment = 'fantastic'
+
+        let email, name, password, userId, token
+
+        beforeEach(() => {
+            email = `Aranzazu-${Math.random()}@gmail.com`
+            name = `Aranzazu-${Math.random()}`
+            password = `123456-${Math.random()}`
+
+            return logicWallbook.register(email, name, password)
+                .then(() =>
+                    logicWallbook.authenticate(email, password)
+                        .then(({ message, token: _token, user: _user }) => {
+                            userId = _user
+                            token = _token
+                        })
+                )
+                .then(() => logicWallbook.addReview(userId, book,title, _vote, comment, token))
+        })
+
+        it('should list review by book correctly', () =>
+            logicWallbook.listReviewsByBook(bookId, token)
+                .catch(({ message }) => expect(message).to.be.undefined)
+                .then((reviews) => {
+                    expect(reviews).to.exist
+                    expect(reviews.length).to.equal(1)
+                })
         )
 
     })
@@ -914,10 +949,10 @@ describe('logic', () => {
         })
 
         it('should retrieve book id correctly', () =>
-        logicWallbook.retrieveBook(bookId, token)
-            .catch(({ message }) => expect(message).to.be.undefined)
-            .then(({ message }) => expect(message).to.equal('Retrieve book correctly'))
-    )
+            logicWallbook.retrieveBook(bookId, token)
+                .catch(({ message }) => expect(message).to.be.undefined)
+                .then(({ message }) => expect(message).to.equal('Retrieve book correctly'))
+        )
     })
 
 

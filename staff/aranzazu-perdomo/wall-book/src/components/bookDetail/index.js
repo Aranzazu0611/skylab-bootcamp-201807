@@ -218,7 +218,7 @@ class BookDetail extends Component {
                         <Container className="container">
                             <Button className="btn-review" color="primary" onClick={this.toggle}>+ Add review</Button>
                             <Row className="justify-content-left">
-                                <Col >
+                                <Col xs="6" xm="4">
                                     {book && <Card className="card">
                                         <CardHeader className="text-muted">
                                             <ReactStars

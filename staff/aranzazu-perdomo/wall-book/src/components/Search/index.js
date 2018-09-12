@@ -61,11 +61,11 @@ class Search extends Component {
 
         const { searchBy } = this.state
 
-        if(searchBy === 'title') {
-            this.setState({searchBy: 'author'})
+        if (searchBy === 'title') {
+            this.setState({ searchBy: 'author' })
         }
         else {
-            this.setState({searchBy: 'title'})
+            this.setState({ searchBy: 'title' })
         }
     }
 
@@ -74,11 +74,11 @@ class Search extends Component {
 
         const { orderBy } = this.state
 
-        if(orderBy === 'relevance') {
-            this.setState({orderBy: 'newest'})
+        if (orderBy === 'relevance') {
+            this.setState({ orderBy: 'newest' })
         }
         else {
-            this.setState({orderBy: 'relevance'})
+            this.setState({ orderBy: 'relevance' })
         }
     }
 
@@ -113,7 +113,7 @@ class Search extends Component {
         this.props.onProfile(userId)
     }
 
-    
+
 
 
     render() {
@@ -156,12 +156,6 @@ class Search extends Component {
                                             <CardTitle>{book.title}</CardTitle>
                                             <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
                                             <CardSubtitle>Language: {book.language}</CardSubtitle>
-                                            {/* <ReactStars
-                                                count={5}
-                                                onChange={ratingChanged}
-                                                size={24}
-                                                color2={'#ffd700'} /> */}
-
                                             <CardText>{description}</CardText>
                                         </div>
                                         <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See reviews</Button>

@@ -5,7 +5,6 @@ import logo from './logo.svg';
 import LandingPage from '../src/components/LandingPage'
 import Profile from '../src/components/Profile'
 import Search from '../src/components/Search'
-import Review from '../src/components/Review'
 import BookDetail from '../src/components/bookDetail'
 import swal from 'sweetalert2'
 import '../src/index.css'
@@ -20,7 +19,7 @@ import {
 
 class App extends Component {
   state = {
-    
+
     email: sessionStorage.getItem('email') || '',
     password: sessionStorage.getItem('password') || ''
   }
@@ -63,16 +62,16 @@ class App extends Component {
     return (
       <div>
         <Navbar color="dark" light >
-            <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
-            {this.isLoggedIn() && <Button id="btn-profile" color="primary" target="_blank" onClick={this.onProfile}>Profile</Button>}
-            {this.isLoggedIn() && <Button id="btn-logout" color="primary" target="_blank" onClick={this.onLogout}>Logout</Button>}
+          <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
+          {this.isLoggedIn() && <Button color="primary" target="_blank"  onClick={this.onProfile}>Profile</Button>}
+          {this.isLoggedIn() && <Button color="primary" target="_blank" onClick={this.onLogout}>Logout</Button>}
         </Navbar>
-       
+
         <Switch>
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />
-          <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail= {this.onBookDetail} onLogout= {this.onLogout} onProfile= {this.onProfile} /> : <Redirect to="/" />} />
-          <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail bookId={props.match.params.id} userId={this.state.userId}/> : <Redirect to="/" />} />
-          <Route path="/user/:userId" render={props => this.isLoggedIn() ? <Profile userId={props.match.params.userId} onLogout= {this.onLogout} email={this.state.email} name={this.state.name}/> : <Redirect to="/" />} />
+          <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail={this.onBookDetail} onLogout={this.onLogout} onProfile={this.onProfile} /> : <Redirect to="/" />} />
+          <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail bookId={props.match.params.id} userId={this.state.userId} /> : <Redirect to="/" />} />
+          <Route path="/user/:userId" render={props => this.isLoggedIn() ? <Profile userId={props.match.params.userId} onLogout={this.onLogout} email={this.state.email} name={this.state.name} /> : <Redirect to="/" />} />
         </Switch>
       </div>
 

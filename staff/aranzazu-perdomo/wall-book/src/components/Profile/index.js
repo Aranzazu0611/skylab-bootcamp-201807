@@ -24,8 +24,10 @@ import {
     ListGroupItem,
     ListGroupItemHeading,
     ListGroupItemText,
-
+    Row
 } from 'reactstrap'
+import ReactStars from 'react-stars'
+import './style.css'
 
 class Settings extends Component {
 
@@ -84,8 +86,6 @@ class Settings extends Component {
     }
 
     listReviews = () => {
-
-
         const userId = sessionStorage.getItem('userId')
         const token = sessionStorage.getItem('token')
 
@@ -102,33 +102,50 @@ class Settings extends Component {
     }
 
 
-    handleDelete = event => {
+    handleDeleteUser = event => {
         event.preventDefault()
 
         const { state: { userId, password } } = this
+
+        logicWallbook.unregister(userId, password)
+            .then(() =>
+                swal({
+                    title: "Success!",
+                    text: "Register Sucessful",
+                    type: "success",
+                    confirmButtonText: "Cool"
+                })
+            ) .catch(err =>
+                swal({
+                  title: "Failed! :(",
+                  text: err,
+                  type: "error",
+                  confirmButtonText: "Try again"
+                })
+              );
 
     }
 
 
     render() {
-        const { reviews } = this.state
+        const { reviews, password } = this.state
 
         return (
             <Container>
 
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Registration form</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Update Form</ModalHeader>
                     <form onSubmit={this.handleUpdatesubmit}>
                         <ModalBody className="text-left">
                             <div className="mb-2 ">
                                 <i className="fa fa-user mr-4" />
-                                <Label for="exampleEmail">userId</Label>
-                                <Input type="text" value={this.props.userId} name="userId" placeholder="userId" required autoFocus="true" />
+                                <Label for="exampleEmail">Email</Label>
+                                <Input type="text" value={this.props.email} name="email" placeholder="email" required autoFocus="true" />
                             </div>
                             <div className="mb-2">
                                 <i className="fa fa-lock mr-4" />
                                 <Label for="examplePassword">Password</Label>
-                                <Input type="password" onChange={this.keepPassword} name="password" placeholder="Password" required />
+                                <Input type="password" onChange={this.keepPassword} name="password" value={password} placeholder="Password" required />
 
                             </div>
                             <div className="mb-2">
@@ -145,25 +162,42 @@ class Settings extends Component {
                     </form>
                 </Modal>
 
-                <Col xs="6" sm="4">
-                    <Card className="card">
-                        <CardHeader className="text-muted"></CardHeader>
-                        <CardBody >
 
-                            <div className="card_cardbody">
-                                <CardTitle>Name: {this.props.name}</CardTitle>
-                                <CardSubtitle>email: {this.props.email}</CardSubtitle>
-                                <Button id="btn-logout" color="primary" target="_blank" onClick={this.props.onLogout}>Logout</Button>
-                                <Button id="btn-delete" color="primary" target="_blank">Delete</Button>
-                                <Button id="btn-update" color="primary" target="_blank" onClick={this.toggle}>Update</Button>
+                <Row>
+                    <Col xs="6" sm="4">
+                        <Card className="card">
+                            <CardBody >
+                                <div className="card_cardbody">
+                                    <CardTitle>Usuario: {this.props.email}</CardTitle>
+                                    <Button id="btn-delete" color="primary" target="_blank">Unregister</Button>
+                                    <Button id="btn-update" color="primary" target="_blank" onClick={this.toggle}>Update</Button>
+                                </div>
+                            </CardBody>
+                        </Card>
+                    </Col>
 
-                            </div>
-                            {/* <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See more</Button> */}
-                        </CardBody>
-                    </Card>
-                </Col>
+                    <Col xs="6" sm="8">
+                        <ListGroup className="listReview mt-5">
+                            {reviews && reviews.length > 0 && reviews.map(review => <ListGroupItem key={review.id}>
+                                <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
+                                <ListGroupItemText className="listReview-vote">
+                                    <ReactStars
+                                        count={5}
+                                        size={24}
+                                        value={review.vote}
+                                        color2={'#ffd700'}
+                                        edit={false}
+                                    />
+                                </ListGroupItemText>
+                                <ListGroupItemText className="listReview-comentario">
+                                    Comentario: {review.comment}
+                                </ListGroupItemText>
+                            </ListGroupItem>
+                            )}
+                        </ListGroup>
+                    </Col>
+                </Row>
 
-                {reviews && reviews.length > 0 && <ul>{reviews.map(({ title }) => <li>{title}</li>)}</ul>}
             </Container>
         )
     }

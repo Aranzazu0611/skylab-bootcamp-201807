@@ -29,15 +29,10 @@ body {
   justify-content: space-between;
   padding: .5rem 1rem;
   margin-top: 2vh;
-  border-radius: 2vw;
+ 
 }
 
-.btn-secondary {
-  color: #fff;
-  background-color: #6c757d;
-  border-color: #6c757d;
-  margin-left: 1vw;
-}
+
 
 .navbar-nav .nav-link {
   float: right;
@@ -167,20 +162,17 @@ body {
 
 .col{
   padding: 0;
-  max-width: 100%;
+  
 }
 .card_cardbody{
  max-height: 50vh;
  
 }
 
-.btn {
-  margin-top: 3vh;
-}
 
 .btn-primary {
   color: #fff;
   background-color: blueviolet !important;
   border-color: #007bff !important;
-
+  margin-right: 15px;
 }

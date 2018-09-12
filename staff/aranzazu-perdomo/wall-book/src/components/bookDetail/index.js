@@ -45,9 +45,13 @@ class BookDetail extends Component {
 
         logicWallbook.retrieveBook(userId, bookId, token)
             .then(({ book: { volumeInfo } }) => {
-                this.setState({ book: volumeInfo })
+                return volumeInfo
             })
-
+            .then(book => {
+                this.setState({ book }, () => {
+                    this.listReviewsByBook()
+                })
+            })
     }
 
     toggle = () => {
@@ -81,14 +85,14 @@ class BookDetail extends Component {
             );
     }
 
-    listReviewsByBook = () => {
-        
+    listReviewsByBook = () => {   
       
         const { bookId } = this.props
 
         const token = sessionStorage.getItem('token')
+        const userId = sessionStorage.getItem('userId')
       
-        logicWallbook.listReviewsByBook(bookId, token)
+        logicWallbook.listReviewsByBook(bookId, userId, token)
             .then(reviews => this.setState({ reviews: reviews }))
             .catch(err =>
                 swal({
@@ -116,9 +120,11 @@ class BookDetail extends Component {
                     type: "success",
                     confirmButtonText: "Cool"
                 })
-                    .then(() => {
-                        this.listReviews()
+                .then(() => {
+                    this.setState({ modal: false, title: '', _vote: 0, comment: ''}, () => {
+                        this.listReviewsByBook()
                     })
+                })
             })
             .catch(err =>
                 swal({
@@ -189,7 +195,7 @@ class BookDetail extends Component {
                                     </FormGroup>
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button type="submit" color="primary" onClick={this.listReviewsByBook}>Add review</Button>{' '}
+                                    <Button type="submit" color="primary">Add review</Button>{' '}
                                     <Button color="secondary" onClick={this.toggle}>Cancel</Button>
                                 </ModalFooter>
                             </Form>
@@ -221,9 +227,9 @@ class BookDetail extends Component {
 
 
                             <div className="card_cardbody">
-                                {/* <CardTitle>{review.title}</CardTitle>
-                                            <CardSubtitle>{review._vote}</CardSubtitle>
-                                        <CardText>{review.description}</CardText> */}
+                               <ul>
+                                   {this.state.reviews.map(review =><li key={review.id}>{`TITULO: ${review.title} Vote: ${review.vote} Comentario: ${review.comment}`}</li>)}
+                               </ul>
                             </div>
 
 

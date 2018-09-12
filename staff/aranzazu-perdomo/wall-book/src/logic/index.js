@@ -227,14 +227,14 @@ const logicWallbook = {
     * @returns {Response} all reviews in an array or an empty array
     */
 
-    listReviewsByBook(bookId, token) {
+    listReviewsByBook(bookId, userId, token) {
         return Promise.resolve()
             .then(() => {
-                debugger;
                 this._validateStringField('bookId', bookId)
+                this._validateStringField('userId', userId)
                 this._validateStringField('token', token)
-
-                return this._call(`user/${bookId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
+                
+                return this._call(`user/${userId}/book/${bookId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
             })
     },

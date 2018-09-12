@@ -6,7 +6,7 @@ import LandingPage from '../src/components/LandingPage'
 import Profile from '../src/components/Profile'
 import Search from '../src/components/Search'
 import Review from '../src/components/Review'
-import BookDetail from '../src/components/BookDetail'
+import BookDetail from '../src/components/bookDetail'
 import swal from 'sweetalert2'
 import '../src/index.css'
 
@@ -14,6 +14,7 @@ import '../src/index.css'
 
 class App extends Component {
   state = {
+    
     email: sessionStorage.getItem('email') || '',
     password: sessionStorage.getItem('password') || ''
   }
@@ -48,6 +49,7 @@ class App extends Component {
   }
 
   onProfile = userId => {
+    debugger
     this.props.history.push(`/user/${userId}`)
   }
 
@@ -57,9 +59,9 @@ class App extends Component {
        
         <Switch>
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />
-          <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail= {this.onBookDetail} onLogout= {this.onLogout}/> : <Redirect to="/" />} />
-          <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail bookId={props.match.params.id} /> : <Redirect to="/" />} />
-          <Route path="/user/:userId" render={props => this.isLoggedIn() ? <Profile userId={props.match.params.id} onLogout= {this.onLogout} /> : <Redirect to="/" />} />
+          <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail= {this.onBookDetail} onLogout= {this.onLogout} onProfile= {this.onProfile} /> : <Redirect to="/" />} />
+          <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail bookId={props.match.params.id} userId={this.state.userId}/> : <Redirect to="/" />} />
+          <Route path="/user/:userId" render={props => this.isLoggedIn() ? <Profile userId={props.match.params.userId} onLogout= {this.onLogout} email={this.state.email} name={this.state.name}/> : <Redirect to="/" />} />
         </Switch>
       </div>
 

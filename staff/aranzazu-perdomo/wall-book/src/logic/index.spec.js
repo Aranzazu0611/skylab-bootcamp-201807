@@ -565,7 +565,7 @@ describe('logic', () => {
         })
 
         it('should list review by book correctly', () =>
-            logicWallbook.listReviewsByBook(bookId, token)
+            logicWallbook.listReviewsByBook(bookId, userId, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then((reviews) => {
                     expect(reviews).to.exist

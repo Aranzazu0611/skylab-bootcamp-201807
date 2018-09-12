@@ -105,8 +105,12 @@ router.get('/user/:userId/reviews', validateJwt, (req, res) => {
 })
 
 // list reviews by book
-router.get('/book/:bookId', validateJwt, (req, res) => {
+
+// http://localhost:8080/api/user/5b98d346a0705b18c4b08a40/book/huy8PQAACAAJ/reviews
+router.get('/user/:userId/book/:bookId/reviews', validateJwt, (req, res) => {
     const { params: { bookId } } = req
+
+    debugger
 
     logic.listReviewsByBook(bookId)
         .then(data => res.json(data))

@@ -40,29 +40,54 @@ class Search extends Component {
     toggle = this.toggle.bind(this);
 
     state = {
-       
+
         query: "",
-        searchBy: undefined,
-        orderBy: undefined,
+        searchBy: 'title',
+        orderBy: 'relevance',
         books: [],
         collapsed: true,
-        dropdownOpen: false,
         vote: []
     }
 
     toggle() {
         this.setState({
             collapsed: !this.state.collapsed,
-            dropdownOpen: !this.state.dropdownOpen
+
         });
     }
 
+    onToggleSearchBy = e => {
+        e.preventDefault()
+
+        const { searchBy } = this.state
+
+        if(searchBy === 'title') {
+            this.setState({searchBy: 'author'})
+        }
+        else {
+            this.setState({searchBy: 'title'})
+        }
+    }
+
+    onToggleOrderBy = e => {
+        e.preventDefault()
+
+        const { orderBy } = this.state
+
+        if(orderBy === 'relevance') {
+            this.setState({orderBy: 'newest'})
+        }
+        else {
+            this.setState({orderBy: 'relevance'})
+        }
+    }
+
     keepQuery = e => this.setState({ query: e.target.value, error: '' })
-    keepSearchBy = e => this.setState({ searchBy: e.target.value, error: '' })
-    keepOrderBy = e => this.setState({ orderBy: e.target.value, error: '' })
 
     onSearch = event => {
         event.preventDefault()
+
+        console.log("HOLA SUBMIT")
         const { query, searchBy, orderBy } = this.state
 
         const token = sessionStorage.getItem('token')
@@ -83,10 +108,12 @@ class Search extends Component {
 
     }
 
+    onProfile = () => {
+        const userId = sessionStorage.getItem('userId')
+        this.props.onProfile(userId)
+    }
 
-    // ratingChanged = (vote) => {
-    //     this.setState('vote')
-    // }
+    
 
 
     render() {
@@ -97,7 +124,7 @@ class Search extends Component {
             <div>
                 <Navbar color="dark" light >
                     <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
-                    <Button id="btn-profile" color="primary" target="_blank"  onClick={this.props.onProfile}>Profile</Button>
+                    <Button id="btn-profile" color="primary" target="_blank" onClick={this.onProfile}>Profile</Button>
                     <Button id="btn-logout" color="primary" target="_blank" onClick={this.props.onLogout}>Logout</Button>
                 </Navbar>
             </div>
@@ -106,8 +133,9 @@ class Search extends Component {
                     <Form onSubmit={this.onSearch} className="form-wrapper">
                         <InputGroup>
                             <Input id="searchInput" onChange={this.keepQuery} placeholder="Search for title, author, newest..." autoFocus="true" autoComplete="off" />
-                            <Input type="submit" value="Author" id="Author" />
-                            <Input type="submit" value="Newest" id="Newest" />
+                            <Button id="Author" onClick={this.onToggleSearchBy}>{this.state.searchBy === 'title' ? 'author' : 'title'}</Button>
+                            <Button id="Newest" onClick={this.onToggleOrderBy}>{this.state.orderBy === 'relevance' ? 'newest' : 'relevance'}</Button>
+
                             <Input type="submit" value="Search" id="submit" />
                         </InputGroup>
                     </Form>
@@ -144,7 +172,7 @@ class Search extends Component {
 
                                             <CardText>{description}</CardText>
                                         </div>
-                                        <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See more</Button>
+                                        <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See reviews</Button>
                                     </CardBody>
                                 </Card>
                             </Col>

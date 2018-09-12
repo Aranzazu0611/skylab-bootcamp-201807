@@ -19,7 +19,11 @@ import {
     ModalFooter,
     CardHeader,
     FormGroup,
-    Form
+    Form,
+    ListGroup,
+    ListGroupItem,
+    ListGroupItemHeading,
+    ListGroupItemText
 } from "reactstrap"
 import swal from "sweetalert2"
 import ReactStars from 'react-stars'
@@ -68,7 +72,7 @@ class BookDetail extends Component {
     keepComment = e => this.setState({ comment: e.target.value, error: '' })
 
     listReviews = () => {
-       
+
 
         const userId = sessionStorage.getItem('userId')
         const token = sessionStorage.getItem('token')
@@ -85,13 +89,13 @@ class BookDetail extends Component {
             );
     }
 
-    listReviewsByBook = () => {   
-      
+    listReviewsByBook = () => {
+
         const { bookId } = this.props
 
         const token = sessionStorage.getItem('token')
         const userId = sessionStorage.getItem('userId')
-      
+
         logicWallbook.listReviewsByBook(bookId, userId, token)
             .then(reviews => this.setState({ reviews: reviews }))
             .catch(err =>
@@ -120,11 +124,11 @@ class BookDetail extends Component {
                     type: "success",
                     confirmButtonText: "Cool"
                 })
-                .then(() => {
-                    this.setState({ modal: false, title: '', _vote: 0, comment: ''}, () => {
-                        this.listReviewsByBook()
+                    .then(() => {
+                        this.setState({ modal: false, title: '', _vote: 0, comment: '' }, () => {
+                            this.listReviewsByBook()
+                        })
                     })
-                })
             })
             .catch(err =>
                 swal({
@@ -227,9 +231,21 @@ class BookDetail extends Component {
 
 
                             <div className="card_cardbody">
-                               <ul>
-                                   {this.state.reviews.map(review =><li key={review.id}>{`TITULO: ${review.title} Vote: ${review.vote} Comentario: ${review.comment}`}</li>)}
-                               </ul>
+                                {this.state.reviews.map(review => <ListGroup key={review.id}>
+                                    <ListGroupItem active>
+                                        <ListGroupItemHeading>Titulo: ${review.title}</ListGroupItemHeading>
+                                        <ListGroupItemText>
+                                            Vote: ${review.vote}
+                                        </ListGroupItemText>
+                                        <ListGroupItemText>
+                                            Comentario: ${review.comment}
+                                        </ListGroupItemText>
+                                    </ListGroupItem>
+                                </ListGroup>
+                                )}
+                            // {/* <ul>
+                            //     {this.state.reviews.map(review => <li key={review.id}>{`TITULO: ${review.title} Vote: ${review.vote} Comentario: ${review.comment}`}</li>)}
+                            // </ul> */}
                             </div>
 
 

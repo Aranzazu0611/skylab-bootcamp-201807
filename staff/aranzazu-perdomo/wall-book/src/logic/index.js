@@ -120,7 +120,7 @@ const logicWallbook = {
                 this._validateStringField("newPassword", newPassword)
                 this._validateStringField("token", token)
 
-                return this._call(`user/${userId}`, 'patch', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, JSON.stringify({ password, newPassword }), 200)
+                return this._call(`user/${userId}`, 'PATCH', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, JSON.stringify({ password, newPassword }), 200)
                     .then(res => res.json())
                     .then(() => true)
             })

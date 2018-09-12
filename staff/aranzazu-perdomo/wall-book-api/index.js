@@ -14,11 +14,11 @@ mongoose.connect(MONGO_URL, { useNewUrlParser: true })
         const { PORT } = process.env
 
         const app = express()
-        
+
         app.use(cors())
 
         app.use('/api', router)
-        
+
         app.listen(PORT, () => console.log(`${package.name} ${package.version} up and running on port ${PORT}`))
     })
     .then(console.log('mongo db connected'))

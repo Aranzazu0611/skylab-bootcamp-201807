@@ -140,7 +140,7 @@ class Settings extends Component {
                             <div className="mb-2 ">
                                 <i className="fa fa-user mr-4" />
                                 <Label for="exampleEmail">Email</Label>
-                                <Input type="text" value={this.props.email} name="email" placeholder="email" required autoFocus="true" />
+                                <Input type="text" value={this.props.email} name="email" placeholder="email" required autoFocus="true" disabled />
                             </div>
                             <div className="mb-2">
                                 <i className="fa fa-lock mr-4" />

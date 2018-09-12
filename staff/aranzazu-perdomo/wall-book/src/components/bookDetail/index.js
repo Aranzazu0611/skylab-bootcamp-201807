@@ -23,7 +23,8 @@ import {
     ListGroup,
     ListGroupItem,
     ListGroupItemHeading,
-    ListGroupItemText
+    ListGroupItemText,
+    Row
 } from "reactstrap"
 import swal from "sweetalert2"
 import ReactStars from 'react-stars'
@@ -208,45 +209,46 @@ class BookDetail extends Component {
 
                         <Container className="container">
                             <Button className="btn-review" color="primary" onClick={this.toggle}>+ Add review</Button>
+                            <Row className="justify-content-left">
+                                <Col >
+                                    {book && <Card className="card">
+                                        <CardHeader className="text-muted">
+                                            <ReactStars
+                                                count={5}
+                                                onChange={this.ratingChanged}
+                                                size={24}
+                                                color2={'#ffd700'} />
+                                        </CardHeader>
+                                        <CardBody >
+                                            <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />
+                                            <div className="card_cardbody">
+                                                <CardTitle>{book.title}</CardTitle>
+                                                <CardSubtitle>Author: {book.authors}</CardSubtitle>
+                                                <CardText>{book.description.substring(0, 299)}...</CardText>
+                                            </div>
+                                        </CardBody>
+                                    </Card>}
+                                </Col>
 
-                            <Col xs="6" sm="4">
-                                {book && <Card className="card">
-                                    <CardHeader className="text-muted">
-                                        <ReactStars
-                                            count={5}
-                                            onChange={this.ratingChanged}
-                                            size={24}
-                                            color2={'#ffd700'} />
-                                    </CardHeader>
-                                    <CardBody >
-                                        <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />
-                                        <div className="card_cardbody">
-                                            <CardTitle>{book.title}</CardTitle>
-                                            <CardSubtitle>Author: {book.authors}</CardSubtitle>
-                                            <CardText>{book.description.substring(0, 299)}...</CardText>
-                                        </div>
-                                    </CardBody>
-                                </Card>}
-                            </Col>
 
+                                <div ClassName="reviews">
+                                    <Col >
+                                        {this.state.reviews.map(review => <ListGroup className="listReview" key={review.id}>
+                                            <ListGroupItem active>
+                                                <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
+                                                <ListGroupItemText className="listReview-vote">
+                                                    Vote: {review.vote}
+                                                </ListGroupItemText>
+                                                <ListGroupItemText className="listReview-comentario">
+                                                    Comentario: {review.comment}
+                                                </ListGroupItemText>
+                                            </ListGroupItem>
+                                        </ListGroup>
+                                        )}
 
-                            <div className="card_cardbody">
-                                {this.state.reviews.map(review => <ListGroup key={review.id}>
-                                    <ListGroupItem active>
-                                        <ListGroupItemHeading>Titulo: ${review.title}</ListGroupItemHeading>
-                                        <ListGroupItemText>
-                                            Vote: ${review.vote}
-                                        </ListGroupItemText>
-                                        <ListGroupItemText>
-                                            Comentario: ${review.comment}
-                                        </ListGroupItemText>
-                                    </ListGroupItem>
-                                </ListGroup>
-                                )}
-                            // {/* <ul>
-                            //     {this.state.reviews.map(review => <li key={review.id}>{`TITULO: ${review.title} Vote: ${review.vote} Comentario: ${review.comment}`}</li>)}
-                            // </ul> */}
-                            </div>
+                                    </Col>
+                                </div>
+                            </Row>
 
 
                         </Container>

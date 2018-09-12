@@ -19,7 +19,11 @@ import {
     ModalHeader,
     ModalBody,
     ModalFooter,
-    Modal
+    Modal,
+    ListGroup,
+    ListGroupItem,
+    ListGroupItemHeading,
+    ListGroupItemText,
 
 } from 'reactstrap'
 
@@ -74,6 +78,25 @@ class Settings extends Component {
             );
 
     }
+
+    listReviews = () => {
+
+
+        const userId = sessionStorage.getItem('userId')
+        const token = sessionStorage.getItem('token')
+
+        logicWallbook.listReviews(userId, token)
+            .then(reviews => this.setState({ reviews: reviews }))
+            .catch(err =>
+                swal({
+                    title: "Failed! :(",
+                    text: err,
+                    type: "error",
+                    confirmButtonText: "Try again"
+                })
+            );
+    }
+
 
     handleDelete = event =>{
         event.preventDefault()
@@ -133,6 +156,8 @@ class Settings extends Component {
                         </CardBody>
                     </Card>
                 </Col>
+
+                
             </Container>
         )
     }

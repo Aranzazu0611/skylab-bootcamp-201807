@@ -40,7 +40,8 @@ class BookDetail extends Component {
         _vote: 0,
         comment: "",
         reviews: [],
-        reviewId: ""
+        reviewId: "",
+        globalVote: 0
     }
 
     componentDidMount() {
@@ -98,7 +99,10 @@ class BookDetail extends Component {
         const userId = sessionStorage.getItem('userId')
 
         logicWallbook.listReviewsByBook(bookId, userId, token)
-            .then(reviews => this.setState({ reviews: reviews }))
+            .then(reviews => this.setState({
+                reviews: reviews,
+                globalVote: this.getGlobalVote(reviews)
+            }))
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -107,6 +111,10 @@ class BookDetail extends Component {
                     confirmButtonText: "Try again"
                 })
             );
+    }
+
+    getGlobalVote(reviews) {
+        return reviews && reviews.length ? reviews.reduce((accum, review) => accum + review.vote, 0) / reviews.length : 0
     }
 
     handleAddReview = e => {
@@ -172,7 +180,7 @@ class BookDetail extends Component {
 
     render() {
 
-        const { book, reviews } = this.state
+        const { book, reviews, globalVote } = this.state
 
         return (
             <div>
@@ -215,9 +223,11 @@ class BookDetail extends Component {
                                         <CardHeader className="text-muted">
                                             <ReactStars
                                                 count={5}
-                                                onChange={this.ratingChanged}
                                                 size={24}
-                                                color2={'#ffd700'} />
+                                                value={globalVote}
+                                                color2={'#ffd700'}
+                                                edit={false}
+                                            />
                                         </CardHeader>
                                         <CardBody >
                                             <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />
@@ -233,11 +243,17 @@ class BookDetail extends Component {
 
                                 <div ClassName="reviews">
                                     <Col >
-                                        {this.state.reviews.map(review => <ListGroup className="listReview" key={review.id}>
+                                        {reviews.map(review => <ListGroup className="listReview" key={review.id}>
                                             <ListGroupItem active>
                                                 <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
                                                 <ListGroupItemText className="listReview-vote">
-                                                    Vote: {review.vote}
+                                                    <ReactStars
+                                                        count={5}
+                                                        size={24}
+                                                        value={review.vote}
+                                                        color2={'#ffd700'}
+                                                        edit={false}
+                                                    />
                                                 </ListGroupItemText>
                                                 <ListGroupItemText className="listReview-comentario">
                                                     Comentario: {review.comment}

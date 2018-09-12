@@ -120,14 +120,6 @@ class Search extends Component {
         const { books } = this.state
 
         return <Container className="container" >
-
-            <div>
-                <Navbar color="dark" light >
-                    <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
-                    <Button id="btn-profile" color="primary" target="_blank" onClick={this.onProfile}>Profile</Button>
-                    <Button id="btn-logout" color="primary" target="_blank" onClick={this.props.onLogout}>Logout</Button>
-                </Navbar>
-            </div>
             <Row className="justify-content-center">
                 <Col xs="12" className="Search">
                     <Form onSubmit={this.onSearch} className="form-wrapper">

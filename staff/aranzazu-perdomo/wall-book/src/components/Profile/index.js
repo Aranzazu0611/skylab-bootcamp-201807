@@ -79,6 +79,10 @@ class Settings extends Component {
 
     }
 
+    componentDidMount() {
+        this.listReviews()
+    }
+
     listReviews = () => {
 
 
@@ -86,7 +90,7 @@ class Settings extends Component {
         const token = sessionStorage.getItem('token')
 
         logicWallbook.listReviews(userId, token)
-            .then(reviews => this.setState({ reviews: reviews }))
+            .then(reviews => this.setState({ reviews }))
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -98,15 +102,17 @@ class Settings extends Component {
     }
 
 
-    handleDelete = event =>{
+    handleDelete = event => {
         event.preventDefault()
 
-        const { state: { userId, password}} = this
+        const { state: { userId, password } } = this
 
     }
 
 
     render() {
+        const { reviews } = this.state
+
         return (
             <Container>
 
@@ -157,7 +163,7 @@ class Settings extends Component {
                     </Card>
                 </Col>
 
-                
+                {reviews && reviews.length > 0 && <ul>{reviews.map(({ title }) => <li>{title}</li>)}</ul>}
             </Container>
         )
     }

@@ -9,6 +9,12 @@ import Review from '../src/components/Review'
 import BookDetail from '../src/components/bookDetail'
 import swal from 'sweetalert2'
 import '../src/index.css'
+import {
+  Button,
+  Navbar,
+  NavbarBrand
+
+} from "reactstrap"
 
 
 
@@ -48,14 +54,19 @@ class App extends Component {
 
   }
 
-  onProfile = userId => {
-    debugger
+  onProfile = () => {
+    const userId = sessionStorage.getItem('userId')
     this.props.history.push(`/user/${userId}`)
   }
 
   render() {
     return (
       <div>
+        <Navbar color="dark" light >
+            <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
+            {this.isLoggedIn() && <Button id="btn-profile" color="primary" target="_blank" onClick={this.onProfile}>Profile</Button>}
+            {this.isLoggedIn() && <Button id="btn-logout" color="primary" target="_blank" onClick={this.onLogout}>Logout</Button>}
+        </Navbar>
        
         <Switch>
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />

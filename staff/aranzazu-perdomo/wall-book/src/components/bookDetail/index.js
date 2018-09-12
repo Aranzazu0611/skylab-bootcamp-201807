@@ -178,6 +178,7 @@ class BookDetail extends Component {
             )
     }
 
+
     render() {
 
         const { book, reviews, globalVote } = this.state
@@ -243,7 +244,7 @@ class BookDetail extends Component {
 
                                 <div ClassName="reviews">
                                     <Col >
-                                        {reviews.map(review => <ListGroup className="listReview" key={review.id}>
+                                        {reviews.map(review => <ListGroup  key={review.id}>
                                             <ListGroupItem active>
                                                 <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
                                                 <ListGroupItemText className="listReview-vote">

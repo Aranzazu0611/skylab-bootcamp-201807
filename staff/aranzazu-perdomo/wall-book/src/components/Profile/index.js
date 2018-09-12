@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import swal from 'sweetalert2'
 import logicWallbook from "../../logic"
-import { Redirect } from "react-router";
+import { Redirect, withRouter } from "react-router";
 import {
     Button,
     Form,
@@ -39,18 +39,27 @@ class Settings extends Component {
         newPassword: null,
         token: sessionStorage.getItem('token') || "",
         redirectHome: false,
-        collapsed: true,
         modal: false,
-
+        modalLogin: false,
     }
 
     toggle = () => {
         this.setState({
             modal: !this.state.modal,
-
-
+            email: "",
+            password: ""
         });
     };
+
+    loginToggle = () => {
+        this.setState({
+            modalLogin: !this.state.modalLogin,
+            email: "",
+            password: ""
+        });
+    };
+
+
 
 
     keepPassword = event => this.setState({ password: event.target.value })
@@ -111,19 +120,22 @@ class Settings extends Component {
             .then(() =>
                 swal({
                     title: "Success!",
-                    text: "Register Sucessful",
+                    text: "Delete Sucessful",
                     type: "success",
                     confirmButtonText: "Cool"
                 })
-            ) .catch(err =>
+                
+            )
+            .then(() => this.props.onLogout(event))
+            .catch(err =>
                 swal({
-                  title: "Failed! :(",
-                  text: err,
-                  type: "error",
-                  confirmButtonText: "Try again"
+                    title: "Failed! :(",
+                    text: err,
+                    type: "error",
+                    confirmButtonText: "Try again"
                 })
-              );
-
+            );
+      
     }
 
 
@@ -134,24 +146,25 @@ class Settings extends Component {
             <Container>
 
                 <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                    <ModalHeader toggle={this.toggle}>Update Form</ModalHeader>
+                    <ModalHeader toggle={this.toggle}>Update form</ModalHeader>
                     <form onSubmit={this.handleUpdatesubmit}>
                         <ModalBody className="text-left">
                             <div className="mb-2 ">
                                 <i className="fa fa-user mr-4" />
                                 <Label for="exampleEmail">Email</Label>
-                                <Input type="text" value={this.props.email} name="email" placeholder="email" required autoFocus="true" disabled />
+                                <Input type="text" onChange={this.keepEmail} name="Email" placeholder="Email" required autoFocus="true" />
                             </div>
+
                             <div className="mb-2">
                                 <i className="fa fa-lock mr-4" />
                                 <Label for="examplePassword">Password</Label>
-                                <Input type="password" onChange={this.keepPassword} name="password" value={password} placeholder="Password" required />
+                                <Input type="password" onChange={this.keepPassword} name="password" placeholder="Password" required />
 
                             </div>
                             <div className="mb-2">
                                 <i className="fa fa-lock mr-4" />
-                                <Label for="exampleNewPassword">New Password</Label>
-                                <Input type="password" onChange={this.keepNewPassword} name="newPassword" placeholder="NewPassword" required />
+                                <Label for="examplePassword">Password</Label>
+                                <Input type="password" onChange={this.keepNewPassword} name="newpassword" placeholder="New Password" required />
 
                             </div>
                         </ModalBody>
@@ -162,6 +175,31 @@ class Settings extends Component {
                     </form>
                 </Modal>
 
+                <Modal isOpen={this.state.modalLogin} toggle={this.loginToggle}>
+                    <ModalHeader toggle={this.loginToggle}>Delete User</ModalHeader>
+                    <form onSubmit={this.handleDeleteUser}>
+                        <ModalBody className="text-left">
+                            <div className="mb-2 ">
+                                <i className="fa fa-user mr-4" />
+                                <Label for="Email">Email</Label>
+                                <Input type="text" onChange={this.keepEmail} name="Email" placeholder="Email" required autoFocus="true" />
+                            </div>
+                            <div className="mb-2 ">
+                                <i className="fa fa-lock mr-4" />
+                                <Label for="Password">Password</Label>
+                                <Input type="password" onChange={this.keepPassword} name="password" placeholder="Password" required />
+                            </div>
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button color="secondary" onClick={this.loginToggle}>Cancel</Button>
+                            <Button color="primary" type="submit">Submit</Button>
+                        </ModalFooter>
+                    </form>
+                </Modal>
+
+
+
+
 
                 <Row>
                     <Col xs="6" sm="4">
@@ -169,7 +207,7 @@ class Settings extends Component {
                             <CardBody >
                                 <div className="card_cardbody">
                                     <CardTitle>Usuario: {this.props.email}</CardTitle>
-                                    <Button id="btn-delete" color="primary" target="_blank">Unregister</Button>
+                                    <Button id="btn-delete" color="primary" target="_blank" onClick={this.loginToggle}>Unregister</Button>
                                     <Button id="btn-update" color="primary" target="_blank" onClick={this.toggle}>Update</Button>
                                 </div>
                             </CardBody>
@@ -203,4 +241,4 @@ class Settings extends Component {
     }
 }
 
-export default Settings
+export default withRouter(Settings)

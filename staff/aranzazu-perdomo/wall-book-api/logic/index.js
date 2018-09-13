@@ -1,7 +1,6 @@
 'use strict'
 
 const validateEmail = require('../utils/validate-email/index')
-const moment = require('moment')
 const { User, Review } = require('../data/models')
 const books = require("google-books-search-2")
 const cloudinary = require('cloudinary')
@@ -25,7 +24,7 @@ const logic = {
     _validateStringField(name, value) {
         if (typeof value !== 'string' || !value.trim().length || value === '/n') throw new LogicError(`invalid ${name}`)
     },
-   
+
     /**
      * Validates a field to be type of email
      * @param {String} email
@@ -35,7 +34,7 @@ const logic = {
     _validateEmail(email) {
         if (!validateEmail(email)) throw new LogicError('invalid email')
     },
-  
+
     /**
      * Validates a field to be type of number
      * @param {String} name
@@ -46,7 +45,7 @@ const logic = {
     _validateNumber(name, value) {
         if (!Number.isInteger(value)) throw new LogicError(`invalid ${name}`)
     },
-   
+
     /**
     * Registers an user with a email, name and password 
     * @param {String} email 
@@ -74,7 +73,7 @@ const logic = {
             .then(() => true)
 
     },
-   
+
     /**
      * Authenticate an user with his/her email and a password 
      * @param {String} email
@@ -101,7 +100,7 @@ const logic = {
                 return user._id.toString()
             })
     },
-   
+
     /**
      * Update a new Password with his/her email and a password 
      * @param {String} userId
@@ -136,7 +135,7 @@ const logic = {
             .then(() => true)
 
     },
-   
+
     /**
      * Unregister user with his/her email and a password 
      * @param {String} email
@@ -163,7 +162,7 @@ const logic = {
             })
             .then(() => true)
     },
-    
+
     /**
      * Add review requiring different parameters
      * @param {String} userId
@@ -176,9 +175,9 @@ const logic = {
      *      
      * @returns {boolean} TRUE => if it is add review correctly
      */
-    addReview(userId, book, title, _vote, comment){
+    addReview(userId, book, title, _vote, comment) {
         let vote
-        
+
         return Promise.resolve()
             .then(() => {
                 vote = parseInt(_vote)
@@ -200,7 +199,7 @@ const logic = {
             })
             .then(() => true)
     },
-   
+
     /**
     * List all reviews
     * @param {String} userId
@@ -218,7 +217,12 @@ const logic = {
             .then(reviews => {
                 if (!reviews) throw new LogicError(`user ${userId} has no reviews`)
 
-                return reviews
+                return Promise.all(reviews.map(({ book }) => this.retrieveBook(book)))
+                    .then(books => {
+                        books.forEach((book, index) => reviews[index].bookTitle = book.volumeInfo.title)
+
+                        return reviews
+                    })
             })
     },
 
@@ -234,7 +238,7 @@ const logic = {
                 return reviews
             })
     },
-   
+
     /**
     * Delete reviews
     * @param {String} reviewId
@@ -255,7 +259,7 @@ const logic = {
             })
             .then(() => true)
     },
-    
+
     /**
     * Search books whith different parameters
     * @param {String} query
@@ -267,7 +271,7 @@ const logic = {
     *      
     * @returns {Array} results => books information
     */
-    searchBook(userId,query, searchBy = 'title', orderBy = 'relevance') {
+    searchBook(userId, query, searchBy = 'title', orderBy = 'relevance') {
         return Promise.resolve()
             .then(() => {
                 if (searchBy !== undefined && typeof searchBy !== 'string') throw new LogicError(`invalid ${searchBy}`)
@@ -291,7 +295,7 @@ const logic = {
             })
             .then(results => results)
     },
-    
+
     /**
      * Add favorites requiring different parameters
      * 
@@ -319,7 +323,7 @@ const logic = {
             })
             .then(() => true)
     },
-   
+
     /**
     * List all favorites
     * @param {String} userId
@@ -342,7 +346,7 @@ const logic = {
                 return Promise.all(bookPromises)
             })
     },
-    
+
     /**
     * Delete favorites
     * @param {String} userId
@@ -354,18 +358,18 @@ const logic = {
     deleteFavorite(userId, bookId) {
         return Promise.resolve()
             .then(() => User.findById(userId)
-            .then(user => {
-                if (!user) throw new LogicError(`user ${userId} not exist`)
+                .then(user => {
+                    if (!user) throw new LogicError(`user ${userId} not exist`)
 
-                const favorites = user.favorites
+                    const favorites = user.favorites
 
-                favorites.splice(favorites.indexOf(bookId), 1)
+                    favorites.splice(favorites.indexOf(bookId), 1)
 
-                return user.save()
-            })
-            .then(() => true))
+                    return user.save()
+                })
+                .then(() => true))
 
-        },
+    },
 
     /**
     * Save image of profile

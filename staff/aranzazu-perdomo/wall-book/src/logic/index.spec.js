@@ -471,7 +471,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('list review', () => {
+    true && describe('list reviews', () => {
         const book = "Harry Potter"
         const title= "Fantastic"
         const _vote = 10
@@ -501,6 +501,12 @@ describe('logic', () => {
                 .then((reviews) => {
                     expect(reviews).to.exist
                     expect(reviews.length).to.equal(1)
+
+                    reviews.forEach(review => {
+                        expect(review.vote).to.be.a('number')
+                        expect(review.title).to.be.a('string')
+                        expect(review.bookTitle).to.be.a('string')
+                    })
                 })
         )
 

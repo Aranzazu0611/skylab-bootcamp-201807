@@ -2,10 +2,9 @@
 
 require('dotenv').config()
 
-const { logic, LogicError } = require('.')
+const { logic } = require('.')
 const { expect } = require('chai')
 const mongoose = require('mongoose')
-const { Types: { ObjectId } } = mongoose
 const { User, Review } = require('../data/models/index')
 
 const { env: { MONGO_URL } } = process
@@ -419,12 +418,12 @@ describe('Logic', () => {
         })
     })
 
-    true && describe('List review', () => {
+    true && describe('list reviews', () => {
         let userId
         const reviews = [
-            { book: "Cien años de soledad", vote: 5, comment: "Un clásico que te lleva a los mas profundo del realismo mágico " },
-            { book: "Harry Potter", vote: 4, comment: "un mundo nuevo de fantasia" },
-            { book: "La casa de Bernarda Alba", vote: 5, comment: "Lorca nunca defrauda" }
+            { book: "TRUdyfwdaSoC", vote: 5, title: 'super', comment: "Un clásico que te lleva a los mas profundo del realismo mágico " },
+            { book: "fGKyeZgvV4MC", vote: 4, title: 'genial', comment: "un mundo nuevo de fantasia" },
+            { book: "4v8QCgAAQBAJ", title: 'me ha gustado mucho', vote: 5, comment: "Lorca nunca defrauda" }
         ]
 
         beforeEach(() => {
@@ -440,6 +439,12 @@ describe('Logic', () => {
             return logic.listReviews(userId)
                 .then(userReviews => {
                     expect(userReviews.length).to.equal(reviews.length)
+
+                    userReviews.forEach(review => {
+                        expect(review.vote).to.be.a('number')
+                        expect(review.title).to.be.a('string')
+                        expect(review.bookTitle).to.be.a('string')
+                    })
                 })
         })
 

@@ -230,6 +230,7 @@ class Settings extends Component {
                                 <ListGroupItemText className="listReview-comentario">
                                     Comentario: {review.comment}
                                 </ListGroupItemText>
+                              
                             </ListGroupItem>
                             )}
                         </ListGroup>

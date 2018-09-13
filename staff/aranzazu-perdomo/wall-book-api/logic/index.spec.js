@@ -322,7 +322,7 @@ describe('Logic', () => {
 
     !!true && describe('Add review', () => {
         let userId
-        const book = "La chica del tren", vote = 5, comment = "Impresionante thriller"
+        const book = "La chica del tren", title = "la chica", vote = 5, comment = "Impresionante thriller"
 
         beforeEach(() =>
             User.create({ email, name, password })
@@ -331,7 +331,7 @@ describe('Logic', () => {
         )
 
         it('should succeed on add review', () => {
-            return logic.addReview(userId, book, vote, comment)
+            return logic.addReview(userId, book, title, vote, comment)
                 .then(res => {
                     expect(res).to.be.true
 
@@ -352,68 +352,68 @@ describe('Logic', () => {
         })
 
         it('should fail on trying to add review with an undefined userId', () => {
-            return logic.addReview(undefined, book, vote, comment)
+            return logic.addReview(undefined, book, title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with an empty userId', () => {
-            return logic.addReview('', book, vote, comment)
+            return logic.addReview('', book,title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with a numeric userId', () => {
-            return logic.addReview(123, book, vote, comment)
+            return logic.addReview(123, book,title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with a blank userId', () => {
-            return logic.addReview('    ', book, vote, comment)
+            return logic.addReview('    ', book,title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with an undefined book ', () => {
-            return logic.addReview(userId, undefined, vote, comment)
+            return logic.addReview(userId, undefined,title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
         it('should fail on trying to add review with an empty book ', () => {
-            return logic.addReview(userId, '', vote, comment)
+            return logic.addReview(userId, '', title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
         it('should fail on trying to add review with a numeric book ', () => {
-            return logic.addReview(userId, 123, vote, comment)
+            return logic.addReview(userId, 123, title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
         it('should fail on trying to add review with a blank book ', () => {
-            return logic.addReview(userId, '      ', vote, comment)
+            return logic.addReview(userId, '      ', title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
         it('should fail on trying to add review with an undefined vote ', () => {
-            return logic.addReview(userId, book, undefined, comment)
+            return logic.addReview(userId, book, title, undefined, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid vote`))
         })
         it('should fail on trying to add review with an empty vote ', () => {
-            return logic.addReview(userId, book, '', comment)
+            return logic.addReview(userId, book, title, '', comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid vote`))
         })
 
         it('should fail on trying to add review with an undefined comment ', () => {
-            return logic.addReview(userId, book, vote, undefined)
+            return logic.addReview(userId, book, title, vote, undefined)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid comment`))
         })
         it('should fail on trying to add review with an empty comment ', () => {
-            return logic.addReview(userId, book, vote, '')
+            return logic.addReview(userId, book, title, vote, '')
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid comment`))
         })
         it('should fail on trying to add review with a numeric comment', () => {
-            return logic.addReview(userId, book, vote, 123)
+            return logic.addReview(userId, book, title, vote, 123)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid comment`))
         })
@@ -750,7 +750,7 @@ describe('Logic', () => {
     true && describe('retrieve book by its id', () => {
         const bookId = '9KJJYFIss_wC'
 
-        it('should succeed on correct book id', ()  => 
+        it('should succeed on correct book id', () =>
             logic.retrieveBook(bookId)
                 .then(book => {
                     expect(book).to.exist

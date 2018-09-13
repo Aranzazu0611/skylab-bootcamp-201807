@@ -2,7 +2,7 @@
     margin-top: 20vh;
 }
 
-.container {
+/* .container {
   background-color: #f6f6f6;
   margin-top: 10vh !important;
   margin-bottom: 25vh !important;
@@ -20,7 +20,7 @@
   overflow: hidden;
   padding: 8px;
   width: 450px;
-}
+} */
 
   .mb-2{
     margin-left: -2vw;
@@ -33,4 +33,8 @@
   #btn-profile{
     margin-top: 2vh;
      margin-right: 250px
+  }
+
+  body{
+    background-image: 
   }

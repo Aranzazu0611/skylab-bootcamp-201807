@@ -222,6 +222,7 @@ const logicWallbook = {
      /**
     * List all reviews by book 
     * @param {String} bookId
+    * @param {String} userId
     * @param {String} token
     *        
     * @returns {Response} all reviews in an array or an empty array
@@ -233,9 +234,10 @@ const logicWallbook = {
                 this._validateStringField('bookId', bookId)
                 this._validateStringField('userId', userId)
                 this._validateStringField('token', token)
-                
+               
                 return this._call(`user/${userId}/book/${bookId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
+                  
             })
     },
 

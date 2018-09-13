@@ -138,10 +138,8 @@ class Settings extends Component {
 
     }
 
-    handleDeleteReview = event => {
-        event.preventDefault()
-
-        const { state: { reviewId, userId, token } } = this
+    handleDeleteReview = reviewId => {
+        const { state: { userId, token } } = this
 
         logicWallbook.deleteReviews(reviewId, userId, token)
             .then(() =>
@@ -150,6 +148,9 @@ class Settings extends Component {
                     text: "Delete review Sucessful",
                     type: "success",
                     confirmButtonText: "Cool"
+                })
+                .then(() => {
+                    this.listReviews()
                 })
 
             )
@@ -244,7 +245,7 @@ class Settings extends Component {
 
                     <Col xs="6" sm="8">
                         <ListGroup className="listReview mt-5">
-                            {reviews && reviews.length > 0 && reviews.map(review => <ListGroupItem key={review.id}>
+                            {reviews && reviews.length > 0 && reviews.map(review => <ListGroupItem key={review._id}>
                                 <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
                                 <ListGroupItemText className="listReview-vote">
                                     <ReactStars
@@ -260,7 +261,7 @@ class Settings extends Component {
                                 </ListGroupItemText>
                                 <ListGroupItemText className="listReview-comentario">
                                     {/* <a href="/profile" className="Delete" onClick={() => { this.handleDeleteReview(reviews.id) }}>X</a> */}
-                                    <Button id="btn-delete" color="primary" target="_blank" onClick={(event) => {event.preventDefault(); this.handleDeleteReview(reviews.id) }}>Borrar</Button>
+                                    <Button id="btn-delete" color="primary" target="_blank" onClick={() => { this.handleDeleteReview(review._id) }}>Borrar</Button>
                                 </ListGroupItemText>
 
                             </ListGroupItem>

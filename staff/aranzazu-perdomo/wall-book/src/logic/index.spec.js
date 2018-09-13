@@ -473,7 +473,8 @@ describe('logic', () => {
 
     true && describe('list review', () => {
         const book = "Harry Potter"
-        const _vote = '10'
+        const title= "Fantastic"
+        const _vote = 10
         const comment = 'fantastic'
 
         let email, name, password, userId, token
@@ -491,7 +492,7 @@ describe('logic', () => {
                             token = _token
                         })
                 )
-                .then(() => logicWallbook.addReview(userId, book, _vote, comment, token))
+                .then(() => logicWallbook.addReview(userId, book, title, _vote, comment, token))
         })
 
         it('should list review correctly', () =>
@@ -546,7 +547,7 @@ describe('logic', () => {
         const book = "Harry Potter"
         const _vote = '10'
         const comment = 'fantastic'
-
+        const bookId= "GXyeCwAAQBAJ"
         let email, name, password, userId, token
 
         beforeEach(() => {
@@ -562,7 +563,7 @@ describe('logic', () => {
                             token = _token
                         })
                 )
-                .then(() => logicWallbook.addReview(userId, book,title, _vote, comment, token))
+                .then(() => logicWallbook.addReview(userId, book, title, _vote, comment, token))
         })
 
         it('should list review by book correctly', () =>
@@ -898,7 +899,7 @@ describe('logic', () => {
 
     })
 
-   
+
     true && describe('Retrive BookId', () => {
         let email, name, password
         let userId, token

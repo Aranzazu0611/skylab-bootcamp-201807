@@ -120,11 +120,11 @@ class Settings extends Component {
             .then(() =>
                 swal({
                     title: "Success!",
-                    text: "Delete Sucessful",
+                    text: "Delete User Sucessful",
                     type: "success",
                     confirmButtonText: "Cool"
                 })
-                
+
             )
             .then(() => this.props.onLogout(event))
             .catch(err =>
@@ -135,7 +135,35 @@ class Settings extends Component {
                     confirmButtonText: "Try again"
                 })
             );
-      
+
+    }
+
+    handleDeleteReview = event => {
+        event.preventDefault()
+
+        const { state: { reviewId, userId, token } } = this
+
+        logicWallbook.deleteReviews(reviewId, userId, token)
+            .then(() =>
+                swal({
+                    title: "Success!",
+                    text: "Delete review Sucessful",
+                    type: "success",
+                    confirmButtonText: "Cool"
+                })
+
+            )
+          
+            .catch(err =>
+                swal({
+                    title: "Failed! :(",
+                    text: err,
+                    type: "error",
+                    confirmButtonText: "Try again"
+                })
+            );
+
+
     }
 
 
@@ -230,7 +258,10 @@ class Settings extends Component {
                                 <ListGroupItemText className="listReview-comentario">
                                     Comentario: {review.comment}
                                 </ListGroupItemText>
-                              
+                                <ListGroupItemText className="listReview-comentario">
+                                    <a href="" onClick={() => { this.handleDeleteReview(reviews.id) }} >X</a>
+                                </ListGroupItemText>
+
                             </ListGroupItem>
                             )}
                         </ListGroup>

@@ -153,7 +153,7 @@ class Settings extends Component {
                 })
 
             )
-          
+
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -259,7 +259,8 @@ class Settings extends Component {
                                     Comentario: {review.comment}
                                 </ListGroupItemText>
                                 <ListGroupItemText className="listReview-comentario">
-                                    <a href="" onClick={() => { this.handleDeleteReview(reviews.id) }} >X</a>
+                                    {/* <a href="/profile" className="Delete" onClick={() => { this.handleDeleteReview(reviews.id) }}>X</a> */}
+                                    <Button id="btn-delete" color="primary" target="_blank" onClick={(event) => {event.preventDefault(); this.handleDeleteReview(reviews.id) }}>Borrar</Button>
                                 </ListGroupItemText>
 
                             </ListGroupItem>

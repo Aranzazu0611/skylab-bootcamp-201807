@@ -357,22 +357,22 @@ describe('Logic', () => {
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with an empty userId', () => {
-            return logic.addReview('', book,title, vote, comment)
+            return logic.addReview('', book, title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with a numeric userId', () => {
-            return logic.addReview(123, book,title, vote, comment)
+            return logic.addReview(123, book, title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with a blank userId', () => {
-            return logic.addReview('    ', book,title, vote, comment)
+            return logic.addReview('    ', book, title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid userId`))
         })
         it('should fail on trying to add review with an undefined book ', () => {
-            return logic.addReview(userId, undefined,title, vote, comment)
+            return logic.addReview(userId, undefined, title, vote, comment)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid book`))
         })
@@ -518,18 +518,16 @@ describe('Logic', () => {
 
                 })
         })
-        // J. J K.Rowling J.K. Rowling J. K. Rowling
+
         it('should search books by author', () => {
             let query = "j.k. Rowling"
             return logic.searchBook(userId, query, 'author')
                 .then(books => {
                     expect(books).to.exist
                     expect(books.length).to.equal(20)
-                    debugger
-                    books.forEach(book => {
 
+                    books.forEach(book => {
                         let isAuthor = book.authors.some(author => author.match(/Rowling/gi))
-                        // let isAuthor = book.authors.includes('J. K. Rowling') || book.authors.includes('J.K. Rowling')
                         expect(isAuthor).to.be.true
                     })
 
@@ -542,7 +540,7 @@ describe('Logic', () => {
                 .then(books => {
 
                     expect(books).to.exist
-                    expect(books.length).to.equal(20)
+                    expect(books.length).to.equal(19)
 
                     books.forEach(book => {
 
@@ -759,32 +757,8 @@ describe('Logic', () => {
         )
     })
 
-    true && describe('upload photo', () => {
-        it('should succeed on correct upload photo', () => {
+    
 
-            return User.create({ email })
-                .then(({ userId }) => {
-
-                    return new Promise((resolve, reject) => {
-
-                        return fs.readFile('./demos/img_base64.txt', 'utf8', (err, buffer) => {
-                            if (err) return reject(err)
-
-                            resolve(buffer.toString())
-                        })
-                    }).then(imgBase64 => {
-                        return logic.saveImageProfile(userId, imgBase64)
-                            .then(res => {
-                                expect(typeof res).to.equal("string")
-                            })
-                    })
-                })
-
-        })
-
-    })
-
-    //todo delete photo
 
     afterEach(() => Promise.all([User.deleteMany(), Review.deleteMany()]))
 

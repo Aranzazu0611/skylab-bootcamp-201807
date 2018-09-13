@@ -358,6 +358,7 @@ describe('logic', () => {
         let email, name, password
 
         const book = "Harry Potter"
+        const title = "hola"
         const _vote = '10'
         const comment = 'fantastic'
 
@@ -897,36 +898,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('save images', () => {
-        let email, name, password
-        let userId, token
-
-        beforeEach(() => {
-            email = `Aranzazu-${Math.random()}@gmail.com`
-            name = `Aranzazu-${Math.random()}`
-            password = `123456-${Math.random()}`
-
-            return logicWallbook.register(email, name, password)
-                .then(() =>
-                    logicWallbook.authenticate(email, password)
-                        .then(({ message, token: _token, user: _user }) => {
-                            userId = _user
-                            token = _token
-                        })
-                )
-        })
-
-        it('should save image correctly', () =>
-            logicWallbook.saveImageProfile(userId, base64Image, token)
-                .catch(({ message }) => expect(message).to.be.undefined)
-                .then(({ message }) => expect(message).to.equal('Delete favorites correctly'))
-        )
-
-
-
-
-    })
-
+   
     true && describe('Retrive BookId', () => {
         let email, name, password
         let userId, token

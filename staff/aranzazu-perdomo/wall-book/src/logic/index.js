@@ -209,6 +209,7 @@ const logicWallbook = {
     */
 
     listReviews(userId, token) {
+        debugger;
         return Promise.resolve()
             .then(() => {
                 this._validateStringField('userId', userId)

@@ -496,6 +496,7 @@ describe('logic', () => {
         })
 
         it('should list review correctly', () =>
+         debugger;
             logicWallbook.listReviews(userId, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then((reviews) => {

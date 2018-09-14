@@ -31,7 +31,7 @@ import logicWallbook from "../../logic"
 import swal from "sweetalert2"
 import Style from './style.css'
 import './style.css'
-import Toggle from 'react-toggle'
+// import Toggle from 'react-toggle'
 
 
 class Search extends Component {
@@ -148,13 +148,13 @@ class Search extends Component {
                             <Col xs="6" sm="4">
                                 <Card className="card">
                                     <CardHeader className="text-muted">
-                                        <label>
+                                        {/* <label>
                                             <Toggle
                                                 defaultChecked={this.state.aubergineIsReady}
                                                 className='custom-classname'
                                                 onChange={this.handleAubergineChange} />
                                             <span>Custom className</span>
-                                        </label>
+                                        </label> */}
                                     </CardHeader>
                                     <CardBody >
                                         <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />

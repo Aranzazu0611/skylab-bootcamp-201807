@@ -441,6 +441,7 @@ describe('Logic', () => {
                     expect(userReviews.length).to.equal(reviews.length)
 
                     userReviews.forEach(review => {
+                        debugger
                         expect(review.vote).to.be.a('number')
                         expect(review.title).to.be.a('string')
                         expect(review.bookTitle).to.be.a('string')

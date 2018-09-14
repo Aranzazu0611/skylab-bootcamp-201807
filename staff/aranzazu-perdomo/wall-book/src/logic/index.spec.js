@@ -14,7 +14,7 @@ describe('logic', () => {
     const password = `123456-${Math.random()}`
 
 
-    true && describe('validate fields', () => {
+    !true && describe('validate fields', () => {
         it('should succeed on correct value', () => {
             expect(() => logicWallbook._validateEmail(email)).not.to.throw()
             expect(() => logicWallbook._validateStringField('password', password)).not.to.throw()
@@ -55,7 +55,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('register user', () => {
+    !true && describe('register user', () => {
         it('should register correctly', () =>
             logicWallbook.register(email, name, password)
                 .catch(({ message }) => expect(message).to.be.undefined)
@@ -129,7 +129,7 @@ describe('logic', () => {
         )
     })
 
-    true && describe('authenticate user', () => {
+    !true && describe('authenticate user', () => {
         it('should authenticate correctly', () =>
             logicWallbook.authenticate(email, password)
                 .catch(({ message }) => expect(message).to.be.undefined)
@@ -184,7 +184,7 @@ describe('logic', () => {
         )
     })
 
-    true && describe('update password', () => {
+    !true && describe('update password', () => {
         let userId, token, email, name, password, newPassword
 
 
@@ -287,7 +287,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('unregister user', () => {
+    !true && describe('unregister user', () => {
         let userId, email, name, password, token
 
         beforeEach(() => {
@@ -354,7 +354,7 @@ describe('logic', () => {
         )
     })
 
-    true && describe('add review', () => {
+!true && describe('add review', () => {
         let email, name, password
 
         const book = "Harry Potter"
@@ -472,7 +472,7 @@ describe('logic', () => {
     })
 
     true && describe('list reviews', () => {
-        const book = "Harry Potter"
+        const book = "TRUdyfwdaSoC"
         const title= "Fantastic"
         const _vote = 10
         const comment = 'fantastic'
@@ -503,6 +503,7 @@ describe('logic', () => {
                     expect(reviews.length).to.equal(1)
 
                     reviews.forEach(review => {
+                        debugger
                         expect(review.vote).to.be.a('number')
                         expect(review.title).to.be.a('string')
                         expect(review.bookTitle).to.be.a('string')
@@ -583,7 +584,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('delete review', () => {
+    !true && describe('delete review', () => {
         const book = "Harry Potter"
         const _vote = '10'
         const comment = 'fantastic'
@@ -679,7 +680,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('add favorite', () => {
+    !true && describe('add favorite', () => {
         let email, name, password
         let userId, token
 
@@ -769,7 +770,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('list favorites', () => {
+    !true && describe('list favorites', () => {
         let email, name, password
         let userId, token
 
@@ -838,7 +839,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('delete favorite', () => {
+    !true && describe('delete favorite', () => {
         let email, name, password
         let userId, token
 
@@ -869,7 +870,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('search book', () => {
+    !true && describe('search book', () => {
         let email, name, password, token, query, searchBy, orderBy, userId
 
         query = "Harry Potter"
@@ -906,7 +907,7 @@ describe('logic', () => {
     })
 
 
-    true && describe('Retrive BookId', () => {
+   !true && describe('Retrive BookId', () => {
         let email, name, password
         let userId, token
 

@@ -99,11 +99,14 @@ class Landing extends Component {
     }
 
     render() {
-        return (<Container className="container">
+        return (
+            <div className= "landing">
+       
 
-            <div className="text-center align-items-center info" style={{ height: 90 + "vh" }}>
+            <div className="text-center align-items-center info">
+
                 <Row>
-                    <Col className="p-5">
+                    <Col sm="12">
                         <h1>Wall-Book</h1>
                         <h5>Get info of your favorite books in an easy way! </h5>
                         <Button color="danger" tag={Link} to="/register">Register</Button>
@@ -112,7 +115,7 @@ class Landing extends Component {
                 </Row>
             </div>
 
-        </Container>
+        </div>
         );
     }
 }

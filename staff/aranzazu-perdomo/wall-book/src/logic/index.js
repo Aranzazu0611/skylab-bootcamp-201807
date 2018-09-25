@@ -50,6 +50,7 @@ const logicWallbook = {
      * @throws {Error} invalid name
      */
     _validateNumber(name, value) {
+        debugger;
         if (!Number.isInteger(value)) throw new Error(`invalid ${name}`)
     },
 
@@ -175,6 +176,7 @@ const logicWallbook = {
      */
 
     addReview(userId, book, title, _vote, comment, token) {
+        debugger;
         return Promise.resolve()
             .then(() => {
                 let vote = parseInt(_vote)

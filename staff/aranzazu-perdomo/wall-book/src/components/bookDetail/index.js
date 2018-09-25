@@ -134,6 +134,7 @@ class BookDetail extends Component {
                     confirmButtonText: "Cool"
                 })
                     .then(() => {
+                        debugger;
                         this.setState({ modal: false, title: '', _vote: 0, comment: '' }, () => {
                             this.listReviewsByBook()
                         })
@@ -197,6 +198,7 @@ class BookDetail extends Component {
                                         <Input type="text" name="title" onChange={this.keepTitle} value={this.state.title} id="exampleTitle" placeholder="write title" />
                                     </FormGroup>
                                     <ReactStars
+                                        half={false}
                                         count={5}
                                         onChange={this.keepVote}
                                         value={this.state._vote}

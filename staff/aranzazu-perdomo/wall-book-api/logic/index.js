@@ -43,6 +43,7 @@ const logic = {
      * @throws {LogicError} invalid name
      */
     _validateNumber(name, value) {
+        debugger;
         if (!Number.isInteger(value)) throw new LogicError(`invalid ${name}`)
     },
 
@@ -192,7 +193,7 @@ const logic = {
             })
             .then(user => {
                 if (!user) throw new LogicError(`user with ${userId} does not exists`)
-
+debugger;
                 const review = { book, title, vote, comment, user: user.id }
 
                 return Review.create(review)

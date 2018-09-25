@@ -79,9 +79,9 @@ router.delete('/unregister', jsonBodyParser, (req, res) => {
 
 //add review
 router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) => {
-    const { params: { userId }, body: { book, title, _vote, comment } } = req
-    
-    logic.addReview(userId, book, title, _vote, comment)
+    const { params: { userId }, body: { book, title, vote, comment } } = req
+    debugger;
+    logic.addReview(userId, book, title, vote, comment)
         .then(() => res.status(201).json({ message: 'Review added correctly' }))
         .catch(err => {
             const { message } = err

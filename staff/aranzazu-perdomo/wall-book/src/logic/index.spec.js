@@ -359,7 +359,7 @@ describe('logic', () => {
 
         const book = "Harry Potter"
         const title = "hola"
-        const _vote = '10'
+        const _vote = 10
         const comment = 'fantastic'
 
         let userId, token
@@ -496,7 +496,7 @@ describe('logic', () => {
         })
 
         it('should list review correctly', () =>
-         debugger;
+    
             logicWallbook.listReviews(userId, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then((reviews) => {

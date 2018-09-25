@@ -118,61 +118,64 @@ class Search extends Component {
         const { books } = this.state
 
         return <Container className="container" >
-            <Row className="justify-content-center">
-                <Col xs="12" className="Search">
-                    <Form onSubmit={this.onSearch} className="form-wrapper">
-                        <InputGroup>
-                            <Input id="searchInput" onChange={this.keepQuery} placeholder="Search for title, author, newest..." autoFocus="true" autoComplete="off" />
-                            <Button id="Author" onClick={this.onToggleSearchBy}>{this.state.searchBy === 'title' ? 'author' : 'title'}</Button>
-                            <Button id="Newest" onClick={this.onToggleOrderBy}>{this.state.orderBy === 'relevance' ? 'newest' : 'relevance'}</Button>
+            <div className="container-search">
+                <Row className="justify-content-center">
+                    <Col xs="12" className="Search">
+                        <Form onSubmit={this.onSearch} className="form-inline md-form mr-auto mb-4">
+                            <InputGroup>
+                                <Input id="searchInput" onChange={this.keepQuery} placeholder="Search for title, author, newest..." autoFocus="true" autoComplete="off" />
+                                <Input className="btn btn-primary" id="searchButton" type="submit" value="Search" />
+                                <div className="buttons">
+                                    <Button className="btn btn-warning" onClick={this.onToggleSearchBy}>{this.state.searchBy === 'title' ? 'author' : 'title'}</Button>
+                                    <Button className="btn btn-success" onClick={this.onToggleOrderBy}>{this.state.orderBy === 'relevance' ? 'newest' : 'relevance'}</Button>
+                                </div>
+                            </InputGroup>
+                        </Form>
+                    </Col>
+                </Row>
+            </div>
+            <div className="container-cards">
+                <Row className="justify-content-center ">
+                    {books.map(book => {
+                        if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail') && book.hasOwnProperty('isbn') && book.hasOwnProperty('infoLink')) {
+                            const { infoLink } = book
+                            const bookId = infoLink.substring(infoLink.indexOf('id') + 3, infoLink.indexOf('&'))
+                            let description = book.description
 
-                            <Input type="submit" value="Search" id="submit" />
-                        </InputGroup>
-                    </Form>
-                </Col>
-            </Row>
-
-            <Row className="justify-content-center">
-                {books.map(book => {
-                    if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail') && book.hasOwnProperty('isbn') && book.hasOwnProperty('infoLink')) {
-                        const { infoLink } = book
-                        const bookId = infoLink.substring(infoLink.indexOf('id') + 3, infoLink.indexOf('&'))
-                        let description = book.description
-
-                        if (description.length > 350) {
-                            description = description.substring(0, 350) + "..."
-                        }
+                            if (description.length > 350) {
+                                description = description.substring(0, 350) + "..."
+                            }
 
 
-                        return (
-                            <Col xs="6" sm="4">
-                                <Card className="card">
-                                    <CardHeader className="text-muted">
-                                        {/* <label>
+                            return (
+                                <Col xs="6" sm="4">
+                                    <Card className="card">
+                                        <CardHeader className="text-muted">
+                                            {/* <label>
                                             <Toggle
                                                 defaultChecked={this.state.aubergineIsReady}
                                                 className='custom-classname'
                                                 onChange={this.handleAubergineChange} />
                                             <span>Custom className</span>
                                         </label> */}
-                                    </CardHeader>
-                                    <CardBody >
-                                        <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
-                                        <div className="card_cardbody">
-                                            <CardTitle>{book.title}</CardTitle>
-                                            <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
-                                            <CardSubtitle>Language: {book.language}</CardSubtitle>
-                                            <CardText>{description}</CardText>
-                                        </div>
-                                        <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See reviews</Button>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                        )
-                    }
-                })}
-            </Row>
-
+                                        </CardHeader>
+                                        <CardBody >
+                                            <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
+                                            <div className="card_cardbody">
+                                                <CardTitle>{book.title}</CardTitle>
+                                                <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
+                                                <CardSubtitle>Language: {book.language}</CardSubtitle>
+                                                <CardText>{description}</CardText>
+                                            </div>
+                                            <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See reviews</Button>
+                                        </CardBody>
+                                    </Card>
+                                </Col>
+                            )
+                        }
+                    })}
+                </Row>
+            </div>
         </Container >
     }
 }

@@ -1,0 +1,24 @@
+.container-login{
+       
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    margin-top: 0;
+    background-image: url('../../images/pluma.png');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    overflow: hidden;
+
+}
+
+.form-login{
+    margin-top: 50px;
+    background: rgba(255, 255, 255, 0.7)
+} 
+                input{
+                    margin-left: 0 !important
+                }
+
+

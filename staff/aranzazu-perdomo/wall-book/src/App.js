@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router'
 import { logicWallbook } from '../src/logic'
-import logo from './logo.svg';
+import Register from '../src/components/Register'
+import Login from '../src/components/Login'
 import LandingPage from '../src/components/LandingPage'
 import Profile from '../src/components/Profile'
 import Search from '../src/components/Search'
@@ -63,7 +64,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Navbar color="dark" light >
+        <Navbar color="dark mt-0" light >
           <NavbarBrand href="/" className="mr-auto">Wall-book</NavbarBrand>
           {this.isLoggedIn() && <Button color="primary" target="_blank" onClick={this.onProfile}>Profile</Button>}
           {this.isLoggedIn() && <Button color="primary" target="_blank" onClick={this.onLogout}>Logout</Button>}
@@ -71,6 +72,8 @@ class App extends Component {
 
         <Switch>
           <Route exact path="/" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <LandingPage onLoggin={this.onLoggin} />} />
+          <Route exact path="/register" render={() => this.isLoggedIn() ? <Redirect to="/login" /> : <Register onLoggin={this.onLoggin} />} />
+          <Route exact path="/login" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <Login onLoggin={this.onLoggin} />} />
           <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail={this.onBookDetail} onLogout={this.onLogout} onProfile={this.onProfile} /> : <Redirect to="/" />} />
           <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail  bookId={props.match.params.id} userId={this.state.userId} /> : <Redirect to="/" />} />
           <Route path="/user/:userId" render={props => this.isLoggedIn() ? <Profile userId={props.match.params.userId} onLogout={this.onLogout} email={this.state.email} /> : <Redirect to="/" />} />

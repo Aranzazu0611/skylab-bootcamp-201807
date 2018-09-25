@@ -1,0 +1,21 @@
+.container-register{
+      
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    background-image: url('../../images/pluma1.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    overflow: hidden;
+    margin-top: 0;
+    
+}
+        .form-register{
+            margin-top: 55px;
+            background: rgba(255, 255, 255, 0.7)
+        }
+                        input{
+                            margin-left: 0 !important
+                        }

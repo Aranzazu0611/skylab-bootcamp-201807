@@ -10,6 +10,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.5",
     "react-stars": "^2.2.5",
+    "react-toggle": "^4.0.2",
     "react-toggle-2": "^5.0.2",
     "reactstrap": "^6.4.0",
     "sweetalert2": "^7.26.12"

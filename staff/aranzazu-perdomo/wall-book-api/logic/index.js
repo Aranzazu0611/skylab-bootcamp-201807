@@ -209,6 +209,7 @@ const logic = {
     * @returns {Array} reviews information
     */
     listReviews(userId) {
+        debugger;
         return Promise.resolve()
             .then(() => {
 

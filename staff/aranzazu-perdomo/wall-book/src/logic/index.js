@@ -177,7 +177,7 @@ const logicWallbook = {
     addReview(userId, book, title, _vote, comment, token) {
         return Promise.resolve()
             .then(() => {
-                const vote = parseInt(_vote)
+                let vote = parseInt(_vote)
 
                 this._validateStringField("userId", userId)
                 this._validateStringField("book", book)
@@ -321,7 +321,7 @@ const logicWallbook = {
                 this._validateStringField("userId", userId)
                 this._validateStringField("token", token)
 
-                debugger
+            
                 return this._call(`user/${userId}/favorites`, 'get', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
             })

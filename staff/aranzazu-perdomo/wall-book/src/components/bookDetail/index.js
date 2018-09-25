@@ -29,7 +29,7 @@ import {
 import swal from "sweetalert2"
 import ReactStars from 'react-stars'
 import './style.css'
-
+import Toggle from 'react-toggle'
 
 class BookDetail extends Component {
 
@@ -229,6 +229,13 @@ class BookDetail extends Component {
                                                 color2={'#ffd700'}
                                                 edit={false}
                                             />
+                                            <label>
+                                                <Toggle
+                                                    defaultChecked={this.state.aubergineIsReady}
+                                                    className='custom-classname'
+                                                    onChange={this.handleAubergineChange} />
+                                                <span>Custom className</span>
+                                            </label>
                                         </CardHeader>
                                         <CardBody >
                                             <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />
@@ -244,7 +251,7 @@ class BookDetail extends Component {
 
                                 <div ClassName="reviews">
                                     <Col >
-                                        {reviews.map(review => <ListGroup  key={review.id}>
+                                        {reviews.map(review => <ListGroup key={review.id}>
                                             <ListGroupItem active>
                                                 <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
                                                 <ListGroupItemText className="listReview-vote">

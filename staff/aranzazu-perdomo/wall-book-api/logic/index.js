@@ -219,7 +219,7 @@ debugger;
             .then(reviews => {
                 if (!reviews) throw new LogicError(`user ${userId} has no reviews`)
 
-                return Promise.all(reviews.map(({ book }) => this.retrieveBook(book)))
+                return Promise.all(reviews.map(({ book }) => this.retrieveBook(book, userId)))
                     .then(books => {
                         books.forEach((book, index) => reviews[index].bookTitle = book.volumeInfo.title)
 
@@ -406,13 +406,19 @@ debugger;
      * 
      * @returns {Promise<Object|LogicError>} - Returns the book info, otherwise if error then returns LogicError
      */
-    retrieveBook(bookId) {
+    retrieveBook(bookId, userId) {
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("bookId", bookId)
+                const bookInfo = fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`).then(res => res.json());
+                const userInfo = User.findById(userId);
 
-                return fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}`)
-                    .then(res => res.json())
+                return Promise.all([bookInfo, userInfo]).then(([bookInfo, userInfo]) => {
+                    return {
+                        ...bookInfo,
+                        isFavorite: userInfo.favorites.includes(bookId),
+                    };
+                });
             })
     }
 

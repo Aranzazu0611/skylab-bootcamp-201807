@@ -51,5 +51,30 @@ dl, ol, ul {
 .Delete{
   color:red !important;
 }
+.Profile{
+      
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  overflow: hidden;
+  margin-top: 0;
+  background-color: blue;
+  
+}
+      .form-unregister{
+          margin-top: 55px;
+          background: rgba(255, 255, 255, 0.7)
+      }
+                      input{
+                          margin-left: 0 !important
+                      }
+ .btn{
+  display: flex;
+ }
 
+ .profile-container {
+   width: 100%;
+ }
  

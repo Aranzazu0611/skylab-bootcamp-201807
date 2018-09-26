@@ -1,0 +1,1 @@
+export const convertAllPropsToFalse = (obj) => Object.keys(obj).reduce((acc, prop) => ({...acc, [prop]: false}), {})

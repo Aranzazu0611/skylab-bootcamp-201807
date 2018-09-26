@@ -197,8 +197,9 @@ const logicWallbook = {
                     JSON.stringify({ userId, book, title, vote, comment }),
                     201
                 )
-                    .then(res => res.json())
-                    .then(res => res)
+                    .then(res => res.json())                    
+                    .then(res => {debugger; return res})
+                    .catch(res => { debugger;})
             })
     },
 
@@ -211,7 +212,6 @@ const logicWallbook = {
     */
 
     listReviews(userId, token) {
-        debugger;
         return Promise.resolve()
             .then(() => {
                 this._validateStringField('userId', userId)

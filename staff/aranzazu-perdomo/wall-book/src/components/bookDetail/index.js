@@ -50,8 +50,8 @@ class BookDetail extends Component {
         const { bookId } = this.props
 
         logicWallbook.retrieveBook(userId, bookId, token)
-            .then(({ book: { volumeInfo } }) => {
-                return volumeInfo
+            .then(({ book: { volumeInfo, isFavorite } }) => {
+                return { ...volumeInfo, isFavorite }
             })
             .then(book => {
                 this.setState({ book }, () => {
@@ -150,6 +150,25 @@ class BookDetail extends Component {
             );
     }
 
+    handleAubergineChange = () => {
+        const userId = sessionStorage.getItem('userId')
+        const bookId = this.props.match.params.id;
+        const token = sessionStorage.getItem('token');
+        const isFavorite = this.state.book.isFavorite;
+        const method = isFavorite ? 'deleteFavorite' : 'addFavorite';
+
+        logicWallbook[method](userId, bookId, token)
+        .then(isFavorite => this.setState(({ book }) => ({ book: { ...book, isFavorite } })))
+        .catch(err =>
+            swal({
+                title: "Failed! :(",
+                text: err,
+                type: "error",
+                confirmButtonText: "Try again"
+            })
+        );
+    }
+
     HandleDeleteReview = event => {
         event.preventDefault()
 
@@ -182,7 +201,7 @@ class BookDetail extends Component {
 
     render() {
 
-        const { book, reviews, globalVote } = this.state
+        const{ state: { book, reviews, globalVote }, keepTitle, keepVote, keepComment } = this;
 
         return (
             <div>
@@ -195,19 +214,19 @@ class BookDetail extends Component {
 
                                     <FormGroup>
                                         <Label for="exampleTitle">TITLE</Label>
-                                        <Input type="text" name="title" onChange={this.keepTitle} value={this.state.title} id="exampleTitle" placeholder="write title" />
+                                        <Input type="text" name="title" onChange={keepTitle} value={this.state.title} id="exampleTitle" placeholder="write title" />
                                     </FormGroup>
                                     <ReactStars
                                         half={false}
                                         count={5}
-                                        onChange={this.keepVote}
+                                        onChange={keepVote}
                                         value={this.state._vote}
                                         size={24}
                                         color2={'#ffd700'} />
 
                                     <FormGroup>
                                         <Label for="exampleText">Text Area</Label>
-                                        <Input type="textarea" name="comment" onChange={this.keepComment} value={this.state.comment} id="exampleText" />
+                                        <Input type="textarea" name="comment" onChange={keepComment} value={this.state.comment} id="exampleText" />
                                     </FormGroup>
                                 </ModalBody>
                                 <ModalFooter>
@@ -224,20 +243,28 @@ class BookDetail extends Component {
                                 <Col xs="6" xm="4">
                                     {book && <Card className="card">
                                         <CardHeader className="text-muted">
-                                            <ReactStars
-                                                count={5}
-                                                size={24}
-                                                value={globalVote}
-                                                color2={'#ffd700'}
-                                                edit={false}
-                                            />
-                                            <label>
-                                                <Toggle
-                                                    defaultChecked={this.state.aubergineIsReady}
-                                                    className='custom-classname'
-                                                    onChange={this.handleAubergineChange} />
-                                                <span>Custom className</span>
-                                            </label>
+                                            <div className="card-header">
+
+                                                <div ClassName="toggle-react">
+
+                                                    <label>
+                                                        <Toggle
+                                                            defaultChecked={book.isFavorite}
+                                                            className='custom-classname'
+                                                            onChange={this.handleAubergineChange} />
+                                                    </label>
+                                                </div>
+                                                <div className="starts">
+
+                                                    <ReactStars
+                                                        count={5}
+                                                        size={24}
+                                                        value={globalVote}
+                                                        color2={'#ffd700'}
+                                                        edit={false}
+                                                    />
+                                                </div>
+                                            </div>
                                         </CardHeader>
                                         <CardBody >
                                             <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />

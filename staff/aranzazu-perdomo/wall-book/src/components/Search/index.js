@@ -23,7 +23,8 @@ import {
     Nav,
     NavItem,
     NavLink,
-    ReactStars
+    ReactStars,
+
 
 } from "reactstrap"
 
@@ -31,7 +32,7 @@ import logicWallbook from "../../logic"
 import swal from "sweetalert2"
 import Style from './style.css'
 import './style.css'
-// import Toggle from 'react-toggle'
+import Toggle from 'react-toggle'
 
 
 class Search extends Component {
@@ -117,7 +118,7 @@ class Search extends Component {
     render() {
         const { books } = this.state
 
-        return <Container className="container" >
+        return <div className="section" >
             <div className="container-search">
                 <Row className="justify-content-center">
                     <Col xs="12" className="Search">
@@ -150,15 +151,6 @@ class Search extends Component {
                             return (
                                 <Col xs="6" sm="4">
                                     <Card className="card">
-                                        <CardHeader className="text-muted">
-                                            {/* <label>
-                                            <Toggle
-                                                defaultChecked={this.state.aubergineIsReady}
-                                                className='custom-classname'
-                                                onChange={this.handleAubergineChange} />
-                                            <span>Custom className</span>
-                                        </label> */}
-                                        </CardHeader>
                                         <CardBody >
                                             <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
                                             <div className="card_cardbody">
@@ -176,7 +168,7 @@ class Search extends Component {
                     })}
                 </Row>
             </div>
-        </Container >
+        </div>
     }
 }
 export default withRouter(Search);

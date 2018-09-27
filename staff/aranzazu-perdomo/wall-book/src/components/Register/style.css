@@ -17,5 +17,9 @@
             background: rgba(255, 255, 255, 0.7)
         }
                         input{
-                            margin-left: 0 !important
-                        }
+                            margin-left: 0 !important;
+                            }
+
+                                photo{
+                                    margin-bottom: 25px;
+                                }

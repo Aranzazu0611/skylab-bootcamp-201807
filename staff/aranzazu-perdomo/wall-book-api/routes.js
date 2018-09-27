@@ -7,11 +7,11 @@ const jwt = require('jsonwebtoken')
 const validateJwt = require('./helpers/validate-jwt')
 
 const router = express.Router()
-const jsonBodyParser = bodyParser.json()
+const jsonBodyParser = bodyParser.json({ limit: '3mb' })
 
 router.post('/register', jsonBodyParser, (req, res) => {
-    const { body: { email, name, password } } = req
-    logic.register(email, name, password)
+    const { body: { email, name, password, photoProfile } } = req
+    logic.register(email, name, password, photoProfile)
         .then(() => res.status(201).json({ message: 'user registered' }))
         .catch(err => {
             const { message } = err
@@ -76,6 +76,19 @@ router.delete('/unregister', jsonBodyParser, (req, res) => {
         })
 })
 
+//retrieve User
+
+router.get('/user/:userId', validateJwt, (req, res) => {
+    const { params: { userId } } = req
+
+    logic.retrieveUser(userId)
+    .then(data => res.json(data))
+        .catch(err => {
+            const { message } = err
+            res.status(err instanceof LogicError ? 400 : 500).json({ message })
+        })
+
+})
 
 //add review
 router.post('/user/:userId/reviews', [validateJwt, jsonBodyParser], (req, res) => {
@@ -195,11 +208,11 @@ router.get('/user/:userId/searchbook', validateJwt, (req, res) => {
 })
 
 //saveimage
-router.post('/user/:userId/saveimage', validateJwt, (req, res) => {
-    const { params: { userId, base64Image } } = req
-
-    logic.saveImageProfile(userId, base64Image)
-        .then(() => res.json({ message: 'Save image correctly' }))
+router.post('/saveimage', jsonBodyParser, (req, res) => {
+    const { body: { base64Image } } = req
+    debugger;
+    logic.saveImage(base64Image)
+        .then(url => res.json({ message: 'Save image correctly', url }))
         .catch(err => {
             const { message } = err
             res.status(err instanceof LogicError ? 400 : 500).json({ message })

@@ -6,10 +6,12 @@ const books = require("google-books-search-2")
 const cloudinary = require('cloudinary')
 require('isomorphic-fetch')
 
+const { CLOUDINARY_CLOUD_NAME = "wallbook", CLOUDINARY_API_SECRET = "w2OWkpOPU-iTfd_reblStV0Zp7U", CLOUDINARY_API_KEY = "782539495716937" } = process.env
+
 cloudinary.config({
-    presentname: "xmjoy1y2",
-    cloudname: "wallbook",
-    apikey: 782539495716937,
+    api_key: CLOUDINARY_API_KEY,
+    cloud_name: CLOUDINARY_CLOUD_NAME,
+    api_secret: CLOUDINARY_API_SECRET,
 })
 
 const logic = {
@@ -57,20 +59,25 @@ const logic = {
     * 
     * @returns {boolean} TRUE => if it is registered correctly
     */
-    register(email, name, password) {
+    register(email, name, password, photo) {
         return Promise.resolve()
             .then(() => {
                 this._validateEmail(email)
                 this._validateStringField("name", name)
                 this._validateStringField("password", password)
+                this._validateStringField("photo", photo)
 
                 return User.findOne({ email })
             })
+
             .then(user => {
                 if (user) throw new LogicError(`user with ${email} email already exist`)
 
-                return User.create({ email, name, password })
+                // return User.create({ email, name, password })
+                return logic.saveImage(photo)
+
             })
+            .then(url => User.create({ email, name, password, photoProfile: url }))
             .then(() => true)
 
     },
@@ -156,12 +163,30 @@ const logic = {
                 return User.findById(userId)
             })
             .then(user => {
-                if (!user) throw new LogicError(`user with id ${userId} already exist`)
+                if (!user) throw new LogicError(`user with id ${userId} not exist`)
                 if (user.password !== password) throw new LogicError(`wrong password`)
 
                 return User.deleteOne({ _id: user._id })
             })
             .then(() => true)
+    },
+
+
+    //retrieve user
+
+    retrieveUser(userId) {
+        return Promise.resolve()
+            .then(() => {
+
+                this._validateStringField("userId", userId)
+
+                return User.findById(userId)
+            })
+            .then(user => {
+                if (!user) throw new LogicError(`user with id ${userId} not exist`)
+
+                return user
+            })
     },
 
     /**
@@ -193,7 +218,7 @@ const logic = {
             })
             .then(user => {
                 if (!user) throw new LogicError(`user with ${userId} does not exists`)
-debugger;
+                debugger;
                 const review = { book, title, vote, comment, user: user.id }
 
                 return Review.create(review)
@@ -376,27 +401,15 @@ debugger;
     /**
     * Save image of profile
     * 
-    * @param {String} userId
     * @param {String} base64Image
     * 
     * @returns {object} Photo Profile
     */
-    saveImageProfile(userId, base64Image) {
-        return Promise.resolve()
-            .then(() => {
-                return new Promise((resolve, reject) => {
-                    return cloudinary.v2.uploader.upload(base64Image, function (err, data) {
-                        if (err) return reject(err)
-                        resolve(data.url)
-                    })
-                })
-                    .then(urlCloudinary => {
-                        return User.findByIdAndUpdate(userId, { photoProfile: urlCloudinary }, { new: true })
-                            .then(user => {
-                                return user.photoProfile
-                            })
-                    })
-            })
+    saveImage(base64Image) {
+        return new Promise((resolve, reject) => cloudinary.v2.uploader.upload(base64Image, (err, data) => {
+            if (err) return reject(err)
+            resolve(data.url)
+        }))
     },
 
     /**

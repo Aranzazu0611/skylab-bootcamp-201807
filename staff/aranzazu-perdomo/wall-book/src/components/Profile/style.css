@@ -60,7 +60,10 @@ dl, ol, ul {
   height: 100%;
   overflow: hidden;
   margin-top: 0;
-  background-color: blue;
+  background-image: url('../../images/escribiendo.jpg');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  
   
 }
       .form-unregister{
@@ -73,8 +76,33 @@ dl, ol, ul {
  .btn{
   display: flex;
  }
+ 
 
  .profile-container {
    width: 100%;
+ }
+ .profile-card{
+  color: white; 
+  background-color: rgba(3, 3, 3, 0.7);
+  padding: 10px;
+  color: white;
+  text-align: center;
+  font-size: 5vh;
+  border: 3px solid white;
+  padding-bottom: 3%;
+  width: 70%;
+  height: 70%;
+  margin-top: -100px;
+  margin-left: 15vw;
+
+ }
+
+ .Update{
+  margin-right: 270px;
+ }
+
+ .reviews{
+   margin-top: 50px;
+   margin-left: 50px;
  }
  

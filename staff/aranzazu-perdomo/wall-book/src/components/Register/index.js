@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { withRouter, Link } from 'react-router-dom'
+import FileBase64 from 'react-file-base64';
 
 import {
     Button,
@@ -22,12 +23,18 @@ class Register extends Component {
 
         email: "",
         name: "",
-        password: ""
+        password: "",
+        photo:undefined,
+        base64:null
     };
 
     keepEmail = e => this.setState({ email: e.target.value, error: '' })
     keepName = e => this.setState({ name: e.target.value, error: '' })
     keepPassword = e => this.setState({ password: e.target.value, error: '' })
+
+    getFiles(photo) {
+        this.setState({ files: photo })
+    }
 
     handleRegisterSubmit = event => {
         event.preventDefault()
@@ -43,10 +50,8 @@ class Register extends Component {
                     confirmButtonText: "Cool"
                 })
             )
-            .then(() => {
-                this.toggle()
-                this.loginToggle()
-            })
+            .then(() => this.props.history.push("/login"))
+
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -56,6 +61,12 @@ class Register extends Component {
                 })
             );
     }
+
+    _crop(){
+        this.setState({
+          photoProfile:this.refs.cropper.getCroppedCanvas({width:300,height:300}).toDataURL()
+        }) 
+      }
 
     render() {
         const { keepEmail, keepName, keepPassword } = this
@@ -82,8 +93,23 @@ class Register extends Component {
                             <Label for="examplePassword">Password</Label>
                             <Input className="m-3" type="password" onChange={keepPassword} name="password" placeholder="Password" required />
                         </FormGroup>
+                        <FormGroup className="photo">
+                            <FileBase64
+                                multiple={false}
+                                onDone={this.getFiles.bind(this)} />
+                            <div className="card-body pt-4" >
+                                {/* {this.state.base64 ? <Cropper
+                                    ref='cropper'
+                                    src={this.state.base64}
+                                    style={{ height: "300px", width: '100%' }}
+                                    aspectRatio={1}
+                                    guides={false}
+                                    dragMode="move"
+                                    crop={this._crop.bind(this)} /> : ""} */}
+                            </div>
+                        </FormGroup>
                         <Button className="m-2" color="danger" tag={Link} to="/#" >Cancel</Button>
-                        <Button className="m-2" color="primary" tag={Link} to="/login" >Register</Button>
+                        <Button className="m-2" color="primary" >Register</Button>
                     </Form>
                 </Col>
             </Container>

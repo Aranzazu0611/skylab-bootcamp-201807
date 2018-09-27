@@ -37,7 +37,7 @@ class BookDetail extends Component {
         modal: false,
         book: "",
         title: "",
-        _vote: 0,
+        vote: 0,
         comment: "",
         reviews: [],
         reviewId: "",
@@ -70,7 +70,7 @@ class BookDetail extends Component {
 
 
     keepTitle = e => this.setState({ title: e.target.value, error: '' })
-    keepVote = rating => this.setState({ _vote: rating, error: '' })
+    keepVote = rating => this.setState({ vote: rating, error: '' })
     keepComment = e => this.setState({ comment: e.target.value, error: '' })
 
     listReviews = () => {
@@ -120,12 +120,12 @@ class BookDetail extends Component {
     handleAddReview = e => {
         e.preventDefault()
 
-        const { title, _vote, comment } = this.state
+        const { title, vote, comment } = this.state
         const userId = sessionStorage.getItem('userId')
         const token = sessionStorage.getItem('token')
         const book = this.props.match.params.id
 
-        logicWallbook.addReview(userId, book, title, _vote, comment, token)
+        logicWallbook.addReview(userId, book, title, vote, comment, token)
             .then(() => {
                 swal({
                     title: "Success!",
@@ -134,8 +134,7 @@ class BookDetail extends Component {
                     confirmButtonText: "Cool"
                 })
                     .then(() => {
-                        debugger;
-                        this.setState({ modal: false, title: '', _vote: 0, comment: '' }, () => {
+                        this.setState({ modal: false, title: '', vote: 0, comment: '' }, () => {
                             this.listReviewsByBook()
                         })
                     })
@@ -158,15 +157,15 @@ class BookDetail extends Component {
         const method = isFavorite ? 'deleteFavorite' : 'addFavorite';
 
         logicWallbook[method](userId, bookId, token)
-        .then(isFavorite => this.setState(({ book }) => ({ book: { ...book, isFavorite } })))
-        .catch(err =>
-            swal({
-                title: "Failed! :(",
-                text: err,
-                type: "error",
-                confirmButtonText: "Try again"
-            })
-        );
+            .then(isFavorite => this.setState(({ book }) => ({ book: { ...book, isFavorite } })))
+            .catch(err =>
+                swal({
+                    title: "Failed! :(",
+                    text: err,
+                    type: "error",
+                    confirmButtonText: "Try again"
+                })
+            );
     }
 
     HandleDeleteReview = event => {
@@ -201,7 +200,7 @@ class BookDetail extends Component {
 
     render() {
 
-        const{ state: { book, reviews, globalVote }, keepTitle, keepVote, keepComment } = this;
+        const { state: { book, reviews, globalVote }, keepTitle, keepVote, keepComment } = this;
 
         return (
             <div>
@@ -211,7 +210,6 @@ class BookDetail extends Component {
                             <ModalHeader toggle={this.toggle} >Write your review</ModalHeader>
                             <Form onSubmit={this.handleAddReview}>
                                 <ModalBody>
-
                                     <FormGroup>
                                         <Label for="exampleTitle">TITLE</Label>
                                         <Input type="text" name="title" onChange={keepTitle} value={this.state.title} id="exampleTitle" placeholder="write title" />
@@ -220,10 +218,9 @@ class BookDetail extends Component {
                                         half={false}
                                         count={5}
                                         onChange={keepVote}
-                                        value={this.state._vote}
+                                        value={this.state.vote}
                                         size={24}
                                         color2={'#ffd700'} />
-
                                     <FormGroup>
                                         <Label for="exampleText">Text Area</Label>
                                         <Input type="textarea" name="comment" onChange={keepComment} value={this.state.comment} id="exampleText" />
@@ -243,19 +240,17 @@ class BookDetail extends Component {
                                 <Col xs="6" xm="4">
                                     {book && <Card className="card">
                                         <CardHeader className="text-muted">
+                                            <div ClassName="toggle-react">
+                                                <label>
+                                                    <Toggle
+                                                        defaultChecked={book.isFavorite}
+                                                        className='custom-classname'
+                                                        onChange={this.handleAubergineChange} />
+                                                </label>
+                                            </div>
                                             <div className="card-header">
 
-                                                <div ClassName="toggle-react">
-
-                                                    <label>
-                                                        <Toggle
-                                                            defaultChecked={book.isFavorite}
-                                                            className='custom-classname'
-                                                            onChange={this.handleAubergineChange} />
-                                                    </label>
-                                                </div>
                                                 <div className="starts">
-
                                                     <ReactStars
                                                         count={5}
                                                         size={24}

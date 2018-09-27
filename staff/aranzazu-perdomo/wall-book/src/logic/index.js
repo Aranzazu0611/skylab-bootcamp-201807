@@ -50,7 +50,6 @@ const logicWallbook = {
      * @throws {Error} invalid name
      */
     _validateNumber(name, value) {
-        debugger;
         if (!Number.isInteger(value)) throw new Error(`invalid ${name}`)
     },
 
@@ -127,6 +126,18 @@ const logicWallbook = {
             })
     },
 
+    retrieveUser(userId,token){
+        return Promise.resolve()
+            .then(()=> {
+                this._validateStringField("userId", userId)
+                this._validateStringField("token", token)
+
+                return this._call(`user/${userId}`, 'GET', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, undefined, 200)
+                    .then(res => res.json())
+                    .then(res => res)
+            })
+    },
+
     retrieveBook(userId, bookId, token) {
         return Promise.resolve()
             .then(() => {
@@ -176,7 +187,6 @@ const logicWallbook = {
      */
 
     addReview(userId, book, title, _vote, comment, token) {
-        debugger;
         return Promise.resolve()
             .then(() => {
                 let vote = parseInt(_vote)
@@ -197,9 +207,9 @@ const logicWallbook = {
                     JSON.stringify({ userId, book, title, vote, comment }),
                     201
                 )
-                    .then(res => res.json())                    
-                    .then(res => {debugger; return res})
-                    .catch(res => { debugger;})
+                    .then(res => res.json())
+                    .then(res => res)
+
             })
     },
 
@@ -222,14 +232,14 @@ const logicWallbook = {
             })
     },
 
-     /**
-    * List all reviews by book 
-    * @param {String} bookId
-    * @param {String} userId
-    * @param {String} token
-    *        
-    * @returns {Response} all reviews in an array or an empty array
-    */
+    /**
+   * List all reviews by book 
+   * @param {String} bookId
+   * @param {String} userId
+   * @param {String} token
+   *        
+   * @returns {Response} all reviews in an array or an empty array
+   */
 
     listReviewsByBook(bookId, userId, token) {
         return Promise.resolve()
@@ -237,10 +247,10 @@ const logicWallbook = {
                 this._validateStringField('bookId', bookId)
                 this._validateStringField('userId', userId)
                 this._validateStringField('token', token)
-               
+
                 return this._call(`user/${userId}/book/${bookId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
-                  
+
             })
     },
 
@@ -323,7 +333,7 @@ const logicWallbook = {
                 this._validateStringField("userId", userId)
                 this._validateStringField("token", token)
 
-            
+
                 return this._call(`user/${userId}/favorites`, 'get', { 'Content-Type': 'application/json', authorization: `bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
             })

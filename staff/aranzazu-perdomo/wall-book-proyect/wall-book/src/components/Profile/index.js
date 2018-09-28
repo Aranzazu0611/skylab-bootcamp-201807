@@ -311,7 +311,7 @@ class Settings extends Component {
 
                     <Col className="favorites" md="6" sm="8">
                         {favorites.map(favorite => <Card className="card" key={favorite.id}>
-                            <CardBody >
+                            <CardBody className="favorite-body">
                                 <CardImg top width="100%" height="461px" src={favorite.volumeInfo.imageLinks.thumbnail} alt="Card image cap" />
                                 <div className="card_cardbody">
                                     <CardTitle>{favorite.volumeInfo.title}</CardTitle>

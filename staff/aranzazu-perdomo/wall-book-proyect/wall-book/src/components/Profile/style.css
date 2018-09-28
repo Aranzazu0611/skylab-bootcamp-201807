@@ -53,7 +53,6 @@ dl, ol, ul {
   align-items: center;
   width: 100%;
   position: absolute;
-  height: 100%;
   overflow: hidden;
   margin-top: 0;
   background-image: url('../../images/escribiendo.jpg');
@@ -114,7 +113,8 @@ dl, ol, ul {
     border-top-right-radius: calc(.25rem - 1px);
     height: auto;
 }
-.card-body {
+
+.favorite-body {
    height: 60vh;
 }
 
@@ -127,10 +127,12 @@ dl, ol, ul {
 
 .Unregister-form{
   margin:auto;
+  margin-bottom: 25px;
 }
 .Update-form{
   margin:auto;
-  margin-top: 20px;
+  margin-bottom: 25px;
+ 
 }
 
 .rounded-circle{

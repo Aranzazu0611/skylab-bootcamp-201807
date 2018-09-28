@@ -25,6 +25,9 @@
   margin-top: 2vh;
  
 }
+.books-card{
+  margin-right: 30px !important;
+}
 
 
 
@@ -57,12 +60,8 @@
 }
 .card_cardbody{
  max-height: 50vh;
- 
+  
 }
-.container-card{
-  margin-right: 45px;
-}
-
 
 .btn-primary {
   color: #fff;

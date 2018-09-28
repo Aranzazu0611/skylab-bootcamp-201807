@@ -136,7 +136,7 @@ class Search extends Component {
                 </Row>
             </div>
             <div className="container-cards">
-                <Row className="justify-content-center ">
+                <Row className="books-card justify-content-center ">
                     {books.map(book => {
                         if (book.hasOwnProperty('description') && book.hasOwnProperty('thumbnail') && book.hasOwnProperty('isbn') && book.hasOwnProperty('infoLink')) {
                             const { infoLink } = book

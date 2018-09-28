@@ -152,6 +152,7 @@ class BookDetail extends Component {
     handleAubergineChange = () => {
         const userId = sessionStorage.getItem('userId')
         const bookId = this.props.match.params.id;
+        const isbn = this.state.book.industryIdentifiers[1].identifier
         const token = sessionStorage.getItem('token');
         const isFavorite = this.state.book.isFavorite;
         const method = isFavorite ? 'deleteFavorite' : 'addFavorite';

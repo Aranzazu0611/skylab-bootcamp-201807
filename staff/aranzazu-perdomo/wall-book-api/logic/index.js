@@ -366,8 +366,9 @@ const logic = {
             .then(user => {
                 if (!user) throw new LogicError(`user ${userId} does not exists`)
 
-                const bookPromises = user.favorites.map(isbn =>
-                    this.searchBook(isbn, 'isbn').then(book => book[0])
+                const bookPromises = user.favorites.map(id =>
+                    // this.searchBook(isbn, 'isbn').then(book => book[0])
+                    this.retrieveBook(id,userId)
                 )
 
                 return Promise.all(bookPromises)
@@ -420,6 +421,7 @@ const logic = {
      * @returns {Promise<Object|LogicError>} - Returns the book info, otherwise if error then returns LogicError
      */
     retrieveBook(bookId, userId) {
+        debugger
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("bookId", bookId)

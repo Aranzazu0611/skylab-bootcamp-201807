@@ -11,7 +11,7 @@ const { env: { MONGO_URL } } = process
 
 describe('Logic', () => {
 
-    const email = `Ara-${Math.random()}@mail.com`, name = `Ara-${Math.random()}`, password = `123-${Math.random()}`
+    const email = `Ara-${Math.random()}@mail.com`, name = `Ara-${Math.random()}`, password = `123-${Math.random()}`,
     let _connection
     let count = 0
     let userId
@@ -48,7 +48,7 @@ describe('Logic', () => {
             return User.findOne({ email })
                 .then(user => {
                     expect(user).to.be.null
-                    return logic.register(email, name, password)
+                    return logic.register(email, name, password, photo)
                 })
                 .then(res => {
                     expect(res).to.be.true
@@ -59,6 +59,7 @@ describe('Logic', () => {
                     expect(user.email).to.equal(email)
                     expect(user.name).to.equal(name)
                     expect(user.password).to.equal(password)
+                    expect(user.photo).to.equal(photo)
 
                     return User.find()
                 })
@@ -763,7 +764,7 @@ describe('Logic', () => {
         )
     })
 
-    
+
 
 
     afterEach(() => Promise.all([User.deleteMany(), Review.deleteMany()]))

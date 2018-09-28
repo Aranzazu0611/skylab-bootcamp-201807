@@ -20,7 +20,8 @@ import {
     ListGroupItem,
     ListGroupItemHeading,
     ListGroupItemText,
-    Row
+    Row,
+    
 } from 'reactstrap'
 import ReactStars from 'react-stars'
 import './style.css'
@@ -40,7 +41,7 @@ class Settings extends Component {
         },
         favorites: [],
         book: "",
-       
+
     }
 
     toggle = () => {
@@ -59,10 +60,13 @@ class Settings extends Component {
     };
 
     showFavorites = () => {
-        const modalsList = convertAllPropsToFalse(this.state.modals);
-        this.setState(({ modals }) => ({
-            modals: { ...modalsList, modalFavorites: !modals.modalFavorites }
-        }));
+        return this.handleListFavorites()
+            .then(() => {
+                const modalsList = convertAllPropsToFalse(this.state.modals);
+                this.setState(({ modals }) => ({
+                    modals: { ...modalsList, modalFavorites: !modals.modalFavorites }
+                }));
+            })
     };
 
     loginToggle = () => {
@@ -102,6 +106,7 @@ class Settings extends Component {
 
     componentDidMount() {
         this.listReviews()
+
     }
 
     listReviews = () => {
@@ -180,8 +185,8 @@ class Settings extends Component {
     handleListFavorites = () => {
         const { state: { userId, token } } = this
 
-        logicWallbook.listFavorites(userId, token)
-            .then(favorites => { debugger; this.setState({ favorites }) })
+        return logicWallbook.listFavorites(userId, token)
+            .then(favorites => { this.setState({ favorites }) })
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -217,53 +222,51 @@ class Settings extends Component {
         return (
             <div className="Profile">
 
-                <Row className="profile-container">
-
-                    <div className="profile-card">
-                        <div className="profile-card_cardbody">
-                            {/* <image>{user.photo}</image> */}
-                      
-                            <h4>Usuario: {this.props.email}</h4>
-                          
-                            <Button className="btn btn-outline-primary mr-3" onClick={this.loginToggle}>Unregister</Button>
-                            <Button className="btn btn-outline-primary mr-3" onClick={this.toggle}>Update</Button>
-                            <Button className="btn btn-outline-primary mr-3" onClick={this.showReviews}>Reviews</Button>
-                            <Button className="btn btn-outline-primary mr-3" onClick={this.showFavorites}>Favorite</Button>
-                           
+                <div className="container-fluid">
+                    <div className="profile-card_cardbody">
+                    <img src="https://www.hipershop.es/im%C3%A1genes/LiLaLu/LiLaLu-Lilalu-pato-de-goma-pato-del-bano-flotante-pato-pato-recoger-de-Halloween-corona-superheroe.-Tipo.-Pato-Superwoman-178865107.jpg" className="rounded-circle" />
+                        <h4>Usuario: {this.props.email}</h4>
+                        <div className="buttons">
+                        <Button className="btn btn btn-danger mr-3" onClick={this.loginToggle}>Unregister</Button>
+                        <Button className="btn btn btn-danger mr-3" onClick={this.toggle}>Update</Button>
+                        <Button className="btn btn btn-danger mr-3" onClick={this.showReviews}>Reviews</Button>
+                        <Button className="btn btn btn-danger mr-3" onClick={this.showFavorites}>Favorite</Button>
                         </div>
                     </div>
+                </div>
 
-                    {modalReviews && (
-                        <Col className="reviews" md="6" sm="8">
-                            <ListGroup className="listReview mt-5">
-                                {hasReviews && reviews.map(review => <ListGroupItem key={review._id}>
-                                    <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
-                                    <ListGroupItemText className="listReview-vote">
-                                        <ReactStars
-                                            count={5}
-                                            size={24}
-                                            value={review.vote}
-                                            color2={'#ffd700'}
-                                            edit={false}
-                                        />
-                                    </ListGroupItemText>
-                                    <ListGroupItemText className="listReview-comentario">
-                                        Comentario: {review.comment}
-                                    </ListGroupItemText>
-                                    <ListGroupItemText className="listReview-comentario">
-                                        <Button id="btn-delete" color="primary" target="_blank" onClick={() => { this.handleDeleteReview(review._id) }}>Borrar</Button>
-                                    </ListGroupItemText>
+                {modalReviews && (
+                    <div className="list">
+                        <ListGroup className="listReview mt-5 ">
+                            {hasReviews && reviews.map(review => <ListGroupItem key={review._id}>
+                                <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
+                                <ListGroupItemText className="listReview-vote">
+                                    <ReactStars
+                                        count={5}
+                                        size={24}
+                                        value={review.vote}
+                                        color2={'#ffd700'}
+                                        edit={false}
+                                    />
+                                </ListGroupItemText>
+                                <ListGroupItemText className="listReview-comentario">
+                                    Comentario: {review.comment}
+                                </ListGroupItemText>
+                                <ListGroupItemText className="listReview-comentario">
+                                    <Button id="btn-delete" color="primary" target="_blank" onClick={() => { this.handleDeleteReview(review._id) }}>Borrar</Button>
+                                </ListGroupItemText>
 
-                                </ListGroupItem>
-                                )}
-                                {!hasReviews && <ListGroupItem>No reviews added yet</ListGroupItem>}
-                            </ListGroup>
-                        </Col>)}
-                </Row>
+                            </ListGroupItem>
+                            )}
+                            {!hasReviews && <ListGroupItem>No reviews added yet</ListGroupItem>}
+                        </ListGroup>
+                    </div>
+                )}
+
 
                 {modalLogin && (
-                    <Col className="Update" sm={{ size: 6, offset: 1 }} md={{ size: 4, offset: 2 }}>
-                        <Form className=" text-center  form-register p-3 pl-5 pr-5 rounded" onSubmit={handleDeleteUser} isOpen={this.state.modalLogin} toggle={this.loginToggle}>
+                    <Col className="Unregister" sm={{ size: 6, offset: 1 }} md={{ size: 4, offset: 2 }}>
+                        <Form className="Unregister-form text-center  form-register p-3 pl-5 pr-5 rounded" onSubmit={handleDeleteUser} isOpen={this.state.modalLogin} toggle={this.loginToggle}>
                             <h3>Unregister </h3>
                             <hr className="my-4" />
                             <FormGroup>
@@ -283,7 +286,7 @@ class Settings extends Component {
 
                 {modal && (
                     <Col className="Update" sm={{ size: 6, offset: 1 }} md={{ size: 4, offset: 2 }}>
-                        <Form className="text-center  form-login p-3 pl-5 pr-5 rounded" onSubmit={handleUpdatesubmit} isOpen={this.state.modal} toggle={this.toggle}>
+                        <Form className="Update-form text-center  form-login p-3 pl-5 pr-5 rounded" onSubmit={handleUpdatesubmit} isOpen={this.state.modal} toggle={this.toggle}>
                             <h3>Update Password </h3>
                             <hr className="my-4" />
                             <FormGroup>
@@ -305,18 +308,20 @@ class Settings extends Component {
                 }
 
                 {modalFavorites && (
-                    <div ClassName="favorites">
-                        {favorites.map(favorite => <Card className="card" key={favorite._id}>
+
+                    <Col className="favorites" md="6" sm="8">
+                        {favorites.map(favorite => <Card className="card" key={favorite.id}>
                             <CardBody >
-                                <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />
+                                <CardImg top width="100%" height="461px" src={favorite.volumeInfo.imageLinks.thumbnail} alt="Card image cap" />
                                 <div className="card_cardbody">
-                                    <CardTitle>{book.title}</CardTitle>
-                                    <CardSubtitle>Author: {book.authors}</CardSubtitle>
+                                    <CardTitle>{favorite.volumeInfo.title}</CardTitle>
+                                    <CardSubtitle>Author: {favorite.volumeInfo.authors[0]}</CardSubtitle>
 
                                 </div>
                             </CardBody>
                         </Card>)}
-                    </div>)}
+                    </Col>)}
+
             </div>
         )
     }

@@ -8,8 +8,8 @@
       margin-bottom: 2vh !important;
       text-align: center !important;
       box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
-      max-width: 30vw !important;
-     
+      margin-right: 25px;
+      margin-left: 25px;
       
   }
   .mt-5, .my-5 {
@@ -17,10 +17,7 @@
 }
 
 .list-group {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: column;
-  flex-direction: column;
+  flex-direction: row !important;
   padding-left: 0;
   margin-bottom: 0;
   max-width: 100%;
@@ -53,7 +50,6 @@ dl, ol, ul {
 }
 .Profile{
       
-  display: flex;
   align-items: center;
   width: 100%;
   position: absolute;
@@ -94,6 +90,8 @@ dl, ol, ul {
   height: 70%;
   margin-top: -100px;
   margin-left: 15vw;
+  justify-content: center;
+  
 
  }
 
@@ -105,4 +103,53 @@ dl, ol, ul {
    margin-top: 50px;
    margin-left: 50px;
  }
- 
+
+  .favorites{
+  display: flex;
+  max-width: 100% !important;
+}
+ .card-img-top {
+    width: 100%;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+    height: auto;
+}
+.card-body {
+   height: 60vh;
+}
+
+.container-fluid{
+  
+  padding: 10px;
+  text-align: center;
+  
+}
+
+.Unregister-form{
+  margin:auto;
+}
+.Update-form{
+  margin:auto;
+  margin-top: 20px;
+}
+
+.rounded-circle{
+    width: 10vw;
+    height: 10vw;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  
+.profile-card_cardbody{
+  
+  background-color:white;
+  opacity: 0.7;
+  padding-bottom: 15px;
+  border-radius: 25px;
+
+
+}
+
+.buttons{
+  margin-bottom: 15px;
+}

@@ -37,7 +37,6 @@ class App extends Component {
     sessionStorage.setItem('token', token)
     sessionStorage.setItem('userId', userId)
 
-    // this.props.history.push('/search')
   }
 
 
@@ -75,7 +74,7 @@ class App extends Component {
           <Route exact path="/register" render={() => this.isLoggedIn() ? <Redirect to="/login" /> : <Register onLoggin={this.onLoggin} />} />
           <Route exact path="/login" render={() => this.isLoggedIn() ? <Redirect to="/search" /> : <Login onLoggin={this.onLoggin} />} />
           <Route path="/search" render={() => this.isLoggedIn() ? <Search onBookDetail={this.onBookDetail} onLogout={this.onLogout} onProfile={this.onProfile} /> : <Redirect to="/" />} />
-          <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail  bookId={props.match.params.id} userId={this.state.userId} /> : <Redirect to="/" />} />
+          <Route path="/book/:id" render={props => this.isLoggedIn() ? <BookDetail bookId={props.match.params.id} userId={this.state.userId} /> : <Redirect to="/" />} />
           <Route path="/user/:userId" render={props => this.isLoggedIn() ? <Profile userId={props.match.params.userId} onLogout={this.onLogout} email={this.state.email} /> : <Redirect to="/" />} />
         </Switch>
       </div>

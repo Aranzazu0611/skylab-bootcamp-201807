@@ -54,12 +54,14 @@ const logic = {
     * @param {String} email 
     * @param {String} name 
     * @param {String} password 
+    * @param {String} photo
     * 
     * @throws {LogicError} if user with email already exist
     * 
     * @returns {boolean} TRUE => if it is registered correctly
     */
     register(email, name, password, photo) {
+        debugger
         return Promise.resolve()
             .then(() => {
                 this._validateEmail(email)
@@ -72,8 +74,7 @@ const logic = {
 
             .then(user => {
                 if (user) throw new LogicError(`user with ${email} email already exist`)
-
-                // return User.create({ email, name, password })
+                debugger
                 return logic.saveImage(photo)
 
             })
@@ -180,11 +181,11 @@ const logic = {
 
                 this._validateStringField("userId", userId)
 
-                return User.findById(userId)
+                return User.findById(userId).lean()
             })
             .then(user => {
                 if (!user) throw new LogicError(`user with id ${userId} not exist`)
-
+                delete user.password
                 return user
             })
     },

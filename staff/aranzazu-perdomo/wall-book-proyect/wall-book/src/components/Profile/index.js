@@ -53,7 +53,6 @@ class Settings extends Component {
 
     showReviews = () => {
         const modalsList = convertAllPropsToFalse(this.state.modals);
-        debugger;
         this.setState(({ modals }) => ({
             modals: { ...modalsList, modalReviews: !modals.modalReviews }
         }));
@@ -106,6 +105,7 @@ class Settings extends Component {
 
     componentDidMount() {
         this.listReviews()
+        this.props.email && this.handleRetrieveUser()
 
     }
 
@@ -197,20 +197,21 @@ class Settings extends Component {
             );
     }
 
-    // handleRetrieveUser = () => {
-    //     const { state: { userId, token } } = this
+    handleRetrieveUser = () => {
+        const { state: { userId, token } } = this
 
-    //     logicWallbook.retrieveUser(userId, token)
-    //         .then(user => this.setState({ user }))
-    //         .catch(err =>
-    //             swal({
-    //                 title: "Failed! :(",
-    //                 text: err,
-    //                 type: "error",
-    //                 confirmButtonText: "Try again"
-    //             }))
-    // }
+        logicWallbook.retrieveUser(userId, token)
+            .then(user => this.setState({ user }))
+            .catch(err =>
+                swal({
+                    title: "Failed! :(",
+                    text: err,
+                    type: "error",
+                    confirmButtonText: "Try again"
+                }))
+    }
 
+   
 
     render() {
         const { state: { reviews, modals, book, favorites }, keepEmail, keepNewPassword, keepPassword, handleUpdatesubmit, handleDeleteUser } = this;
@@ -220,12 +221,12 @@ class Settings extends Component {
 
 
         return (
-            <div className="Profile">
+            <div  className="Profile">
 
                 <div className="container-fluid">
                     <div className="profile-card_cardbody">
-                    <img src="https://www.hipershop.es/im%C3%A1genes/LiLaLu/LiLaLu-Lilalu-pato-de-goma-pato-del-bano-flotante-pato-pato-recoger-de-Halloween-corona-superheroe.-Tipo.-Pato-Superwoman-178865107.jpg" className="rounded-circle" />
-                        <h4>Usuario: {this.props.email}</h4>
+                    {this.state.user &&<img src={this.state.user.photoProfile} className="rounded-circle" />}
+                    {this.state.user &&<h4>Usuario: {this.state.user.name}</h4>}
                         <div className="buttons">
                         <Button className="btn btn btn-danger mr-3" onClick={this.loginToggle}>Unregister</Button>
                         <Button className="btn btn btn-danger mr-3" onClick={this.toggle}>Update</Button>
@@ -239,6 +240,7 @@ class Settings extends Component {
                     <div className="list">
                         <ListGroup className="listReview mt-5 ">
                             {hasReviews && reviews.map(review => <ListGroupItem key={review._id}>
+                                <ListGroupItemHeading className="listReview-title">Libro:{review.bookTitle}</ListGroupItemHeading>
                                 <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
                                 <ListGroupItemText className="listReview-vote">
                                     <ReactStars
@@ -318,6 +320,7 @@ class Settings extends Component {
                                     <CardSubtitle>Author: {favorite.volumeInfo.authors[0]}</CardSubtitle>
 
                                 </div>
+                                
                             </CardBody>
                         </Card>)}
                     </Col>)}

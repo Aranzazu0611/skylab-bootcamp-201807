@@ -62,14 +62,15 @@ const logicWallbook = {
     * @returns {boolean} TRUE => if it is registered correctly
     */
 
-    register(email, name, password) {
+    register(email, name, password, photo) {
         return Promise.resolve()
             .then(() => {
                 this._validateEmail(email)
                 this._validateStringField("name", name)
                 this._validateStringField("password", password)
+                this._validateStringField("photo", photo)
 
-                return this._call('register', 'post', { 'Content-Type': 'application/json' }, JSON.stringify({ email, name, password }), 201)
+                return this._call('register', 'post', { 'Content-Type': 'application/json' }, JSON.stringify({ email, name, password, photo }), 201)
                     .then(res => res.json())
                     .then(() => true)
             })
@@ -126,9 +127,9 @@ const logicWallbook = {
             })
     },
 
-    retrieveUser(userId,token){
+    retrieveUser(userId, token) {
         return Promise.resolve()
-            .then(()=> {
+            .then(() => {
                 this._validateStringField("userId", userId)
                 this._validateStringField("token", token)
 

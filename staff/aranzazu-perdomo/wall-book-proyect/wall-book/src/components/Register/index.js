@@ -39,9 +39,9 @@ class Register extends Component {
     handleRegisterSubmit = event => {
         event.preventDefault()
 
-        const { state: { email, name, password } } = this
+        const { state: { email, name, password,files:{base64} } } = this
 
-        return logicWallbook.register(email, name, password)
+        return logicWallbook.register(email, name, password,base64)
             .then(() =>
                 swal({
                     title: "Success!",

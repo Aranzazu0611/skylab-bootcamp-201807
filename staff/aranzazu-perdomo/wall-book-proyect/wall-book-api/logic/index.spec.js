@@ -22,7 +22,7 @@ describe('Logic', () => {
             .then(() => User.deleteMany())
     )
 
-    true && describe("validateStringField", () => {
+    !true && describe("validateStringField", () => {
         it('should succeed on correct value', () => {
             expect(() => logic._validateStringField('email', email).to.equal(email))
             expect(() => logic._validateStringField('password', password).to.equal(password))
@@ -43,7 +43,7 @@ describe('Logic', () => {
 
     })
 
-    true && describe("Register", () => {
+    !true && describe("Register", () => {
         it('should register correctly', () => {
             return User.findOne({ email })
                 .then(user => {
@@ -138,7 +138,7 @@ describe('Logic', () => {
         })
     })
 
-    true && describe('authenticate user', () => {
+    !true && describe('authenticate user', () => {
         let userId
 
         beforeEach(() =>
@@ -196,7 +196,7 @@ describe('Logic', () => {
 
     })
 
-    true && describe('update password', () => {
+    !true && describe('update password', () => {
         const newPassword = `${password}-${Math.random()}`
 
         beforeEach(() => User.create({ email, name, password }).then(user => userId = user.id))
@@ -279,7 +279,7 @@ describe('Logic', () => {
         })
     })
 
-    true && describe('unregister', () => {
+    !true && describe('unregister', () => {
         beforeEach(() => User.create({ email, name, password }).then(user => userId = user.id))
 
         it('should unregister user correctly', () => {
@@ -320,7 +320,7 @@ describe('Logic', () => {
         })
     })
 
-    !!true && describe('Add review', () => {
+    !!!true && describe('Add review', () => {
         let userId
         const book = "La chica del tren", title = "la chica", vote = 5, comment = "Impresionante thriller"
 
@@ -442,7 +442,6 @@ describe('Logic', () => {
                     expect(userReviews.length).to.equal(reviews.length)
 
                     userReviews.forEach(review => {
-                        debugger
                         expect(review.vote).to.be.a('number')
                         expect(review.title).to.be.a('string')
                         expect(review.bookTitle).to.be.a('string')
@@ -452,7 +451,7 @@ describe('Logic', () => {
 
     })
 
-    true && describe('Delete Review', () => {
+    !true && describe('Delete Review', () => {
         let userId, reviewId
         const reviews = [
             { book: "Cien años de soledad", vote: 5, comment: "Un clásico que te lleva a los mas profundo del realismo mágico " },
@@ -494,7 +493,7 @@ describe('Logic', () => {
 
     })
 
-    true && describe('search books', () => {
+    !true && describe('search books', () => {
         let userId
 
         beforeEach(() =>
@@ -616,7 +615,7 @@ describe('Logic', () => {
 
     })
 
-    true && describe('add favorite', () => {
+    !true && describe('add favorite', () => {
         let userId
         beforeEach(() =>
             User.create({ email, name, password })
@@ -696,7 +695,7 @@ describe('Logic', () => {
 
     })
 
-    true && describe('list favorites', () => {
+    !true && describe('list favorites', () => {
         let userId
 
         const favorites = ["9788441416291", "9781781101353", "9781781101322"]
@@ -723,7 +722,7 @@ describe('Logic', () => {
 
     // todo delete favorite
 
-    true && describe('delete favorite', () => {
+    !true && describe('delete favorite', () => {
         let userId
 
         const favorites = ["9KJJYFIss_wC", "s1gVAAAAYAAJ"]
@@ -752,7 +751,7 @@ describe('Logic', () => {
 
     })
 
-    true && describe('retrieve book by its id', () => {
+    !true && describe('retrieve book by its id', () => {
         const bookId = '9KJJYFIss_wC'
 
         it('should succeed on correct book id', () =>

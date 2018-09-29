@@ -10,8 +10,8 @@ const router = express.Router()
 const jsonBodyParser = bodyParser.json({ limit: '3mb' })
 
 router.post('/register', jsonBodyParser, (req, res) => {
-    const { body: { email, name, password, photoProfile } } = req
-    logic.register(email, name, password, photoProfile)
+    const { body: { email, name, password, photo } } = req
+    logic.register(email, name, password, photo)
         .then(() => res.status(201).json({ message: 'user registered' }))
         .catch(err => {
             const { message } = err

@@ -2,7 +2,7 @@
 .section {
   margin-top: 10vh !important;
   margin-bottom: 25vh !important;
-  background-color: #c1bfea;
+  background: radial-gradient(ellipse at center, #a90329 0%,#8f0222 44%,#6d0019 100%);
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
   margin-left: 20px;
   margin-right: 20px;
@@ -65,8 +65,7 @@
 
 .btn-primary {
   color: #fff;
-  background-color: blueviolet !important;
-  border-color: #007bff !important;
+  
   margin-right: 15px;
 }
 

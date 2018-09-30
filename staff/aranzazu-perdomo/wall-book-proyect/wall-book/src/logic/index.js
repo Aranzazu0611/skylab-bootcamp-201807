@@ -103,6 +103,7 @@ const logicWallbook = {
             })
 
     },
+
     /**
      * Update a new Password with his/her email and a password 
      * @param {String} userId
@@ -127,6 +128,14 @@ const logicWallbook = {
             })
     },
 
+    /**
+     * Retrieve user 
+     * @param {String} userId
+     * @param {String} token
+     * 
+     *  @returns {Response} All info user an array 
+     */
+
     retrieveUser(userId, token) {
         return Promise.resolve()
             .then(() => {
@@ -139,6 +148,15 @@ const logicWallbook = {
             })
     },
 
+     /**
+     * Retrieve book
+     * @param {String} userId
+     * @param {String} bookId
+     * @param {String} token
+     * 
+     *  @returns {Response} All info book 
+     */
+
     retrieveBook(userId, bookId, token) {
         return Promise.resolve()
             .then(() => {
@@ -149,7 +167,6 @@ const logicWallbook = {
                 return this._call(`user/${userId}/book/${bookId}`, 'GET', { 'Content-Type': 'application/json', authorization: `Bearer ${token}` }, undefined, 200)
                     .then(res => res.json())
                     .then(res => res)
-                //.then(() => true)
             })
     },
 

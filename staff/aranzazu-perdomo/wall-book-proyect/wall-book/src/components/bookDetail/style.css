@@ -9,6 +9,10 @@
     margin-bottom: 15vh;
     margin-top: 15vh;
      }
+    .card-subtitle{
+      margin-bottom: 12px;
+      margin-top: 12px;
+    }
   
   .col{
     padding: 0;
@@ -31,9 +35,9 @@
 }
 
 .list-group-item.active {
-  z-index: 2;
-  color: black !important;
-  background-color: #fff !important;
+    z-index: 2;
+    color: black !important;
+    background-color: #fff !important;
     background-clip: border-box !important;
     border: 1px solid rgba(0,0,0,.125) !important;
     border-radius: .25rem !important;
@@ -42,7 +46,11 @@
     box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
     max-width: 30vw !important;
     margin-left: 35vw;
-    
+   
+}
+
+.list-group{
+  margin-top: 48px;
 }
 
 .react-toggle {
@@ -195,4 +203,13 @@
 .starts{
   margin-left: 225px;
 
+}
+
+.container-review{
+  margin-top: 10vh !important;
+  margin-bottom: 25vh !important;
+  background: radial-gradient(ellipse at center, #a90329 0%,#8f0222 44%,#6d0019 100%);
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+  margin-left: 20px;
+  margin-right: 20px;
 }

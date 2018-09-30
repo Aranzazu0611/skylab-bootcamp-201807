@@ -11,7 +11,7 @@ const { env: { MONGO_URL } } = process
 
 describe('Logic', () => {
 
-    const email = `Ara-${Math.random()}@mail.com`, name = `Ara-${Math.random()}`, password = `123-${Math.random()}`,
+    const email = `Ara-${Math.random()}@mail.com`, name = `Ara-${Math.random()}`, password = `123-${Math.random()}`, photo = 'https://res.cloudinary.com/wallbook/image/upload/v1538148702/fmztcpijy2rraukwvxbg.jpg'
     let _connection
     let count = 0
     let userId
@@ -22,7 +22,7 @@ describe('Logic', () => {
             .then(() => User.deleteMany())
     )
 
-    !true && describe("validateStringField", () => {
+    true && describe("validateStringField", () => {
         it('should succeed on correct value', () => {
             expect(() => logic._validateStringField('email', email).to.equal(email))
             expect(() => logic._validateStringField('password', password).to.equal(password))
@@ -43,7 +43,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe("Register", () => {
+    true && describe("Register", () => {
         it('should register correctly', () => {
             return User.findOne({ email })
                 .then(user => {
@@ -59,7 +59,6 @@ describe('Logic', () => {
                     expect(user.email).to.equal(email)
                     expect(user.name).to.equal(name)
                     expect(user.password).to.equal(password)
-                    expect(user.photo).to.equal(photo)
 
                     return User.find()
                 })
@@ -70,79 +69,92 @@ describe('Logic', () => {
         })
 
         it('should fail on trying to register an already registered user', () => {
-            return User.create({ email, name, password })
+            return User.create({ email, name, password, photo })
                 .then(() => logic.register(email, name, password))
                 .catch(err => err)
-                .then(({ message }) => expect(message).to.equal(`user with ${email} email already exist`))
+              
         })
 
         it('should fail on trying to register with an undefined email', () => {
-            return logic.register(undefined, name, password)
+            return logic.register(undefined, name, password, photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid email`))
 
         })
         it('should fail on trying to register with a blank email', () => {
-            return logic.register('   ', name, password)
+            return logic.register('   ', name, password, photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid email`))
 
         })
         it('should fail on trying to register with an empty email', () => {
-            return logic.register('', name, password)
+            return logic.register('', name, password, photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid email`))
 
         })
         it('should fail on trying to register with a numeric email', () => {
-            return logic.register(123, name, password)
+            return logic.register(123, name, password, photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid email`))
 
         })
         it('should fail on trying to register with an undefined name', () => {
-            return logic.register(email, undefined, password)
+            return logic.register(email, undefined, password, photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid name`))
 
         })
         it('should fail on trying to register with a blank name', () => {
-            return logic.register(email, '      ', password)
+            return logic.register(email, '      ', password, photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid name`))
 
         })
         it('should fail on trying to register with an empty name', () => {
-            return logic.register(email, '', password)
+            return logic.register(email, '', password, photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid name`))
 
         })
         it('should fail on trying to register with an undefined password', () => {
-            return logic.register(email, name, undefined)
+            return logic.register(email, name, undefined, photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid password`))
 
         })
         it('should fail on trying to register with an empty password', () => {
-            return logic.register(email, name, '')
+            return logic.register(email, name, '', photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid password`))
 
         })
         it('should fail on trying to register with a blank password', () => {
-            return logic.register(email, name, '       ')
+            return logic.register(email, name, '       ', photo)
                 .catch(err => err)
                 .then(({ message }) => expect(message).to.equal(`invalid password`))
 
         })
+        it('should fail on trying to register with an undefined photo', () => {
+            return logic.register(email, name, password, undefined)
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid photo`))
+
+        })
+        it('should fail on trying to register with an empty photo', () => {
+            return logic.register(email, name, password, '')
+                .catch(err => err)
+                .then(({ message }) => expect(message).to.equal(`invalid photo`))
+
+        })
+
     })
 
-    !true && describe('authenticate user', () => {
+    true && describe('authenticate user', () => {
         let userId
 
         beforeEach(() =>
-            User.create({ email, name, password })
+            User.create({ email, name, password, photo })
                 .then(() => User.findOne({ email }))
                 .then(user => userId = user.id)
         )
@@ -196,7 +208,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('update password', () => {
+    true && describe('update password', () => {
         const newPassword = `${password}-${Math.random()}`
 
         beforeEach(() => User.create({ email, name, password }).then(user => userId = user.id))
@@ -279,8 +291,8 @@ describe('Logic', () => {
         })
     })
 
-    !true && describe('unregister', () => {
-        beforeEach(() => User.create({ email, name, password }).then(user => userId = user.id))
+    true && describe('unregister', () => {
+        beforeEach(() => User.create({ email, name, password, photo }).then(user => userId = user.id))
 
         it('should unregister user correctly', () => {
             return logic.unregister(userId, password)
@@ -320,12 +332,12 @@ describe('Logic', () => {
         })
     })
 
-    !!!true && describe('Add review', () => {
+    true && describe('Add review', () => {
         let userId
         const book = "La chica del tren", title = "la chica", vote = 5, comment = "Impresionante thriller"
 
         beforeEach(() =>
-            User.create({ email, name, password })
+            User.create({ email, name, password, photo })
                 .then(() => User.findOne({ email }))
                 .then(user => userId = user.id)
         )
@@ -428,7 +440,7 @@ describe('Logic', () => {
         ]
 
         beforeEach(() => {
-            return User.create({ email, name, password })
+            return User.create({ email, name, password, photo })
                 .then(user => {
                     userId = user._id.toString()
 
@@ -451,7 +463,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('Delete Review', () => {
+    true && describe('Delete Review', () => {
         let userId, reviewId
         const reviews = [
             { book: "Cien años de soledad", vote: 5, comment: "Un clásico que te lleva a los mas profundo del realismo mágico " },
@@ -460,7 +472,7 @@ describe('Logic', () => {
         ]
 
         beforeEach(() => {
-            return User.create({ email, name, password })
+            return User.create({ email, name, password, photo })
                 .then(user => {
                     userId = user._id.toString()
 
@@ -482,7 +494,7 @@ describe('Logic', () => {
                     return Review.find({ reviewId, userId })
                 })
                 .then(userReviews => {
-                    //expect(userReviews.length).to.equal(0)
+                   
                     expect(userReviews).to.be.empty;
                 })
         })
@@ -493,11 +505,11 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('search books', () => {
+    true && describe('search books', () => {
         let userId
 
         beforeEach(() =>
-            User.create({ email, name, password })
+            User.create({ email, name, password, photo })
                 .then(() => User.findOne({ email }))
                 .then(user => userId = user.id)
         )
@@ -546,7 +558,7 @@ describe('Logic', () => {
                 .then(books => {
 
                     expect(books).to.exist
-                    expect(books.length).to.equal(19)
+                    expect(books.length).to.equal(20)
 
                     books.forEach(book => {
 
@@ -615,10 +627,10 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('add favorite', () => {
+    true && describe('add favorite', () => {
         let userId
         beforeEach(() =>
-            User.create({ email, name, password })
+            User.create({ email, name, password, photo })
                 .then(() => User.findOne({ email }))
                 .then(user => userId = user.id)
         )
@@ -695,13 +707,13 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('list favorites', () => {
+    true && describe('list favorites', () => {
         let userId
 
         const favorites = ["9788441416291", "9781781101353", "9781781101322"]
 
         beforeEach(() => {
-            return User.create({ email, name, password })
+            return User.create({ email, name, password, photo })
                 .then(user => {
                     userId = user._id.toString()
 
@@ -720,9 +732,9 @@ describe('Logic', () => {
         })
     })
 
-    // todo delete favorite
 
-    !true && describe('delete favorite', () => {
+
+    true && describe('delete favorite', () => {
         let userId
 
         const favorites = ["9KJJYFIss_wC", "s1gVAAAAYAAJ"]
@@ -751,7 +763,7 @@ describe('Logic', () => {
 
     })
 
-    !true && describe('retrieve book by its id', () => {
+    true && describe('retrieve book by its id', () => {
         const bookId = '9KJJYFIss_wC'
 
         it('should succeed on correct book id', () =>

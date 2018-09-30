@@ -45,7 +45,7 @@ const logic = {
      * @throws {LogicError} invalid name
      */
     _validateNumber(name, value) {
-        debugger;
+      
         if (!Number.isInteger(value)) throw new LogicError(`invalid ${name}`)
     },
 
@@ -61,7 +61,7 @@ const logic = {
     * @returns {boolean} TRUE => if it is registered correctly
     */
     register(email, name, password, photo) {
-        debugger
+        
         return Promise.resolve()
             .then(() => {
                 this._validateEmail(email)
@@ -74,7 +74,7 @@ const logic = {
 
             .then(user => {
                 if (user) throw new LogicError(`user with ${email} email already exist`)
-                debugger
+             
                 return logic.saveImage(photo)
 
             })
@@ -173,7 +173,15 @@ const logic = {
     },
 
 
-    //retrieve user
+    /**
+     * Retrieve user
+     * @param {String} userId
+     * @param {String} password 
+     * 
+     * @throws {LogicError} if user with userId not exist
+     * 
+     * @returns {Array}  user information
+     */
 
     retrieveUser(userId) {
         return Promise.resolve()
@@ -219,7 +227,7 @@ const logic = {
             })
             .then(user => {
                 if (!user) throw new LogicError(`user with ${userId} does not exists`)
-                debugger;
+              
                 const review = { book, title, vote, comment, user: user.id }
 
                 return Review.create(review)
@@ -236,7 +244,7 @@ const logic = {
     * @returns {Array} reviews information
     */
     listReviews(userId) {
-        debugger;
+        
         return Promise.resolve()
             .then(() => {
 
@@ -253,6 +261,15 @@ const logic = {
                     })
             })
     },
+
+     /**
+    * List all reviews by books
+    * @param {String} bookId
+    * 
+    * @throws {LogicError} if book has no reviws
+    *      
+    * @returns {Array} reviews information
+    */
 
     listReviewsByBook(bookId) {
         return Promise.resolve()
@@ -422,7 +439,7 @@ const logic = {
      * @returns {Promise<Object|LogicError>} - Returns the book info, otherwise if error then returns LogicError
      */
     retrieveBook(bookId, userId) {
-        debugger
+        
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("bookId", bookId)

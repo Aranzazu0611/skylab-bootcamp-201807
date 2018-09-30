@@ -235,7 +235,7 @@ class BookDetail extends Component {
                         </Modal>
 
 
-                        <Container className="container">
+                        <Container className="container-review">
                             <Button className="btn-review" color="primary" onClick={this.toggle}>+ Add review</Button>
                             <Row className="justify-content-left">
                                 <Col xs="6" xm="4">
@@ -250,7 +250,6 @@ class BookDetail extends Component {
                                                 </label>
                                             </div>
                                             <div className="card-header">
-
                                                 <div className="starts">
                                                     <ReactStars
                                                         count={5}

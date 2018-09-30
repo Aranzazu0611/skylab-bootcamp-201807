@@ -21,13 +21,14 @@ import {
     ListGroupItemHeading,
     ListGroupItemText,
     Row,
-    
+
 } from 'reactstrap'
 import ReactStars from 'react-stars'
 import './style.css'
 
 class Settings extends Component {
     state = {
+        books: [],
         userId: sessionStorage.getItem('userId') || "",
         password: "",
         newPassword: null,
@@ -105,6 +106,12 @@ class Settings extends Component {
 
     componentDidMount() {
         this.listReviews()
+        // .then(() => {
+        //     const promises = this.state.reviews.map(elem => {
+        //         this.handleRetrieveBook(elem.book)
+        //     });
+        //     return Promise.resolve(promises)
+        // })
         this.props.email && this.handleRetrieveUser()
 
     }
@@ -113,8 +120,14 @@ class Settings extends Component {
         const userId = sessionStorage.getItem('userId')
         const token = sessionStorage.getItem('token')
 
-        logicWallbook.listReviews(userId, token)
+        return logicWallbook.listReviews(userId, token)
             .then(reviews => this.setState({ reviews }))
+            .then(() => {
+                const promises = this.state.reviews.map(elem => {
+                    this.handleRetrieveBook(elem.book)
+                });
+                return Promise.resolve(promises)
+            })
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -211,27 +224,61 @@ class Settings extends Component {
                 }))
     }
 
-   
+    handleDeleteFavorite = favoriteId => {
+        const { state: { userId, token } } = this
+
+       return logicWallbook.deleteFavorite(userId, favoriteId, token)
+            .then(() =>
+                swal({
+                    title: "Success!",
+                    text: "Delete favorite Sucessful",
+                    type: "success",
+                    confirmButtonText: "Cool"
+                })
+                    .then(() => {
+                        this.listFavorites()
+                    })
+
+            )
+            .then(() => this.listFavorites())
+            .catch(err =>
+                swal({
+                    title: "Failed! :(",
+                    text: err,
+                    type: "error",
+                    confirmButtonText: "Try again"
+                })
+            );
+
+
+    }
+
+    handleRetrieveBook = id => {
+        const { state: { userId, token, books } } = this
+        return logicWallbook.retrieveBook(userId, id, token)
+            .then(data => this.setState({ books: [...this.state.books, data] }))
+    }
+
 
     render() {
-        const { state: { reviews, modals, book, favorites }, keepEmail, keepNewPassword, keepPassword, handleUpdatesubmit, handleDeleteUser } = this;
+        const { state: { reviews, modals, book, favorites, userId, token }, keepEmail, keepNewPassword, keepPassword, handleUpdatesubmit, handleDeleteUser } = this;
         const { modalReviews, modalLogin, modal, modalFavorites } = modals;
 
         const hasReviews = reviews && reviews.length > 0;
 
 
         return (
-            <div  className="Profile">
+            <div className="Profile">
 
                 <div className="container-fluid">
                     <div className="profile-card_cardbody">
-                    {this.state.user &&<img src={this.state.user.photoProfile} className="rounded-circle" />}
-                    {this.state.user &&<h4>Usuario: {this.state.user.name}</h4>}
+                        {this.state.user && <img src={this.state.user.photoProfile} className="rounded-circle" />}
+                        {this.state.user && <h4>Usuario: {this.state.user.name}</h4>}
                         <div className="buttons">
-                        <Button className="btn btn btn-danger mr-3" onClick={this.loginToggle}>Unregister</Button>
-                        <Button className="btn btn btn-danger mr-3" onClick={this.toggle}>Update</Button>
-                        <Button className="btn btn btn-danger mr-3" onClick={this.showReviews}>Reviews</Button>
-                        <Button className="btn btn btn-danger mr-3" onClick={this.showFavorites}>Favorite</Button>
+                            <Button className="btn btn btn-danger mr-3" onClick={this.loginToggle}>Unregister</Button>
+                            <Button className="btn btn btn-danger mr-3" onClick={this.toggle}>Update</Button>
+                            <Button className="btn btn btn-danger mr-3" onClick={this.showReviews}>Reviews</Button>
+                            <Button className="btn btn btn-danger mr-3" onClick={this.showFavorites}>Favorite</Button>
                         </div>
                     </div>
                 </div>
@@ -239,11 +286,9 @@ class Settings extends Component {
                 {modalReviews && (
                     <div className="list">
                         <ListGroup className="listReview mt-5 ">
-                            {hasReviews && reviews.map(review => <ListGroupItem key={review._id}>
-                                <ListGroupItemHeading className="listReview-title">Libro:{review.bookTitle}</ListGroupItemHeading>
-                                <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
+                            {hasReviews && reviews.map((review, index) => <ListGroupItem key={review._id}>
                                 <ListGroupItemText className="listReview-vote">
-                                    <ReactStars
+                                    <ReactStars className="Starts"
                                         count={5}
                                         size={24}
                                         value={review.vote}
@@ -251,8 +296,11 @@ class Settings extends Component {
                                         edit={false}
                                     />
                                 </ListGroupItemText>
+                                <ListGroupItemHeading className="listReview-book"><span>Libro:</span> {this.state.books && this.state.books[index] ? this.state.books[index].book.volumeInfo.title : ""}</ListGroupItemHeading>
+                                <ListGroupItemHeading className="listReview-author"><span>Author:</span> {this.state.books && this.state.books[index] ? this.state.books[index].book.volumeInfo.authors[0] : ""}</ListGroupItemHeading>
+                                <ListGroupItemHeading className="listReview-title"><span>Titulo:</span> {review.title}</ListGroupItemHeading>
                                 <ListGroupItemText className="listReview-comentario">
-                                    Comentario: {review.comment}
+                                    <span>Comentario:</span> {review.comment}
                                 </ListGroupItemText>
                                 <ListGroupItemText className="listReview-comentario">
                                     <Button id="btn-delete" color="primary" target="_blank" onClick={() => { this.handleDeleteReview(review._id) }}>Borrar</Button>
@@ -312,15 +360,14 @@ class Settings extends Component {
                 {modalFavorites && (
 
                     <Col className="favorites" md="6" sm="8">
-                        {favorites.map(favorite => <Card className="card" key={favorite.id}>
+                        {favorites.map((favorite, index) => <Card className="card" key={favorite.id}>
                             <CardBody className="favorite-body">
                                 <CardImg top width="100%" height="461px" src={favorite.volumeInfo.imageLinks.thumbnail} alt="Card image cap" />
-                                <div className="card_cardbody">
+                              
                                     <CardTitle>{favorite.volumeInfo.title}</CardTitle>
                                     <CardSubtitle>Author: {favorite.volumeInfo.authors[0]}</CardSubtitle>
-
-                                </div>
-                                
+                                    <Button id="btn-delete" color="primary" target="_blank" onClick={() => { this.handleDeleteFavorite(favorites[index].id)}}>Borrar</Button>
+                               
                             </CardBody>
                         </Card>)}
                     </Col>)}

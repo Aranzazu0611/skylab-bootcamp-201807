@@ -111,7 +111,26 @@ class Search extends Component {
         const userId = sessionStorage.getItem('userId')
         this.props.onProfile(userId)
     }
+    
+    // handleAubergineChange = () => {
+    //     const userId = sessionStorage.getItem('userId')
+    //     const bookId = this.props.match.params.id;
+    //     const isbn = this.state.book.industryIdentifiers[1].identifier
+    //     const token = sessionStorage.getItem('token');
+    //     const isFavorite = this.state.book.isFavorite;
+    //     const method = isFavorite ? 'deleteFavorite' : 'addFavorite';
 
+    //     logicWallbook[method](userId, bookId, token)
+    //         .then(isFavorite => this.setState(({ book }) => ({ book: { ...book, isFavorite } })))
+    //         .catch(err =>
+    //             swal({
+    //                 title: "Failed! :(",
+    //                 text: err,
+    //                 type: "error",
+    //                 confirmButtonText: "Try again"
+    //             })
+    //         );
+    // }
 
 
 
@@ -152,6 +171,14 @@ class Search extends Component {
                                 <Col xs="6" sm="4">
                                     <Card className="card">
                                         <CardBody >
+                                            <div ClassName="toggle-react">
+                                                <label>
+                                                    <Toggle
+                                                        defaultChecked={book.isFavorite}
+                                                        className='custom-classname'
+                                                        onChange={this.handleAubergineChange} />
+                                                </label>
+                                            </div>
                                             <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
                                             <div className="card_cardbody">
                                                 <CardTitle>{book.title}</CardTitle>

@@ -12,9 +12,10 @@ describe('logic', () => {
     const email = `Aranzazu-${Math.random()}@gmail.com`
     const name = `Aranzazu-${Math.random()}`
     const password = `123456-${Math.random()}`
+    const photo = 'https://res.cloudinary.com/wallbook/image/upload/v1538148702/fmztcpijy2rraukwvxbg.jpg'
 
 
-    !true && describe('validate fields', () => {
+    true && describe('validate fields', () => {
         it('should succeed on correct value', () => {
             expect(() => logicWallbook._validateEmail(email)).not.to.throw()
             expect(() => logicWallbook._validateStringField('password', password)).not.to.throw()
@@ -55,81 +56,91 @@ describe('logic', () => {
 
     })
 
-    !true && describe('register user', () => {
+    true && describe('register user', () => {
         it('should register correctly', () =>
-            logicWallbook.register(email, name, password)
+            logicWallbook.register(email, name, password, photo)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then(res => expect(res).to.be.true)
         )
 
         it('should fail on undefined email', () =>
-            logicWallbook.register(undefined, name, password)
+            logicWallbook.register(undefined, name, password, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on empty email', () =>
-            logicWallbook.register('', name, password)
+            logicWallbook.register('', name, password, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on blank email', () =>
-            logicWallbook.register('     ', name, password)
+            logicWallbook.register('     ', name, password, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on numeric email', () =>
-            logicWallbook.register('     ', name, password)
+            logicWallbook.register('     ', name, password, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid email'))
         )
 
         it('should fail on undefined name', () =>
-            logicWallbook.register(email, undefined, password)
+            logicWallbook.register(email, undefined, password, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid name'))
         )
 
         it('should fail on empty name', () =>
-            logicWallbook.register(email, '', password)
+            logicWallbook.register(email, '', password, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid name'))
         )
 
         it('should fail on blank name', () =>
-            logicWallbook.register(email, '    ', password)
+            logicWallbook.register(email, '    ', password, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid name'))
         )
 
         it('should fail on numeric name', () =>
-            logicWallbook.register(email, 12345, password)
+            logicWallbook.register(email, 12345, password, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid name'))
         )
 
         it('should fail on undefined password', () =>
-            logicWallbook.register(email, name, undefined)
+            logicWallbook.register(email, name, undefined, photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid password'))
         )
 
         it('should fail on empty password', () =>
-            logicWallbook.register(email, name, '')
+            logicWallbook.register(email, name, '', photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid password'))
         )
 
         it('should fail on blank password', () =>
-            logicWallbook.register(email, name, '    ')
+            logicWallbook.register(email, name, '    ', photo)
                 .catch(({ message }) => message)
                 .then(message => expect(message).to.equal('invalid password'))
         )
+        it('should fail on undefined photo', () =>
+            logicWallbook.register(email, name, password, undefined)
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid photo'))
+        )
+        it('should fail on empty photo', () =>
+            logicWallbook.register(email, name, password, '')
+                .catch(({ message }) => message)
+                .then(message => expect(message).to.equal('invalid photo'))
+        )
     })
 
-    !true && describe('authenticate user', () => {
+    true && describe('authenticate user', () => {
         it('should authenticate correctly', () =>
             logicWallbook.authenticate(email, password)
                 .catch(({ message }) => expect(message).to.be.undefined)
@@ -184,7 +195,7 @@ describe('logic', () => {
         )
     })
 
-    !true && describe('update password', () => {
+    true && describe('update password', () => {
         let userId, token, email, name, password, newPassword
 
 
@@ -194,7 +205,7 @@ describe('logic', () => {
             password = `123456-${Math.random()}`
             newPassword = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -287,7 +298,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('unregister user', () => {
+    true && describe('unregister user', () => {
         let userId, email, name, password, token
 
         beforeEach(() => {
@@ -295,7 +306,7 @@ describe('logic', () => {
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -354,7 +365,7 @@ describe('logic', () => {
         )
     })
 
-!true && describe('add review', () => {
+    true && describe('add review', () => {
         let email, name, password
 
         const book = "Harry Potter"
@@ -369,7 +380,7 @@ describe('logic', () => {
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -473,18 +484,18 @@ describe('logic', () => {
 
     true && describe('list reviews', () => {
         const book = "TRUdyfwdaSoC"
-        const title= "Fantastic"
+        const title = "Fantastic"
         const _vote = 10
         const comment = 'fantastic'
 
-        let email, name, password, userId, token
+        let email, name, password, photo, userId, token
 
         beforeEach(() => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -496,7 +507,7 @@ describe('logic', () => {
         })
 
         it('should list review correctly', () =>
-    
+
             logicWallbook.listReviews(userId, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then((reviews) => {
@@ -504,7 +515,7 @@ describe('logic', () => {
                     expect(reviews.length).to.equal(1)
 
                     reviews.forEach(review => {
-                        debugger
+
                         expect(review.vote).to.be.a('number')
                         expect(review.title).to.be.a('string')
                         expect(review.bookTitle).to.be.a('string')
@@ -555,15 +566,15 @@ describe('logic', () => {
         const book = "Harry Potter"
         const _vote = '10'
         const comment = 'fantastic'
-        const bookId= "GXyeCwAAQBAJ"
-        let email, name, password, userId, token
+        const bookId = "GXyeCwAAQBAJ"
+        let email, name, password, photo, userId, token
 
         beforeEach(() => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -585,19 +596,19 @@ describe('logic', () => {
 
     })
 
-    !true && describe('delete review', () => {
+    true && describe('delete review', () => {
         const book = "Harry Potter"
         const _vote = '10'
         const comment = 'fantastic'
 
-        let email, name, password, userId, token, reviewId
+        let email, name, password, photo, userId, token, reviewId
 
         beforeEach(() => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -681,8 +692,8 @@ describe('logic', () => {
 
     })
 
-    !true && describe('add favorite', () => {
-        let email, name, password
+    true && describe('add favorite', () => {
+        let email, name, password, photo
         let userId, token
 
         const bookId = "9KJJYFIss_wC"
@@ -693,7 +704,7 @@ describe('logic', () => {
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -771,8 +782,8 @@ describe('logic', () => {
 
     })
 
-    !true && describe('list favorites', () => {
-        let email, name, password
+    true && describe('list favorites', () => {
+        let email, name, password, photo
         let userId, token
 
         const book = "Harry Potter"
@@ -783,7 +794,7 @@ describe('logic', () => {
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() => logicWallbook.authenticate(email, password))
                 .then(({ message, token: _token, user: _user }) => {
                     userId = _user
@@ -840,8 +851,8 @@ describe('logic', () => {
 
     })
 
-    !true && describe('delete favorite', () => {
-        let email, name, password
+    true && describe('delete favorite', () => {
+        let email, name, password, photo
         let userId, token
 
         const bookId = "9KJJYFIss_wC"
@@ -851,7 +862,7 @@ describe('logic', () => {
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                 )
@@ -871,7 +882,7 @@ describe('logic', () => {
 
     })
 
-    !true && describe('search book', () => {
+    true && describe('search book', () => {
         let email, name, password, token, query, searchBy, orderBy, userId
 
         query = "Harry Potter"
@@ -881,7 +892,7 @@ describe('logic', () => {
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {
@@ -908,9 +919,9 @@ describe('logic', () => {
     })
 
 
-   !true && describe('Retrive BookId', () => {
-        let email, name, password
-        let userId, token
+    true && describe('Retrive BookId', () => {
+        let email, name, password, photo
+        let token
 
         const bookId = '9KJJYFIss_wC'
 
@@ -919,7 +930,7 @@ describe('logic', () => {
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
 
-            return logicWallbook.register(email, name, password)
+            return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
                         .then(({ message, token: _token, user: _user }) => {

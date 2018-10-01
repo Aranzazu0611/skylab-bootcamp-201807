@@ -144,7 +144,7 @@ class Settings extends Component {
 
         const { state: { userId, password } } = this
 
-      return logicWallbook.unregister(userId, password)
+        return logicWallbook.unregister(userId, password)
             .then(() =>
                 swal({
                     title: "Success!",
@@ -169,7 +169,7 @@ class Settings extends Component {
     handleDeleteReview = reviewId => {
         const { state: { userId, token } } = this
 
-       return logicWallbook.deleteReviews(reviewId, userId, token)
+        return logicWallbook.deleteReviews(reviewId, userId, token)
             .then(() =>
                 swal({
                     title: "Success!",
@@ -213,7 +213,7 @@ class Settings extends Component {
     handleRetrieveUser = () => {
         const { state: { userId, token } } = this
 
-       return logicWallbook.retrieveUser(userId, token)
+        return logicWallbook.retrieveUser(userId, token)
             .then(user => this.setState({ user }))
             .catch(err =>
                 swal({
@@ -227,7 +227,7 @@ class Settings extends Component {
     handleDeleteFavorite = favoriteId => {
         const { state: { userId, token } } = this
 
-       return logicWallbook.deleteFavorite(userId, favoriteId, token)
+        return logicWallbook.deleteFavorite(userId, favoriteId, token)
             .then(() =>
                 swal({
                     title: "Success!",
@@ -240,7 +240,6 @@ class Settings extends Component {
                     })
 
             )
-            .then(() => this.listFavorites())
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -363,11 +362,11 @@ class Settings extends Component {
                         {favorites.map((favorite, index) => <Card className="card" key={favorite.id}>
                             <CardBody className="favorite-body">
                                 <CardImg top width="100%" height="461px" src={favorite.volumeInfo.imageLinks.thumbnail} alt="Card image cap" />
-                              
-                                    <CardTitle>{favorite.volumeInfo.title}</CardTitle>
-                                    <CardSubtitle>Author: {favorite.volumeInfo.authors[0]}</CardSubtitle>
-                                    <Button id="btn-delete" color="primary" target="_blank" onClick={() => { this.handleDeleteFavorite(favorites[index].id)}}>Borrar</Button>
-                               
+
+                                <CardTitle>{favorite.volumeInfo.title}</CardTitle>
+                                <CardSubtitle>Author: {favorite.volumeInfo.authors[0]}</CardSubtitle>
+                                <Button id="btn-delete" color="primary" target="_blank" onClick={() => { this.handleDeleteFavorite(favorites[index].id) }}>Borrar</Button>
+
                             </CardBody>
                         </Card>)}
                     </Col>)}

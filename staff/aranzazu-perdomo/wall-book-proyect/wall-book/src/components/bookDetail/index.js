@@ -264,8 +264,8 @@ class BookDetail extends Component {
                                         <CardBody >
                                             <CardImg top width="100%" height="461px" src={book.imageLinks.thumbnail} alt="Card image cap" />
                                             <div className="card_cardbody">
-                                                <CardTitle>{book.title}</CardTitle>
-                                                <CardSubtitle>Author: {book.authors}</CardSubtitle>
+                                                <CardTitle><span>{book.title}</span></CardTitle>
+                                                <CardSubtitle className="subtitle"><span>Author:</span> {book.authors}</CardSubtitle>
                                                 <CardText>{book.description.substring(0, 299)}...</CardText>
                                             </div>
                                         </CardBody>
@@ -277,8 +277,6 @@ class BookDetail extends Component {
                                     <Col >
                                         {reviews.map(review => <ListGroup key={review.id}>
                                             <ListGroupItem active>
-                                                <ListGroupItemHeading className="listReview-title">Titulo:{review.title}</ListGroupItemHeading>
-                                                <ListGroupItemText className="listReview-vote">
                                                     <ReactStars
                                                         count={5}
                                                         size={24}
@@ -286,9 +284,11 @@ class BookDetail extends Component {
                                                         color2={'#ffd700'}
                                                         edit={false}
                                                     />
+                                                <ListGroupItemHeading className="listReview-title"><span>Titulo:</span> {review.title}</ListGroupItemHeading>
+                                                <ListGroupItemText className="listReview-vote">
                                                 </ListGroupItemText>
                                                 <ListGroupItemText className="listReview-comentario">
-                                                    Comentario: {review.comment}
+                                                    <span>Comentario:</span> {review.comment}
                                                 </ListGroupItemText>
                                             </ListGroupItem>
                                         </ListGroup>

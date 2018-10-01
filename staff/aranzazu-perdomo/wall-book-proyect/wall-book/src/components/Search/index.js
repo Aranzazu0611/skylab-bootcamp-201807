@@ -181,10 +181,10 @@ class Search extends Component {
                                             </div>
                                             <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
                                             <div className="card_cardbody">
-                                                <CardTitle>{book.title}</CardTitle>
-                                                <CardSubtitle>ISBN: {book.isbn.identifier}</CardSubtitle>
-                                                <CardSubtitle>Language: {book.language}</CardSubtitle>
-                                                <CardText>{description}</CardText>
+                                                <CardTitle><span> {book.title}</span></CardTitle>
+                                                <CardSubtitle className="subtitle"><span>ISBN:</span> {book.isbn.identifier}</CardSubtitle>
+                                                <CardSubtitle className="subtitle"><span>Language:</span> {book.language}</CardSubtitle>
+                                                <CardText> {description}</CardText>
                                             </div>
                                             <Button color="primary" target="_blank" onClick={() => this.props.onBookDetail(bookId)} >See reviews</Button>
                                         </CardBody>

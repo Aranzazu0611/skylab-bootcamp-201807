@@ -213,3 +213,12 @@
   margin-left: 20px;
   margin-right: 20px;
 }
+
+.subtitle {
+  margin-bottom: 8px !important;
+  margin-top: 8px !important;
+}
+
+span{
+  color:red;
+}

@@ -106,6 +106,7 @@ class Settings extends Component {
 
     componentDidMount() {
         this.listReviews()
+        this.handleListFavorites()
         // .then(() => {
         //     const promises = this.state.reviews.map(elem => {
         //         this.handleRetrieveBook(elem.book)
@@ -144,7 +145,7 @@ class Settings extends Component {
 
         const { state: { userId, password } } = this
 
-        logicWallbook.unregister(userId, password)
+      return logicWallbook.unregister(userId, password)
             .then(() =>
                 swal({
                     title: "Success!",
@@ -169,7 +170,7 @@ class Settings extends Component {
     handleDeleteReview = reviewId => {
         const { state: { userId, token } } = this
 
-        logicWallbook.deleteReviews(reviewId, userId, token)
+       return logicWallbook.deleteReviews(reviewId, userId, token)
             .then(() =>
                 swal({
                     title: "Success!",
@@ -213,7 +214,7 @@ class Settings extends Component {
     handleRetrieveUser = () => {
         const { state: { userId, token } } = this
 
-        logicWallbook.retrieveUser(userId, token)
+       return logicWallbook.retrieveUser(userId, token)
             .then(user => this.setState({ user }))
             .catch(err =>
                 swal({

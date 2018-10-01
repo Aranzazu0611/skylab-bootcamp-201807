@@ -10,6 +10,9 @@
 ## User Cases
 ![user cases](./docs/usercase.png)
 
+## Data Model 
+![user cases](./docs/datamode.png)
+
 ## Block Model
 
 ![Block model](./docs/Blockmodel.png)

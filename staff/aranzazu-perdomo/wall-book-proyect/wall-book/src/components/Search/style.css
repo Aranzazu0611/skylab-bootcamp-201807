@@ -50,7 +50,9 @@
 
 .card {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
-  margin-bottom: 8vh;
+  margin-bottom: 15vh;
+  margin-top: 15vh;
+  margin-left: 50px;
  
 }
 
@@ -124,9 +126,7 @@
 
 }
 
-.card {
-  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
-  margin-bottom: 15vh;
-  margin-top: 15vh;
-  margin-left: 50px;
+.subtitle {
+   margin-bottom: 8px !important;
+   margin-top: 8px !important;
 }

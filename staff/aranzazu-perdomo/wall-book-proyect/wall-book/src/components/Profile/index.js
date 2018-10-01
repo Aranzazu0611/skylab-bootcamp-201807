@@ -106,7 +106,6 @@ class Settings extends Component {
 
     componentDidMount() {
         this.listReviews()
-        this.handleListFavorites()
         // .then(() => {
         //     const promises = this.state.reviews.map(elem => {
         //         this.handleRetrieveBook(elem.book)

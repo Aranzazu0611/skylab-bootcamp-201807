@@ -12,7 +12,7 @@ describe('logic', () => {
     const email = `Aranzazu-${Math.random()}@gmail.com`
     const name = `Aranzazu-${Math.random()}`
     const password = `123456-${Math.random()}`
-    const photo = 'https://res.cloudinary.com/wallbook/image/upload/v1538148702/fmztcpijy2rraukwvxbg.jpg'
+    const photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
 
     true && describe('validate fields', () => {
@@ -196,7 +196,7 @@ describe('logic', () => {
     })
 
     true && describe('update password', () => {
-        let userId, token, email, name, password, newPassword
+        let userId, token, email, name, password, photo, newPassword
 
 
         beforeEach(() => {
@@ -204,6 +204,7 @@ describe('logic', () => {
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
             newPassword = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -299,12 +300,13 @@ describe('logic', () => {
     })
 
     true && describe('unregister user', () => {
-        let userId, email, name, password, token
+        let userId, email, name, password, photo, token
 
         beforeEach(() => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -366,7 +368,7 @@ describe('logic', () => {
     })
 
     true && describe('add review', () => {
-        let email, name, password
+        let email, name, password, photo
 
         const book = "Harry Potter"
         const title = "hola"
@@ -379,6 +381,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -494,6 +497,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -573,6 +577,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -607,6 +612,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -703,6 +709,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -793,6 +800,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() => logicWallbook.authenticate(email, password))
@@ -861,6 +869,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -883,7 +892,7 @@ describe('logic', () => {
     })
 
     true && describe('search book', () => {
-        let email, name, password, token, query, searchBy, orderBy, userId
+        let email, name, password, photo, token, query, searchBy, orderBy, userId
 
         query = "Harry Potter"
 
@@ -891,6 +900,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
@@ -920,7 +930,7 @@ describe('logic', () => {
 
 
     true && describe('Retrive BookId', () => {
-        let email, name, password, photo
+        let email, name, password, photo, userId
         let token
 
         const bookId = '9KJJYFIss_wC'
@@ -929,6 +939,7 @@ describe('logic', () => {
             email = `Aranzazu-${Math.random()}@gmail.com`
             name = `Aranzazu-${Math.random()}`
             password = `123456-${Math.random()}`
+            photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>

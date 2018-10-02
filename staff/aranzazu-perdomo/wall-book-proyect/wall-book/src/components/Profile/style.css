@@ -163,3 +163,20 @@ span{
 .card-title{
   margin-top: 12px;
 }
+
+.heart{
+  height: 8vh;
+}
+.star{
+  height: 10vh;
+}
+.heart-favorites{
+  font-size: 5vh;
+  padding: 2vw;
+}
+
+.star-reviews{
+  font-size: 5vh;
+  padding: 2vw;
+  
+}

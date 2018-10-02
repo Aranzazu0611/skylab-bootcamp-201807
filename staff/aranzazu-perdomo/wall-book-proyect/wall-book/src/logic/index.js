@@ -1,4 +1,4 @@
-'use strict'
+
 const validateEmail = require('../utils/validate-email/index')
 
 const logicWallbook = {
@@ -226,7 +226,9 @@ const logicWallbook = {
                     201
                 )
                     .then(res => res.json())
-                    .then(res => res)
+                    .then(res => {
+                       return res
+                    })
 
             })
     },
@@ -246,7 +248,9 @@ const logicWallbook = {
                 this._validateStringField('token', token)
 
                 return this._call(`user/${userId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
-                    .then(res => res.json())
+                    .then(res => {                        
+                       return res.json()
+                    })
             })
     },
 
@@ -267,7 +271,9 @@ const logicWallbook = {
                 this._validateStringField('token', token)
 
                 return this._call(`user/${userId}/book/${bookId}/reviews`, 'GET', { authorization: `Bearer ${token}` }, undefined, 200)
-                    .then(res => res.json())
+                    .then(res => {
+                        return res.json()
+                    })
 
             })
     },

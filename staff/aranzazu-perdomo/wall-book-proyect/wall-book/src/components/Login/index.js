@@ -7,7 +7,6 @@ import {
     Input,
     Form,
     FormGroup,
-    FormText,
     Container,
     Col
 
@@ -68,7 +67,7 @@ class Login extends Component {
                         <FormGroup>
                             <Label for="exampleEmail">Email</Label>
                             <Input type="text" onChange={keepEmail} name="Email" placeholder="Email" required autoFocus="true" />
-                           
+
                         </FormGroup>
                         <FormGroup>
                             <Label for="examplePassword">Password</Label>

@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { Route, Redirect, Switch, withRouter } from 'react-router'
-import { logicWallbook } from '../src/logic'
 import Register from '../src/components/Register'
 import Login from '../src/components/Login'
 import LandingPage from '../src/components/LandingPage'
 import Profile from '../src/components/Profile'
 import Search from '../src/components/Search'
 import BookDetail from '../src/components/bookDetail'
-import swal from 'sweetalert2'
 import '../src/index.css'
 import {
   Button,

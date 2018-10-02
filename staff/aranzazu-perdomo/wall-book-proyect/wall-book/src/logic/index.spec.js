@@ -8,14 +8,36 @@ const { expect } = require('chai')
 const logicWallbook = require('../logic')
 const jwt = require('jsonwebtoken')
 
+const {mongoose, models: { User, Review }} = require('./../../../wall-book-api/data')
+
+const { env: { MONGO_URL } } = process
+
 describe('logic', () => {
+    let _connection
+
     const email = `Aranzazu-${Math.random()}@gmail.com`
     const name = `Aranzazu-${Math.random()}`
     const password = `123456-${Math.random()}`
     const photo = 'http://res.cloudinary.com/wallbook/image/upload/v1538141962/ont4yupylmnsdyjqufzc.jpg'
 
+    before(() =>
+        mongoose
+        .connect(
+            MONGO_URL,
+            {
+            useNewUrlParser: true
+            }
+        )
+        .then(conn => (_connection = conn))
+    );
 
-    true && describe('validate fields', () => {
+    beforeEach(() => Promise.all([User.deleteMany(), Review.deleteMany()]))
+
+    after(() =>
+        Promise.all([User.deleteMany(), Review.deleteMany()]).then(() => _connection.disconnect())
+    );
+
+   true && describe('validate fields', () => {
         it('should succeed on correct value', () => {
             expect(() => logicWallbook._validateEmail(email)).not.to.throw()
             expect(() => logicWallbook._validateStringField('password', password)).not.to.throw()
@@ -56,7 +78,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('register user', () => {
+   true && describe('register user', () => {
         it('should register correctly', () =>
             logicWallbook.register(email, name, password, photo)
                 .catch(({ message }) => expect(message).to.be.undefined)
@@ -140,7 +162,9 @@ describe('logic', () => {
         )
     })
 
-    true && describe('authenticate user', () => {
+   true && describe('authenticate user', () => {
+       beforeEach(() => logicWallbook.register(email, name, password, photo))
+       
         it('should authenticate correctly', () =>
             logicWallbook.authenticate(email, password)
                 .catch(({ message }) => expect(message).to.be.undefined)
@@ -195,7 +219,7 @@ describe('logic', () => {
         )
     })
 
-    true && describe('update password', () => {
+   true && describe('update password', () => {
         let userId, token, email, name, password, photo, newPassword
 
 
@@ -299,7 +323,7 @@ describe('logic', () => {
 
     })
 
-    true && describe('unregister user', () => {
+   true && describe('unregister user', () => {
         let userId, email, name, password, photo, token
 
         beforeEach(() => {
@@ -367,7 +391,7 @@ describe('logic', () => {
         )
     })
 
-    true && describe('add review', () => {
+   true && describe('add review', () => {
         let email, name, password, photo
 
         const book = "Harry Potter"
@@ -522,7 +546,8 @@ describe('logic', () => {
 
                         expect(review.vote).to.be.a('number')
                         expect(review.title).to.be.a('string')
-                        expect(review.bookTitle).to.be.a('string')
+                        expect(review.comment).to.be.a('string')
+                        expect(review.title).to.equal('Fantastic')
                     })
                 })
         )
@@ -567,10 +592,9 @@ describe('logic', () => {
 
     true && describe('list review', () => {
         const title = "fantastic"
-        const book = "Harry Potter"
-        const _vote = '10'
+        const _vote = 10
         const comment = 'fantastic'
-        const bookId = "GXyeCwAAQBAJ"
+        const bookId = "TRUdyfwdaSoC"
         let email, name, password, photo, userId, token
 
         beforeEach(() => {
@@ -582,29 +606,31 @@ describe('logic', () => {
             return logicWallbook.register(email, name, password, photo)
                 .then(() =>
                     logicWallbook.authenticate(email, password)
-                        .then(({ message, token: _token, user: _user }) => {
+                        .then(({ token: _token, user: _user }) => {
                             userId = _user
                             token = _token
                         })
                 )
-                .then(() => logicWallbook.addReview(userId, book, title, _vote, comment, token))
+                .then(() => logicWallbook.addReview(userId, bookId, title, _vote, comment, token))
         })
 
-        it('should list review by book correctly', () =>
-            logicWallbook.listReviewsByBook(bookId, userId, token)
+        it('should list review by book correctly', () => {
+            return logicWallbook.listReviewsByBook(bookId, userId, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then((reviews) => {
                     expect(reviews).to.exist
                     expect(reviews.length).to.equal(1)
                 })
+            }
         )
 
     })
 
     true && describe('delete review', () => {
-        const book = "Harry Potter"
-        const _vote = '10'
+        const title = "fantastic"
+        const _vote = 10
         const comment = 'fantastic'
+        const bookId = "TRUdyfwdaSoC"
 
         let email, name, password, photo, userId, token, reviewId
 
@@ -622,7 +648,7 @@ describe('logic', () => {
                             token = _token
                         })
                 )
-                .then(() => logicWallbook.addReview(userId, book, _vote, comment, token))
+                .then(() => logicWallbook.addReview(userId, bookId, title, _vote, comment, token))
                 .then(res => {
                     expect(res).to.exist
 
@@ -914,11 +940,11 @@ describe('logic', () => {
         })
 
         it('should search book correctly', () =>
-            logicWallbook.searchBook(query, searchBy = 'title', orderBy = 'relevance', token)
+            logicWallbook.searchBook(userId, query, searchBy, orderBy, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then(searchs => {
                     expect(searchs).to.exist
-                    expect(searchs.length).to.equal(1)
+                    expect(searchs.books.length).to.equal(20)
                 })
 
         )
@@ -952,12 +978,10 @@ describe('logic', () => {
         })
 
         it('should retrieve book id correctly', () =>
-            logicWallbook.retrieveBook(bookId, token)
+            logicWallbook.retrieveBook(userId, bookId, token)
                 .catch(({ message }) => expect(message).to.be.undefined)
                 .then(({ message }) => expect(message).to.equal('Retrieve book correctly'))
         )
     })
-
-
 
 })

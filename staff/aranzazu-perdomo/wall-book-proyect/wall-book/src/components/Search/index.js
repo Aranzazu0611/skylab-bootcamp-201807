@@ -1,38 +1,25 @@
 import React, { Component } from "react"
-import { Switch, Route, withRouter, Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import {
     Card,
     CardImg,
     CardBody,
-    CardHeader,
     CardTitle,
     CardSubtitle,
     CardText,
     Button,
     Form,
     InputGroup,
-    InputGroupAddon,
     Input,
-    Container,
     Col,
     Row,
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    ReactStars,
-
-
+    
 } from "reactstrap"
 
 import logicWallbook from "../../logic"
 import swal from "sweetalert2"
-import Style from './style.css'
 import './style.css'
-import Toggle from 'react-toggle'
+
 
 
 class Search extends Component {
@@ -114,7 +101,7 @@ class Search extends Component {
 
 
     render() {
-        const { books } = this.state
+        const { books, searchBy, orderBy } = this.state
 
         return <div className="section" >
             <div className="container-search">
@@ -125,8 +112,8 @@ class Search extends Component {
                                 <Input id="searchInput" onChange={this.keepQuery} placeholder="Search for title, author, newest..." autoFocus="true" autoComplete="off" />
                                 <Input className="btn btn-primary" id="searchButton" type="submit" value="Search" />
                                 <div className="buttons">
-                                    <Button className="btn btn-warning" onClick={this.onToggleSearchBy}>{this.state.searchBy === 'title' ? 'author' : 'title'}</Button>
-                                    <Button className="btn btn-success" onClick={this.onToggleOrderBy}>{this.state.orderBy === 'relevance' ? 'newest' : 'relevance'}</Button>
+                                    <Button className="btn btn-warning" onClick={this.onToggleSearchBy}>{searchBy === 'title' ? 'author' : 'title'}</Button>
+                                    <Button className="btn btn-success" onClick={this.onToggleOrderBy}>{orderBy === 'relevance' ? 'newest' : 'relevance'}</Button>
                                 </div>
                             </InputGroup>
                         </Form>
@@ -142,7 +129,7 @@ class Search extends Component {
                             let description = book.description
 
                             if (description.length > 350) {
-                                description = description.substring(0, 350) + "..."
+                                 description = description.substring(0, 350) + "..."
                             }
 
 
@@ -150,7 +137,7 @@ class Search extends Component {
                                 <Col xs="6" sm="4">
                                     <Card className="card">
                                         <CardBody >
-                                            <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" />
+                                            <CardImg top width="100%" height="461px" src={book.thumbnail} alt="Card image cap" onClick={() => this.props.onBookDetail(bookId)} />
                                             <div className="card_cardbody">
                                                 <CardTitle><span> {book.title}</span></CardTitle>
                                                 <CardSubtitle className="subtitle"><span>ISBN:</span> {book.isbn.identifier}</CardSubtitle>

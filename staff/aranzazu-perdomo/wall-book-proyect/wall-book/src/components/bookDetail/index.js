@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import logicWallbook from "../../logic"
-import { Redirect, withRouter } from "react-router";
+import { withRouter } from "react-router";
 import {
     Card,
     CardImg,
@@ -152,7 +152,6 @@ class BookDetail extends Component {
     handleAubergineChange = () => {
         const userId = sessionStorage.getItem('userId')
         const bookId = this.props.match.params.id;
-        const isbn = this.state.book.industryIdentifiers[1].identifier
         const token = sessionStorage.getItem('token');
         const isFavorite = this.state.book.isFavorite;
         const method = isFavorite ? 'deleteFavorite' : 'addFavorite';
@@ -277,13 +276,14 @@ class BookDetail extends Component {
                                     <Col >
                                         {reviews.map(review => <ListGroup key={review.id}>
                                             <ListGroupItem active>
-                                                    <ReactStars
-                                                        count={5}
-                                                        size={24}
-                                                        value={review.vote}
-                                                        color2={'#ffd700'}
-                                                        edit={false}
-                                                    />
+                                                <ReactStars
+                                                    count={5}
+                                                    size={24}
+                                                    value={review.vote}
+                                                    color2={'#ffd700'}
+                                                    edit={false}
+                                                />
+                                                <ListGroupItemHeading className="listReview-title"><span>Usuario:</span> {review.user.name}</ListGroupItemHeading>
                                                 <ListGroupItemHeading className="listReview-title"><span>Titulo:</span> {review.title}</ListGroupItemHeading>
                                                 <ListGroupItemText className="listReview-vote">
                                                 </ListGroupItemText>

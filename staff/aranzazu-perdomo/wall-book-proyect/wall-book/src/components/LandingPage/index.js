@@ -3,7 +3,6 @@ import { withRouter, Link } from 'react-router-dom'
 
 import {
     Button,
-    Container,
     Row,
     Col
 

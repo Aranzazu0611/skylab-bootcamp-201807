@@ -22,7 +22,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "test-logic": "mocha src/logic --timeout 45000",
+    "test-logic": "mocha src/logic --timeout 15000",
     "debug-test-logic": "mocha debug src/logic --timeout 45000"
   },
   "devDependencies": {

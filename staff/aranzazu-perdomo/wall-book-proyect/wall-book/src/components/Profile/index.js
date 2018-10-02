@@ -2,7 +2,9 @@ import React, { Component } from "react"
 import swal from 'sweetalert2'
 import logicWallbook from "../../logic"
 import { convertAllPropsToFalse } from "../../utils/object"
-import { Redirect, withRouter } from "react-router";
+import { withRouter } from "react-router";
+import star from "../../images/star.png"
+import heart from "../../images/heart.png"
 import {
     Button,
     Form,
@@ -20,7 +22,6 @@ import {
     ListGroupItem,
     ListGroupItemHeading,
     ListGroupItemText,
-    Row,
 
 } from 'reactstrap'
 import ReactStars from 'react-stars'
@@ -28,7 +29,7 @@ import './style.css'
 
 class Settings extends Component {
     state = {
-        books: [],
+        reviews: [],
         userId: sessionStorage.getItem('userId') || "",
         password: "",
         newPassword: null,
@@ -38,10 +39,16 @@ class Settings extends Component {
             modal: false,
             modalLogin: false,
             modalReviews: true,
-            modalFavorites: true,
+            modalFavorites: false,
         },
         favorites: [],
         book: "",
+
+    }
+
+    componentDidMount() {
+        this.listReviews()
+        this.props.email && this.handleRetrieveUser()
 
     }
 
@@ -93,6 +100,12 @@ class Settings extends Component {
                     confirmButtonText: "Cool"
                 })
             )
+            .then(() => {
+                const modalsList = convertAllPropsToFalse(this.state.modals);
+                this.setState(({ modals }) => {
+                    return ({ modals: { ...modalsList } })
+                });
+            })
             .catch(err =>
                 swal({
                     title: "Failed! :(",
@@ -104,29 +117,27 @@ class Settings extends Component {
 
     }
 
-    componentDidMount() {
-        this.listReviews()
-        // .then(() => {
-        //     const promises = this.state.reviews.map(elem => {
-        //         this.handleRetrieveBook(elem.book)
-        //     });
-        //     return Promise.resolve(promises)
-        // })
-        this.props.email && this.handleRetrieveUser()
-
-    }
-
     listReviews = () => {
         const userId = sessionStorage.getItem('userId')
         const token = sessionStorage.getItem('token')
 
-        return logicWallbook.listReviews(userId, token)
-            .then(reviews => this.setState({ reviews }))
-            .then(() => {
-                const promises = this.state.reviews.map(elem => {
-                    this.handleRetrieveBook(elem.book)
-                });
-                return Promise.resolve(promises)
+         return logicWallbook.listReviews(userId, token)
+            .then(reviews => {
+                const promises = reviews.map(review => {
+                    let reviewInfo = {...reviewInfo, ...review }
+
+                    return this.handleRetrieveBook(review.book)
+                        .then(book => {
+                            reviewInfo.book = { id: review.book, ...book }
+
+                            return reviewInfo
+                        })
+                })
+
+                Promise.all(promises)
+                    .then(reviews => {
+                        this.setState({ reviews })
+                    })
             })
             .catch(err =>
                 swal({
@@ -138,6 +149,20 @@ class Settings extends Component {
             );
     }
 
+    handleRetrieveBook = id => {
+        const { userId, token, books } = this.state
+
+        return logicWallbook.retrieveBook(userId, id, token)
+            .then(data => {
+                const {title, authors} = data.book.volumeInfo
+                const author = authors[0]
+
+                return {
+                    title,
+                    author
+                }
+            })
+    }
 
     handleDeleteUser = event => {
         event.preventDefault()
@@ -235,9 +260,9 @@ class Settings extends Component {
                     type: "success",
                     confirmButtonText: "Cool"
                 })
-                    .then(() => {
-                        this.listFavorites()
-                    })
+                    .then(() =>
+                        this.handleListFavorites()
+                    )
 
             )
             .catch(err =>
@@ -252,15 +277,8 @@ class Settings extends Component {
 
     }
 
-    handleRetrieveBook = id => {
-        const { state: { userId, token, books } } = this
-        return logicWallbook.retrieveBook(userId, id, token)
-            .then(data => this.setState({ books: [...this.state.books, data] }))
-    }
-
-
     render() {
-        const { state: { reviews, modals, book, favorites, userId, token }, keepEmail, keepNewPassword, keepPassword, handleUpdatesubmit, handleDeleteUser } = this;
+        const { state: { reviews, modals, favorites }, keepEmail, keepNewPassword, keepPassword, handleUpdatesubmit, handleDeleteUser } = this;
         const { modalReviews, modalLogin, modal, modalFavorites } = modals;
 
         const hasReviews = reviews && reviews.length > 0;
@@ -271,8 +289,13 @@ class Settings extends Component {
 
                 <div className="container-fluid">
                     <div className="profile-card_cardbody">
-                        {this.state.user && <img src={this.state.user.photoProfile} className="rounded-circle" />}
+                        {this.state.user && <img src={this.state.user.photoProfile} className="rounded-circle" alt="foto"/>}
                         {this.state.user && <h4>Usuario: {this.state.user.name}</h4>}
+
+                        {this.state.user && <React.Fragment><img src={star} className="star" alt="foto-star"/>
+                        <span className="star-reviews">{reviews.length}</span></React.Fragment>}
+                        {this.state.user && <React.Fragment><img src={heart} className="heart" alt="foto-heart"/><span className="heart-favorites">{favorites.length}</span></React.Fragment>}
+
                         <div className="buttons">
                             <Button className="btn btn btn-danger mr-3" onClick={this.loginToggle}>Unregister</Button>
                             <Button className="btn btn btn-danger mr-3" onClick={this.toggle}>Update</Button>
@@ -285,7 +308,7 @@ class Settings extends Component {
                 {modalReviews && (
                     <div className="list">
                         <ListGroup className="listReview mt-5 ">
-                            {hasReviews && reviews.map((review, index) => <ListGroupItem key={review._id}>
+                            {hasReviews && reviews.map(review => <ListGroupItem key={review._id}>
                                 <ListGroupItemText className="listReview-vote">
                                     <ReactStars className="Starts"
                                         count={5}
@@ -295,8 +318,8 @@ class Settings extends Component {
                                         edit={false}
                                     />
                                 </ListGroupItemText>
-                                <ListGroupItemHeading className="listReview-book"><span>Libro:</span> {this.state.books && this.state.books[index] ? this.state.books[index].book.volumeInfo.title : ""}</ListGroupItemHeading>
-                                <ListGroupItemHeading className="listReview-author"><span>Author:</span> {this.state.books && this.state.books[index] ? this.state.books[index].book.volumeInfo.authors[0] : ""}</ListGroupItemHeading>
+                                <ListGroupItemHeading className="listReview-book"><span>Libro:</span> {review.book.title}</ListGroupItemHeading>
+                                <ListGroupItemHeading className="listReview-author"><span>Author:</span> {review.book.author}</ListGroupItemHeading>
                                 <ListGroupItemHeading className="listReview-title"><span>Titulo:</span> {review.title}</ListGroupItemHeading>
                                 <ListGroupItemText className="listReview-comentario">
                                     <span>Comentario:</span> {review.comment}

@@ -72,7 +72,7 @@ describe('Logic', () => {
             return User.create({ email, name, password, photo })
                 .then(() => logic.register(email, name, password))
                 .catch(err => err)
-              
+
         })
 
         it('should fail on trying to register with an undefined email', () => {
@@ -494,7 +494,7 @@ describe('Logic', () => {
                     return Review.find({ reviewId, userId })
                 })
                 .then(userReviews => {
-                   
+
                     expect(userReviews).to.be.empty;
                 })
         })
@@ -558,8 +558,7 @@ describe('Logic', () => {
                 .then(books => {
 
                     expect(books).to.exist
-                    expect(books.length).to.equal(20)
-
+                
                     books.forEach(book => {
 
                         let isAuthor = book.authors.includes('J. K. Rowling') || book.authors.includes('J.K. Rowling') || book.authors.includes("Joanne K. Rowling")
@@ -765,9 +764,16 @@ describe('Logic', () => {
 
     true && describe('retrieve book by its id', () => {
         const bookId = '9KJJYFIss_wC'
+        let userId
+
+        beforeEach(() =>
+            User.create({ email, name, password, photo })
+                .then(() => User.findOne({ email }))
+                .then(user => userId = user.id)
+        )
 
         it('should succeed on correct book id', () =>
-            logic.retrieveBook(bookId)
+            logic.retrieveBook(bookId, userId)
                 .then(book => {
                     expect(book).to.exist
                     expect(book.volumeInfo.title).to.equal('Professional Javascript For Web Developers, 2nd Ed')

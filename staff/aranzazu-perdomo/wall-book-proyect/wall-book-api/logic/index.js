@@ -45,7 +45,7 @@ const logic = {
      * @throws {LogicError} invalid name
      */
     _validateNumber(name, value) {
-      
+
         if (!Number.isInteger(value)) throw new LogicError(`invalid ${name}`)
     },
 
@@ -61,7 +61,7 @@ const logic = {
     * @returns {boolean} TRUE => if it is registered correctly
     */
     register(email, name, password, photo) {
-        
+
         return Promise.resolve()
             .then(() => {
                 this._validateEmail(email)
@@ -74,7 +74,7 @@ const logic = {
 
             .then(user => {
                 if (user) throw new LogicError(`user with ${email} email already exist`)
-             
+
                 return logic.saveImage(photo)
 
             })
@@ -169,6 +169,10 @@ const logic = {
 
                 return User.deleteOne({ _id: user._id })
             })
+            .then(() => {
+                // BORRAR REVIEWS DEL USUARIO
+                return Review.deleteMany({ user: userId})
+            })
             .then(() => true)
     },
 
@@ -227,7 +231,7 @@ const logic = {
             })
             .then(user => {
                 if (!user) throw new LogicError(`user with ${userId} does not exists`)
-              
+
                 const review = { book, title, vote, comment, user: user.id }
 
                 return Review.create(review)
@@ -244,7 +248,7 @@ const logic = {
     * @returns {Array} reviews information
     */
     listReviews(userId) {
-        
+
         return Promise.resolve()
             .then(() => {
 
@@ -262,20 +266,19 @@ const logic = {
             })
     },
 
-     /**
-    * List all reviews by books
-    * @param {String} bookId
-    * 
-    * @throws {LogicError} if book has no reviws
-    *      
-    * @returns {Array} reviews information
-    */
+    /**
+   * List all reviews by books
+   * @param {String} bookId
+   * 
+   * @throws {LogicError} if book has no reviws
+   *      
+   * @returns {Array} reviews information
+   */
 
     listReviewsByBook(bookId) {
         return Promise.resolve()
             .then(() => {
-
-                return Review.find({ book: bookId })
+                return Review.find({ book: bookId }).populate('user')
             })
             .then(reviews => {
                 if (!reviews) throw new LogicError(`book ${bookId} has no reviews`)
@@ -386,7 +389,7 @@ const logic = {
 
                 const bookPromises = user.favorites.map(id =>
                     // this.searchBook(isbn, 'isbn').then(book => book[0])
-                    this.retrieveBook(id,userId)
+                    this.retrieveBook(id, userId)
                 )
 
                 return Promise.all(bookPromises)
@@ -439,7 +442,7 @@ const logic = {
      * @returns {Promise<Object|LogicError>} - Returns the book info, otherwise if error then returns LogicError
      */
     retrieveBook(bookId, userId) {
-        
+
         return Promise.resolve()
             .then(() => {
                 this._validateStringField("bookId", bookId)

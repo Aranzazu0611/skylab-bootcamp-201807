@@ -24,8 +24,8 @@ class Register extends Component {
         email: "",
         name: "",
         password: "",
-        photo:undefined,
-        base64:null
+        photo: undefined,
+        base64: null
     };
 
     keepEmail = e => this.setState({ email: e.target.value, error: '' })
@@ -39,9 +39,9 @@ class Register extends Component {
     handleRegisterSubmit = event => {
         event.preventDefault()
 
-        const { state: { email, name, password,files:{base64} } } = this
+        const { state: { email, name, password, files: { base64 } } } = this
 
-        return logicWallbook.register(email, name, password,base64)
+        return logicWallbook.register(email, name, password, base64)
             .then(() =>
                 swal({
                     title: "Success!",
@@ -62,11 +62,11 @@ class Register extends Component {
             );
     }
 
-    _crop(){
+    _crop() {
         this.setState({
-          photoProfile:this.refs.cropper.getCroppedCanvas({width:300,height:300}).toDataURL()
-        }) 
-      }
+            photoProfile: this.refs.cropper.getCroppedCanvas({ width: 300, height: 300 }).toDataURL()
+        })
+    }
 
     render() {
         const { keepEmail, keepName, keepPassword } = this
@@ -97,16 +97,6 @@ class Register extends Component {
                             <FileBase64
                                 multiple={false}
                                 onDone={this.getFiles.bind(this)} />
-                            <div className="card-body pt-4" >
-                                {/* {this.state.base64 ? <Cropper
-                                    ref='cropper'
-                                    src={this.state.base64}
-                                    style={{ height: "300px", width: '100%' }}
-                                    aspectRatio={1}
-                                    guides={false}
-                                    dragMode="move"
-                                    crop={this._crop.bind(this)} /> : ""} */}
-                            </div>
                         </FormGroup>
                         <Button className="m-2" color="danger" tag={Link} to="/#" >Cancel</Button>
                         <Button className="m-2" color="primary" >Register</Button>
